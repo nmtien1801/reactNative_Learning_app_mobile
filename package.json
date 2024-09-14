@@ -1,7 +1,7 @@
 {
   "name": "reactnative_learning_app_mobile",
   "version": "1.0.0",
-  "main": "expo/AppEntry.js",
+  "main": "ConfigEntry.js",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
