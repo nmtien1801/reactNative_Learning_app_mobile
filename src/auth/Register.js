@@ -5,33 +5,27 @@ import {
   TextInput,
   View,
   TouchableOpacity,
-  CheckBox,
 } from "react-native";
 import React, { useState } from "react";
 
-const Login = ({ navigation }) => {
-  const [rememberMe, setRememberMe] = useState(false);
+const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleLogin = () => {
-    // Simulated login logic
-    if (username === "user" && password === "pass") {
-      alert("Login successful!");
-      navigation.navigate("Home"); // Replace 'Home' with your desired screen
-    } else {
-      alert("Invalid username or password");
+  const handleRegister = () => {
+    if (password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
     }
-  };
-
-  const handleSignUp = () => {
-    navigation.navigate("Register"); // Navigate to the Register screen
+    alert("Registration successful!");
+    // Add your registration logic here
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.card}>
-        <Text style={styles.title}>Login</Text>
+        <Text style={styles.title}>Register</Text>
         <TextInput
           style={styles.input}
           placeholder="Username"
@@ -45,19 +39,15 @@ const Login = ({ navigation }) => {
           value={password}
           onChangeText={setPassword}
         />
-        <View style={styles.rememberMeContainer}>
-          <CheckBox
-            value={rememberMe}
-            onValueChange={setRememberMe}
-            tintColors={{ true: "#008CBA", false: "#ccc" }}
-          />
-          <Text style={styles.rememberMeText}>Remember me</Text>
-        </View>
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleSignUp}>
-          <Text style={styles.signUpText}>Sign up?</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Confirm Password"
+          secureTextEntry
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+        />
+        <TouchableOpacity style={styles.button} onPress={handleRegister}>
+          <Text style={styles.buttonText}>Register</Text>
         </TouchableOpacity>
       </View>
       <StatusBar style="auto" />
@@ -75,13 +65,13 @@ const styles = StyleSheet.create({
   card: {
     width: "80%",
     padding: 20,
-    backgroundColor: "#00BFFF",
+    backgroundColor: "#f0fff0",
     borderRadius: 10,
     alignItems: "center",
   },
   title: {
     fontSize: 24,
-    color: "#fff",
+    color: "#333",
     marginBottom: 20,
   },
   input: {
@@ -94,17 +84,8 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     backgroundColor: "#fff",
   },
-  rememberMeContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 15,
-  },
-  rememberMeText: {
-    color: "#fff",
-    marginLeft: 10,
-  },
   button: {
-    backgroundColor: "#008CBA",
+    backgroundColor: "#28a745",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
@@ -115,10 +96,6 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
   },
-  signUpText: {
-    color: "#fff",
-    marginTop: 10,
-  },
 });
 
-export default Login;
+export default Register;
