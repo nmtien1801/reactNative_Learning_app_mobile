@@ -22,15 +22,11 @@ const Stack = createStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName="MyCourse"> 
         <Stack.Screen name="Home" component={handleLogin} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Register" component={Register} />
       </Stack.Navigator>
     </NavigationContainer>
-
-    // <View>
-    //   <Text>hello login</Text>
-    // </View>
   );
 }
