@@ -4,6 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
+import MyCourse from "./component/My-course";
 
 // click -> Login
 function handleLogin({ navigation }) {
@@ -21,12 +22,19 @@ function handleLogin({ navigation }) {
 const Stack = createStackNavigator();
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="MyCourse"> 
-        <Stack.Screen name="Home" component={handleLogin} />
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Register" component={Register} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    // <NavigationContainer>
+    //   <Stack.Navigator initialRouteName="MyCourse">
+    //     <Stack.Screen name="Home" component={handleLogin} />
+    //     <Stack.Screen name="Login" component={Login} />
+    //     <Stack.Screen name="Register" component={Register} />
+    //   </Stack.Navigator>
+    // </NavigationContainer>
+    // <MyCourse />
+
+    // <App_Intro />
+    // <LoginScreen />
+    // <RegisterScreen/>
+    // <User_Profile/>
+    <TeacherProfile />
   );
 }
