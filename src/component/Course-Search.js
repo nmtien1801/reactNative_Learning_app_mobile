@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   Text,
@@ -7,72 +7,76 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
-const HotTopic = ({ title }) => (
-  <TouchableOpacity style={styles.hotTopic}>
-    <Text style={styles.hotTopicText}>{title}</Text>
-  </TouchableOpacity>
-);
+export default function CourseSearch({ navigation, route }) {
+  const HotTopic = ({ title }) => (
+    <TouchableOpacity style={styles.hotTopic}>
+      <Text style={styles.hotTopicText}>{title}</Text>
+    </TouchableOpacity>
+  );
 
-const Category = ({ icon, title }) => (
-  <TouchableOpacity style={styles.category}>
-    <Ionicons name={icon} size={24} color="#666" style={styles.categoryIcon} />
-    <Text style={styles.categoryTitle}>{title}</Text>
-    <Ionicons name="chevron-forward" size={24} color="#666" />
-  </TouchableOpacity>
-);
+  const Category = ({ icon, title }) => (
+    <TouchableOpacity style={styles.category}>
+      <Ionicons
+        name={icon}
+        size={24}
+        color="#666"
+        style={styles.categoryIcon}
+      />
+      <Text style={styles.categoryTitle}>{title}</Text>
+      <Ionicons name="chevron-forward" size={24} color="#666" />
+    </TouchableOpacity>
+  );
 
-const CourseCard = ({
-  title,
-  author,
-  price,
-  rating,
-  lessons,
-  discount,
-  isBestSeller,
-}) => (
-  <View style={styles.courseCard}>
-    <Image
-      source={{ uri: 'https://v0.dev/placeholder.svg' }}
-      style={styles.courseImage}
-    />
-    {isBestSeller && (
-      <View style={styles.bestSeller}>
-        <Text style={styles.bestSellerText}>Best-seller</Text>
-      </View>
-    )}
-    {discount && (
-      <View style={styles.discount}>
-        <Text style={styles.discountText}>{discount}</Text>
-      </View>
-    )}
-    <Text style={styles.courseTitle}>{title}</Text>
-    <Text style={styles.courseAuthor}>{author}</Text>
-    <View style={styles.courseDetails}>
-      <Text style={styles.coursePrice}>${price}</Text>
-      <View style={styles.ratingContainer}>
-        <Ionicons name="star" size={16} color="#FFD700" />
-        <Text style={styles.ratingText}>{rating}</Text>
-        <Text style={styles.lessonsText}>({lessons} lessons)</Text>
-      </View>
-    </View>
-  </View>
-);
-
-export default function CourseSearch() {
-  return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.time}>9:41</Text>
-        <View style={styles.statusIcons}>
-          <Ionicons name="cellular" size={16} color="black" />
-          <Ionicons name="wifi" size={16} color="black" />
-          <Ionicons name="battery-full" size={16} color="black" />
+  const CourseCard = ({
+    title,
+    author,
+    price,
+    rating,
+    lessons,
+    discount,
+    isBestSeller,
+  }) => (
+    <View style={styles.courseCard}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("courseDetailOverView")}
+      >
+        <Image
+          source={{ uri: "https://v0.dev/placeholder.svg" }}
+          style={styles.courseImage}
+        />
+      </TouchableOpacity>
+      {isBestSeller && (
+        <View style={styles.bestSeller}>
+          <Text style={styles.bestSellerText}>Best-seller</Text>
+        </View>
+      )}
+      {discount && (
+        <View style={styles.discount}>
+          <Text style={styles.discountText}>{discount}</Text>
+        </View>
+      )}
+      <TouchableOpacity
+        onPress={() => navigation.navigate("courseDetailOverView")}
+      >
+        <Text style={styles.courseTitle}>{title}</Text>
+      </TouchableOpacity>
+      <Text style={styles.courseAuthor}>{author}</Text>
+      <View style={styles.courseDetails}>
+        <Text style={styles.coursePrice}>${price}</Text>
+        <View style={styles.ratingContainer}>
+          <Ionicons name="star" size={16} color="#FFD700" />
+          <Text style={styles.ratingText}>{rating}</Text>
+          <Text style={styles.lessonsText}>({lessons} lessons)</Text>
         </View>
       </View>
+    </View>
+  );
 
+  return (
+    <View style={styles.container}>
       <ScrollView style={styles.content}>
         <View style={styles.searchContainer}>
           <Ionicons
@@ -86,7 +90,7 @@ export default function CourseSearch() {
             placeholder="Search course"
             placeholderTextColor="#666"
           />
-          <TouchableOpacity style={styles.filterButton}>
+          <TouchableOpacity style={styles.filterButton} onPress={()=> navigation.navigate('courseListting')}>
             <Text style={styles.filterButtonText}>Filter</Text>
           </TouchableOpacity>
         </View>
@@ -95,7 +99,8 @@ export default function CourseSearch() {
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          style={styles.hotTopicsContainer}>
+          style={styles.hotTopicsContainer}
+        >
           <HotTopic title="Java" />
           <HotTopic title="SQL" />
           <HotTopic title="Javascript" />
@@ -142,6 +147,7 @@ export default function CourseSearch() {
               rating="4.5 (1782)"
               lessons="12"
               discount="20% Off"
+              onPress={() => navigation.navigate("CourseDetailOverView")}
             />
           </ScrollView>
         </View>
@@ -156,7 +162,7 @@ export default function CourseSearch() {
           <Ionicons name="search" size={24} color="#00BCD4" />
           <Text style={[styles.tabLabel, styles.activeTabLabel]}>Search</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
+        <TouchableOpacity style={styles.tabItem} onPress={()=> navigation.navigate('myCourse')}>
           <Ionicons name="book" size={24} color="#666" />
           <Text style={styles.tabLabel}>My Courses</Text>
         </TouchableOpacity>
@@ -172,60 +178,45 @@ export default function CourseSearch() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingTop: 40,
-    paddingHorizontal: 15,
-    paddingBottom: 10,
-  },
-  time: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  statusIcons: {
-    flexDirection: 'row',
-    gap: 5,
-  },
+  
   content: {
     flex: 1,
   },
   searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingHorizontal: 15,
     marginBottom: 20,
   },
   searchIcon: {
-    position: 'absolute',
+    position: "absolute",
     left: 25,
     zIndex: 1,
   },
   searchInput: {
     flex: 1,
     height: 40,
-    backgroundColor: '#F0F0F0',
+    backgroundColor: "#F0F0F0",
     borderRadius: 20,
     paddingLeft: 40,
     paddingRight: 10,
   },
   filterButton: {
     marginLeft: 10,
-    backgroundColor: '#00BCD4',
+    backgroundColor: "#00BCD4",
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderRadius: 20,
   },
   filterButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginLeft: 15,
     marginBottom: 10,
   },
@@ -234,35 +225,35 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   hotTopic: {
-    backgroundColor: '#E0F7FA',
+    backgroundColor: "#E0F7FA",
     paddingHorizontal: 15,
     paddingVertical: 8,
     borderRadius: 20,
     marginRight: 10,
   },
   hotTopicText: {
-    color: '#00BCD4',
+    color: "#00BCD4",
   },
   categoriesContainer: {
     marginBottom: 20,
   },
   categoriesHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingRight: 15,
     marginBottom: 10,
   },
   viewMoreText: {
-    color: '#00BCD4',
+    color: "#00BCD4",
   },
   category: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingVertical: 15,
     paddingHorizontal: 15,
     borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
+    borderBottomColor: "#F0F0F0",
   },
   categoryIcon: {
     marginRight: 15,
@@ -275,9 +266,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   recommendedHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingRight: 15,
     marginBottom: 10,
   },
@@ -287,89 +278,89 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   courseImage: {
-    width: '100%',
+    width: "100%",
     height: 140,
     borderRadius: 8,
     marginBottom: 10,
   },
   bestSeller: {
-    position: 'absolute',
+    position: "absolute",
     top: 10,
     left: 10,
-    backgroundColor: '#FFD700',
+    backgroundColor: "#FFD700",
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 4,
   },
   bestSellerText: {
-    color: '#000',
-    fontWeight: 'bold',
+    color: "#000",
+    fontWeight: "bold",
     fontSize: 12,
   },
   discount: {
-    position: 'absolute',
+    position: "absolute",
     top: 10,
     right: 10,
-    backgroundColor: '#FF6347',
+    backgroundColor: "#FF6347",
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 4,
   },
   discountText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
     fontSize: 12,
   },
   courseTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 5,
   },
   courseAuthor: {
     fontSize: 14,
-    color: '#666',
+    color: "#666",
     marginBottom: 5,
   },
   courseDetails: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   coursePrice: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   ratingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   ratingText: {
     marginLeft: 5,
     fontSize: 14,
-    color: '#666',
+    color: "#666",
   },
   lessonsText: {
     marginLeft: 5,
     fontSize: 14,
-    color: '#666',
+    color: "#666",
   },
   tabBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
     borderTopWidth: 1,
-    borderTopColor: '#F0F0F0',
+    borderTopColor: "#F0F0F0",
     paddingVertical: 10,
   },
   tabItem: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   tabLabel: {
     fontSize: 12,
     marginTop: 5,
-    color: '#666',
+    color: "#666",
   },
   activeTabLabel: {
-    color: '#00BCD4',
+    color: "#00BCD4",
   },
 });

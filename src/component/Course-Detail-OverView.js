@@ -42,7 +42,7 @@ const CourseCard = ({ title, instructor, price, rating, reviews, lessons, image,
   </View>
 );
 
-export default function CourseDetailOverView() {
+export default function CourseDetailOverView({navigation, route}) {
 
   const courses = [
     {
@@ -82,35 +82,10 @@ export default function CourseDetailOverView() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.statusBar}>
-        <Text style={styles.time}>9:41</Text>
-        <View style={styles.icons}>
-          <Ionicons name="cellular" size={16} color="black" />
-          <Ionicons name="wifi" size={16} color="black" style={styles.icon} />
-          <View style={styles.batteryContainer}>
-            <View style={styles.battery}>
-              <View style={styles.batteryLevel} />
-            </View>
-            <View style={styles.batteryTip} />
-          </View>
-        </View>
-      </View>
+     
 
       <ScrollView>
-        <View style={styles.header}>
-          <TouchableOpacity style={styles.backButton}>
-            <Ionicons name="chevron-back" size={24} color="black" />
-          </TouchableOpacity>
-          <Text style={styles.titleBar}>Course details</Text>
-          <View style={styles.rightIcons}>
-            <TouchableOpacity style={styles.iconButton}>
-              <Ionicons name="bookmark-outline" size={24} color="black" />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.iconButton}>
-              <Ionicons name="ellipsis-vertical" size={24} color="black" />
-            </TouchableOpacity>
-          </View>
-        </View>
+        
 
         <View style={styles.courseHeader}>
           <Text style={styles.courseCategory}>UX Foundations</Text>
@@ -133,10 +108,10 @@ export default function CourseDetailOverView() {
         <TouchableOpacity style={[styles.tab, styles.activeTab]}>
           <Text style={[styles.tabText, styles.activeTabText]}>OVERVIEW</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.tab}>
+        <TouchableOpacity style={styles.tab} onPress={()=>navigation.navigate('courseDetailLesson')}>
           <Text style={styles.tabText}>LESSONS</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.tab}>
+        <TouchableOpacity style={styles.tab} onPress={()=>navigation.navigate('courseDetailReview')}>
           <Text style={styles.tabText}>REVIEW</Text>
         </TouchableOpacity>
       </View>
@@ -250,29 +225,7 @@ const styles = StyleSheet.create({
     marginLeft: 1,
   },
 
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
-  },
-  backButton: {
-    padding: 4,
-  },
-  titleBar: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  rightIcons: {
-    flexDirection: 'row',
-  },
-  iconButton: {
-    padding: 4,
-    marginLeft: 16,
-  },
+ 
 
   courseHeader: {
     backgroundColor: '#7C4DFF',

@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
+export default function MyCourse({ navigation, route }) {
 const ProgressBar = ({ progress }) => (
   <View style={styles.progressBarContainer}>
     <View style={[styles.progressBar, { width: `${progress}%` }]} />
@@ -29,7 +30,7 @@ const CourseItem = ({ title, duration, progress, image }) => (
   </View>
 );
 
-export default function MyCourse() {
+
   const [activeTab, setActiveTab] = useState('ALL');
 
   const tabs = ['ALL', 'ON GOING', 'COMPLETED'];
@@ -123,7 +124,7 @@ export default function MyCourse() {
           <Ionicons name="search" size={24} color="#666" />
           <Text style={styles.tabLabel}>Search</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
+        <TouchableOpacity style={styles.tabItem} >
           <Ionicons name="book" size={24} color="#00BCD4" />
           <Text style={[styles.tabLabel, styles.activeTabLabel]}>
             My Courses

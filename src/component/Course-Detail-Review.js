@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   Text,
@@ -8,72 +8,43 @@ import {
   StyleSheet,
   SafeAreaView,
   StatusBar,
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { Star } from 'lucide-react-native'; // add npm (2)
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { Star } from "lucide-react-native"; // add npm (2)
 
-const StarRating = ({ rating }) => {
-  return (
-    <View style={styles.starContainer}>
-      {[1, 2, 3, 4, 5].map((star) => (
-        <Star
-          key={star}
-          size={16}
-          fill={star <= rating ? '#FFD700' : 'transparent'}
-          color={star <= rating ? '#FFD700' : '#C4C4C4'}
-        />
-      ))}
+export default function CourseDetailReview({ navigation, route }) {
+  const StarRating = ({ rating }) => {
+    return (
+      <View style={styles.starContainer}>
+        {[1, 2, 3, 4, 5].map((star) => (
+          <Star
+            key={star}
+            size={16}
+            fill={star <= rating ? "#FFD700" : "transparent"}
+            color={star <= rating ? "#FFD700" : "#C4C4C4"}
+          />
+        ))}
+      </View>
+    );
+  };
+
+  const ReviewItem = ({ name, time, rating, review, imageUrl }) => (
+    <View style={styles.reviewItem}>
+      <Image source={{ uri: imageUrl }} style={styles.avatar} />
+      <View style={styles.reviewContent}>
+        <Text style={styles.reviewName}>{name}</Text>
+        <Text style={styles.reviewTime}>{time}</Text>
+        <StarRating rating={rating} />
+        <Text style={styles.reviewText}>{review}</Text>
+      </View>
     </View>
   );
-};
 
-const ReviewItem = ({ name, time, rating, review, imageUrl }) => (
-  <View style={styles.reviewItem}>
-    <Image source={{ uri: imageUrl }} style={styles.avatar} />
-    <View style={styles.reviewContent}>
-      <Text style={styles.reviewName}>{name}</Text>
-      <Text style={styles.reviewTime}>{time}</Text>
-      <StarRating rating={rating} />
-      <Text style={styles.reviewText}>{review}</Text>
-    </View>
-  </View>
-);
-
-export default function CourseDetailReview() {
-  const filterOptions = ['All', '5', '4', '3', '2', '1'];
+  const filterOptions = ["All", "5", "4", "3", "2", "1"];
 
   return (
     <View style={styles.container}>
-      <View style={styles.statusBar}>
-        <Text style={styles.time}>9:41</Text>
-        <View style={styles.icons}>
-          <Ionicons name="cellular" size={16} color="black" />
-          <Ionicons name="wifi" size={16} color="black" style={styles.icon} />
-          <View style={styles.batteryContainer}>
-            <View style={styles.battery}>
-              <View style={styles.batteryLevel} />
-            </View>
-            <View style={styles.batteryTip} />
-          </View>
-        </View>
-      </View>
-
       <ScrollView>
-        <View style={styles.header}>
-          <TouchableOpacity style={styles.backButton}>
-            <Ionicons name="chevron-back" size={24} color="black" />
-          </TouchableOpacity>
-          <Text style={styles.title}>Course details</Text>
-          <View style={styles.rightIcons}>
-            <TouchableOpacity style={styles.iconButton}>
-              <Ionicons name="bookmark-outline" size={24} color="black" />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.iconButton}>
-              <Ionicons name="ellipsis-vertical" size={24} color="black" />
-            </TouchableOpacity>
-          </View>
-        </View>
-
         <View style={styles.courseHeader}>
           <Text style={styles.courseCategory}>UX Foundations</Text>
           <Text style={styles.courseTitle}>Introduction to UX Design</Text>
@@ -92,10 +63,16 @@ export default function CourseDetailReview() {
         </View>
 
         <View style={styles.tabContainer}>
-          <TouchableOpacity style={styles.tab}>
+          <TouchableOpacity
+            style={styles.tab}
+            onPress={() => navigation.navigate("courseDetailOverView")}
+          >
             <Text style={styles.tabText}>OVERVIEW</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.tab}>
+          <TouchableOpacity
+            style={styles.tab}
+            onPress={() => navigation.navigate("courseDetailLesson")}
+          >
             <Text style={styles.tabText}>LESSONS</Text>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.tab, styles.activeTab]}>
@@ -116,20 +93,23 @@ export default function CourseDetailReview() {
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          style={styles.filterContainer}>
+          style={styles.filterContainer}
+        >
           {filterOptions.map((option, index) => (
             <TouchableOpacity
               key={index}
               style={[
                 styles.filterButton,
-                option === 'All' && styles.filterButtonActive,
-              ]}>
-              {option !== 'All' && <Star size={16} color="#00BCD4" />}
+                option === "All" && styles.filterButtonActive,
+              ]}
+            >
+              {option !== "All" && <Star size={16} color="#00BCD4" />}
               <Text
                 style={[
                   styles.filterText,
-                  option === 'All' && styles.filterTextActive,
-                ]}>
+                  option === "All" && styles.filterTextActive,
+                ]}
+              >
                 {option}
               </Text>
             </TouchableOpacity>
@@ -175,196 +155,172 @@ export default function CourseDetailReview() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   statusBar: {
     height: 44,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingHorizontal: 16,
   },
   time: {
     fontSize: 15,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   icons: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   icon: {
     marginLeft: 6,
   },
   batteryContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginLeft: 6,
   },
   battery: {
     width: 22,
     height: 11,
     borderWidth: 1,
-    borderColor: 'black',
+    borderColor: "black",
     borderRadius: 2,
-    justifyContent: 'center',
+    justifyContent: "center",
     padding: 1,
   },
   batteryLevel: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'black',
+    width: "100%",
+    height: "100%",
+    backgroundColor: "black",
   },
   batteryTip: {
     width: 1,
     height: 4,
-    backgroundColor: 'black',
+    backgroundColor: "black",
     marginLeft: 1,
   },
 
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
-  },
-  backButton: {
-    padding: 4,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  rightIcons: {
-    flexDirection: 'row',
-  },
-  iconButton: {
-    padding: 4,
-    marginLeft: 16,
-  },
-
   tabContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
+    borderBottomColor: "#E0E0E0",
   },
   tab: {
     flex: 1,
     paddingVertical: 16,
-    alignItems: 'center',
+    alignItems: "center",
   },
   activeTab: {
     borderBottomWidth: 2,
-    borderBottomColor: '#2196F3',
+    borderBottomColor: "#00BCD4",
   },
   tabText: {
     fontSize: 14,
-    fontWeight: 'bold',
-    color: '#757575',
+    fontWeight: "bold",
+    color: "#757575",
   },
   activeTabText: {
-    color: '#2196F3',
+    color: "#00BCD4",
   },
 
   courseHeader: {
-    backgroundColor: '#7C4DFF',
+    backgroundColor: "#7C4DFF",
     padding: 16,
     height: 200,
-    justifyContent: 'flex-end',
+    justifyContent: "flex-end",
   },
   courseCategory: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 14,
   },
   courseTitle: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginTop: 8,
   },
   playButton: {
-    position: 'absolute',
+    position: "absolute",
     right: 16,
     bottom: 16,
-    backgroundColor: 'rgba(255,255,255,0.3)',
+    backgroundColor: "rgba(255,255,255,0.3)",
     borderRadius: 25,
     width: 50,
     height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   courseInfo: {
     padding: 16,
   },
   courseSubtitle: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   ratingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginTop: 8,
   },
   ratingText: {
     marginLeft: 4,
-    color: '#757575',
+    color: "#757575",
   },
 
   content: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
   ratingContainerContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   ratingTextContent: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginRight: 8,
   },
   reviewCount: {
     fontSize: 14,
-    color: '#666',
+    color: "#666",
   },
   viewAll: {
     fontSize: 14,
-    color: '#00BCD4',
+    color: "#00BCD4",
   },
   filterContainer: {
     paddingHorizontal: 16,
     paddingBottom: 12,
   },
   filterButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#00BCD4',
+    borderColor: "#00BCD4",
     marginRight: 8,
   },
   filterButtonActive: {
-    backgroundColor: '#00BCD4',
+    backgroundColor: "#00BCD4",
   },
   filterText: {
-    color: '#00BCD4',
+    color: "#00BCD4",
     marginLeft: 4,
   },
   filterTextActive: {
-    color: '#fff',
+    color: "#fff",
   },
   reviewItem: {
-    flexDirection: 'row',
+    flexDirection: "row",
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: "#f0f0f0",
   },
   avatar: {
     width: 50,
@@ -377,52 +333,52 @@ const styles = StyleSheet.create({
   },
   reviewName: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   reviewTime: {
     fontSize: 12,
-    color: '#666',
+    color: "#666",
     marginBottom: 4,
   },
   starContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginBottom: 4,
   },
   reviewText: {
     fontSize: 14,
-    color: '#333',
+    color: "#333",
   },
 
   footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     padding: 16,
     borderTopWidth: 1,
-    borderTopColor: '#E0E0E0',
+    borderTopColor: "#E0E0E0",
   },
   priceContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   price: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   originalPrice: {
     fontSize: 16,
-    color: '#757575',
-    textDecorationLine: 'line-through',
+    color: "#757575",
+    textDecorationLine: "line-through",
     marginLeft: 8,
   },
   addToCartButton: {
-    backgroundColor: '#00BCD4',
+    backgroundColor: "#00BCD4",
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 4,
   },
   addToCartText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
   },
 });
