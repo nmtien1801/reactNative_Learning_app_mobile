@@ -14,7 +14,7 @@ export default function SignUpScreen() {
   return (
     <View style={styles.container}>
       <Image
-        source={require("../../img/Login_Register/App_Intro.jpg")}
+        source={require("../../../img/Login_Register/Intro.png")}
         style={styles.img}
       />
     </View>
@@ -29,6 +29,6 @@ const styles = StyleSheet.create({
   img: {
     flex: 1,
     height: 700,
-    width: 430,
+    width: 400,
   },
 });

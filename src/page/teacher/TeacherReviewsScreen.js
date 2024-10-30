@@ -10,9 +10,9 @@ import {
   FlatList,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import Header_Teacher from "../component/TeacherProfile/Header_Teacher";
-import Nav_Teacher from "../component/TeacherProfile/Nav_Teacher";
-import Footer from "../component/index";
+import Header_Teacher from "../../component/TeacherProfile/Header_Teacher";
+import Nav_Teacher from "../../component/TeacherProfile/Nav_Teacher";
+import Footer from "../../component/index";
 
 const reviews = [
   {
@@ -42,7 +42,7 @@ export default function TeacherReviewsScreen() {
   const renderReviewItem = ({ item }) => (
     <View style={styles.reviewCard}>
       <Image
-        source={require("../../img/Login_Register/Login.jpg")}
+        source={require("./../../../img/Login_Register/Login.jpg")}
         style={styles.reviewerImage}
       />
       <View style={styles.reviewContent}>

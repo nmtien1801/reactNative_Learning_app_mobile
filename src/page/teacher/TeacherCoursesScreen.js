@@ -10,9 +10,9 @@ import {
   SafeAreaView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import Header_Teacher from "../component/TeacherProfile/Header_Teacher";
-import Nav_Teacher from "../component/TeacherProfile/Nav_Teacher";
-import Footer from "../component/index";
+import Header_Teacher from "../../component/TeacherProfile/Header_Teacher";
+import Nav_Teacher from "../../component/TeacherProfile/Nav_Teacher";
+import Footer from "../../component/index";
 
 const categories = [
   {
@@ -65,7 +65,7 @@ export default function TeacherCoursesScreen() {
   const renderCourseItem = ({ item }) => (
     <View style={styles.courseCard}>
       <Image
-        source={require("../../img/Login_Register/Login.jpg")}
+        source={require("../../../img/Login_Register/Login.jpg")}
         style={styles.courseImage}
       />
       <View style={styles.courseInfo}>

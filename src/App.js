@@ -5,14 +5,14 @@ import { NavigationContainer } from "@react-navigation/native";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
 import MyCourse from "./component/My-course";
-import App_Intro from "./page/App_Intro";
-import LoginScreen from "./page/Login";
-import RegisterScreen from "./page/Register";
-import User_Profile from "./page/User_Profile";
-import TeacherOverviewScreen from "./page/TeacherOverviewScreen";
-import TeacherCoursesScreen from "./page/TeacherCoursesScreen";
-import TeacherReviewsScreen from "./page/TeacherReviewsScreen";
-
+import App_Intro from "./page/auth/App_Intro";
+import LoginScreen from "./page/auth/Login";
+import RegisterScreen from "./page/auth/Register";
+import User_Profile from "./page/user/User_Profile";
+import TeacherOverviewScreen from "./page/teacher/TeacherOverviewScreen";
+import TeacherCoursesScreen from "./page/teacher/TeacherCoursesScreen";
+import TeacherReviewsScreen from "./page/teacher/TeacherReviewsScreen";
+import Teacher_Course from "./page/teacher/Teacher_Course";
 const Stack = createStackNavigator();
 export default function App() {
   return (
@@ -33,15 +33,16 @@ export default function App() {
     // <TeacherCoursesScreen />
     // <TeacherReviewsScreen />
 
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="TeacherOverview">
-        <Stack.Screen
-          name="TeacherOverview"
-          component={TeacherOverviewScreen}
-        />
-        <Stack.Screen name="TeacherCourses" component={TeacherCoursesScreen} />
-        <Stack.Screen name="TeacherReviews" component={TeacherReviewsScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    // <NavigationContainer>
+    //   <Stack.Navigator initialRouteName="TeacherOverview">
+    //     <Stack.Screen
+    //       name="TeacherOverview"
+    //       component={TeacherOverviewScreen}
+    //     />
+    //     <Stack.Screen name="TeacherCourses" component={TeacherCoursesScreen} />
+    //     <Stack.Screen name="TeacherReviews" component={TeacherReviewsScreen} />
+    //   </Stack.Navigator>
+    // </NavigationContainer>
+    <Teacher_Course />
   );
 }

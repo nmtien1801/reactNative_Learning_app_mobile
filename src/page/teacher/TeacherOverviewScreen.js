@@ -9,10 +9,10 @@ import {
   SafeAreaView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import Header_Teacher from "../component/TeacherProfile/Header_Teacher";
-import Nav_Teacher from "../component/TeacherProfile/Nav_Teacher";
+import Header_Teacher from "../../component/TeacherProfile/Header_Teacher";
+import Nav_Teacher from "../../component/TeacherProfile/Nav_Teacher";
 import { useNavigation } from "@react-navigation/native";
-import Footer from "../component/index";
+import Footer from "../../component/index";
 
 export default function TeacherOverViewScreen() {
   const navigation = useNavigation();
@@ -24,7 +24,7 @@ export default function TeacherOverViewScreen() {
         <View style={styles.infoCard}>
           <View style={styles.infoCardHeader}>
             <Image
-              source={require("../../img/Teacher_Profile/teacher.jpg")}
+              source={require("../../../img/Teacher_Profile/teacher.jpg")}
               style={styles.infoCardImage}
             />
             <View style={styles.infoCardText}>

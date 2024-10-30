@@ -6,20 +6,21 @@ import {
   TouchableOpacity,
   Image,
   StyleSheet,
+  SafeAreaView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
-export default function RegisterScreen() {
+export default function LoginScreen() {
   return (
     <View style={styles.container}>
-      <LinearGradient colors={["#A9C6EB", "#FFC0CB"]} style={styles.background}>
+      <LinearGradient colors={["#FFC0CB", "#A9C6EB"]} style={styles.background}>
         <View style={styles.content}>
           <Image
-            source={require("../../img/Login_Register/Login.jpg")}
+            source={require("../../../img/Login_Register/Login.jpg")}
             style={styles.img}
           />
           <View style={styles.formContainer}>
-            <Text style={styles.title}>Sign up</Text>
+            <Text style={styles.title}>Login</Text>
             <TextInput
               style={styles.input}
               placeholder="Username/Email"
@@ -31,20 +32,18 @@ export default function RegisterScreen() {
               placeholderTextColor="#999"
               secureTextEntry
             />
-            <TextInput
-              style={styles.input}
-              placeholder="Confirm password"
-              placeholderTextColor="#999"
-              secureTextEntry
-            />
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity style={[styles.button, styles.createButton]}>
-                <Text style={styles.buttonText}>Create</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.button, styles.cancelButton]}>
-                <Text style={styles.buttonText}>Cancel</Text>
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity>
+              <Text style={styles.forgotPassword}>Forgot Password?</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.loginButton}>
+              <Text style={styles.loginButtonText}>Login</Text>
+            </TouchableOpacity>
+            <Text style={styles.errorText}>
+              Username hoặc mật khẩu không chính xác
+            </Text>
+            <TouchableOpacity>
+              <Text style={styles.signupText}>Not a member? Signup</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </LinearGradient>
@@ -62,14 +61,14 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     // justifyContent: 'center',
-    // alignItems: 'center',
+    alignItems: "center",
     padding: 20,
   },
   img: {
     width: 150,
     height: 150,
+    marginLeft: 180,
     marginTop: 40,
-    marginLeft: 0,
   },
   formContainer: {
     backgroundColor: "white",
@@ -77,8 +76,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: "100%",
     alignItems: "center",
-    height: 400,
     justifyContent: "center",
+    height: 400,
   },
   title: {
     fontSize: 24,
@@ -88,34 +87,37 @@ const styles = StyleSheet.create({
   input: {
     width: "100%",
     height: 40,
-    borderColor: "#ddd",
+    borderColor: "#484646",
     borderBottomWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
+    marginBottom: 10,
+  },
+  forgotPassword: {
+    color: "#999",
     marginBottom: 20,
+    marginRight: 180,
+    fontStyle: "italic",
   },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
-    marginTop: 20,
-  },
-  button: {
+  loginButton: {
+    backgroundColor: "#1E90FF",
     paddingVertical: 10,
     paddingHorizontal: 20,
-    borderRadius: 5,
-    width: "48%",
+    borderRadius: 20,
+    width: "100%",
     alignItems: "center",
   },
-  createButton: {
-    backgroundColor: "#1DCCE4",
-  },
-  cancelButton: {
-    backgroundColor: "#94E66E",
-  },
-  buttonText: {
+  loginButtonText: {
     color: "white",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  errorText: {
+    color: "red",
+    marginTop: 10,
+  },
+  signupText: {
+    marginTop: 20,
+    color: "#1E90FF",
   },
 });

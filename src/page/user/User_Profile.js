@@ -8,12 +8,12 @@ import {
   FlatList,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import Footer from "../component/index";
+import Footer from "../../component/index";
 
 const data = [
   {
     id: 1,
-    image: require("../../img/User_Profile/ProductDesign.jpg"),
+    image: require("../../../img/User_Profile/ProductDesign.jpg"),
     title: "Product Design",
     author: "Dennis Sweeney",
     price: 190,
@@ -22,7 +22,7 @@ const data = [
   },
   {
     id: 2,
-    image: require("../../img/User_Profile/Website_Design.jpg"),
+    image: require("../../../img/User_Profile/ProductDesign.jpg"),
     title: "Website Design",
     author: "Ramono Wultschner",
     price: 59,
@@ -32,7 +32,7 @@ const data = [
 
   {
     id: 3,
-    image: require("../../img/User_Profile/Mobile_UI_Design.jpg"),
+    image: require("../../../img/User_Profile/ProductDesign.jpg"),
     title: "Mobile UI Design",
     author: "Ramono Wultschner",
     price: 320,
@@ -42,7 +42,7 @@ const data = [
 
   {
     id: 4,
-    image: require("../../img/User_Profile/Digital.jpg"),
+    image: require("../../../img/User_Profile/ProductDesign.jpg"),
     title: "Digital Portrait",
     author: "Ramono Wultschner",
     price: 67,
@@ -52,7 +52,7 @@ const data = [
 
   {
     id: 5,
-    image: require("../../img/User_Profile/ProductDesign.jpg"),
+    image: require("../../../img/User_Profile/ProductDesign.jpg"),
     title: "Product Design",
     author: "Dennis Sweeney",
     price: 190,
@@ -62,7 +62,7 @@ const data = [
 
   {
     id: 6,
-    image: require("../../img/User_Profile/ProductDesign.jpg"),
+    image: require("../../../img/User_Profile/ProductDesign.jpg"),
     title: "Product Design",
     author: "Dennis Sweeney",
     price: 190,
@@ -99,11 +99,11 @@ export default function UserProfileScreen() {
         </View>
         <View style={styles.profileSection}>
           <Image
-            source={require("../../img/User_Profile/UserProfile1.jpg")}
+            source={require("./../../../img/User_Profile/UserProfile1.jpg")}
             style={styles.bannerImage}
           />
           <Image
-            source={require("../../img/User_Profile/User_Profile.jpg")}
+            source={require("./../../../img/User_Profile/User_Profile.jpg")}
             style={styles.profileImage}
           />
           <Text style={styles.userName}>Nhi Nhi</Text>
