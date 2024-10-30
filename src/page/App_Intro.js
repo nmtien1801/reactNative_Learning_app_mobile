@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   Text,
@@ -7,13 +7,16 @@ import {
   Image,
   StyleSheet,
   SafeAreaView,
-} from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+} from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function SignUpScreen() {
   return (
     <View style={styles.container}>
-      <Image source={require('../img/Login_Register/App_Intro.jpg')} style={styles.img} />
+      <Image
+        source={require("../../img/Login_Register/App_Intro.jpg")}
+        style={styles.img}
+      />
     </View>
   );
 }
@@ -21,11 +24,11 @@ export default function SignUpScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    height: "auto"
+    height: "auto",
   },
   img: {
     flex: 1,
     height: 700,
-    width: 430
+    width: 430,
   },
 });

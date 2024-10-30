@@ -5,6 +5,11 @@ import { NavigationContainer } from "@react-navigation/native";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
 import MyCourse from "./component/My-course";
+import App_Intro from "./page/App_Intro";
+import LoginScreen from "./page/Login";
+import RegisterScreen from "./page/Register";
+import User_Profile from "./page/User_Profile";
+import Teacher_Profile from "./page/Teacher_Profile";
 
 // click -> Login
 function handleLogin({ navigation }) {
@@ -32,9 +37,9 @@ export default function App() {
     // <MyCourse />
 
     // <App_Intro />
-    // <LoginScreen />
-    // <RegisterScreen/>
-    // <User_Profile/>
-    <TeacherProfile />
+    <LoginScreen />
+    // <RegisterScreen />
+    // <User_Profile />
+    // <Teacher_Profile />
   );
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   Text,
@@ -7,8 +7,8 @@ import {
   TouchableOpacity,
   StyleSheet,
   SafeAreaView,
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function TeacherProfileScreen() {
   return (
@@ -19,11 +19,11 @@ export default function TeacherProfileScreen() {
         </View>
         <View style={styles.profileSection}>
           <Image
-             source={require('../img/Teacher_Profile/Teacher_Nen.jpg')}
+            source={require("../../img/Teacher_Profile/Teacher_Nen.jpg")}
             style={styles.bannerImage}
           />
           <Image
-            source={require('../img/Teacher_Profile/teacher.jpg')}
+            source={require("../../img/Teacher_Profile/teacher.jpg")}
             style={styles.profileImage}
           />
           <View style={styles.profileInfo}>
@@ -51,7 +51,7 @@ export default function TeacherProfileScreen() {
         <View style={styles.infoCard}>
           <View style={styles.infoCardHeader}>
             <Image
-               source={require('../img/Teacher_Profile/teacher.jpg')}
+              source={require("../../img/Teacher_Profile/teacher.jpg")}
               style={styles.infoCardImage}
             />
             <View style={styles.infoCardText}>
@@ -104,71 +104,71 @@ export default function TeacherProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: "#F5F5F5",
   },
   header: {
     padding: 16,
-    backgroundColor: '#FFF',
+    backgroundColor: "#FFF",
   },
   headerTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   profileSection: {
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 20,
   },
   bannerImage: {
-    width: '100%',
+    width: "100%",
     height: 150,
-    resizeMode: 'cover',
+    resizeMode: "cover",
   },
   profileImage: {
     width: 100,
     height: 100,
     borderRadius: 50,
     borderWidth: 3,
-    borderColor: '#FFF',
-    position: 'absolute',
+    borderColor: "#FFF",
+    position: "absolute",
     top: 100,
   },
   profileInfo: {
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 60,
   },
   teacherName: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   jobTitleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginTop: 4,
   },
   jobTitle: {
     fontSize: 16,
-    color: '#666',
+    color: "#666",
   },
   teacherTag: {
-    backgroundColor: '#4A90E2',
+    backgroundColor: "#4A90E2",
     borderRadius: 12,
     paddingHorizontal: 8,
     paddingVertical: 2,
     marginLeft: 8,
   },
   teacherTagText: {
-    color: '#FFF',
+    color: "#FFF",
     fontSize: 12,
   },
   timeZone: {
     fontSize: 14,
-    color: '#666',
+    color: "#666",
     marginTop: 4,
   },
   tabContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    backgroundColor: '#FFF',
+    flexDirection: "row",
+    justifyContent: "space-around",
+    backgroundColor: "#FFF",
     paddingVertical: 12,
     marginBottom: 16,
   },
@@ -178,25 +178,25 @@ const styles = StyleSheet.create({
   },
   activeTab: {
     borderBottomWidth: 2,
-    borderBottomColor: '#4A90E2',
+    borderBottomColor: "#4A90E2",
   },
   tabText: {
     fontSize: 14,
-    color: '#666',
+    color: "#666",
   },
   activeTabText: {
-    color: '#4A90E2',
-    fontWeight: 'bold',
+    color: "#4A90E2",
+    fontWeight: "bold",
   },
   infoCard: {
-    backgroundColor: '#FFF',
+    backgroundColor: "#FFF",
     borderRadius: 8,
     padding: 16,
     marginHorizontal: 16,
   },
   infoCardHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 16,
   },
   infoCardImage: {
@@ -210,64 +210,64 @@ const styles = StyleSheet.create({
   },
   infoCardName: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   infoCardJob: {
     fontSize: 14,
-    color: '#666',
+    color: "#666",
   },
   followButton: {
-    backgroundColor: '#4A90E2',
+    backgroundColor: "#4A90E2",
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
   },
   followButtonText: {
-    color: '#FFF',
+    color: "#FFF",
     fontSize: 14,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   descriptionContainer: {
     marginBottom: 16,
   },
   descriptionText: {
     fontSize: 14,
-    color: '#333',
+    color: "#333",
     lineHeight: 20,
   },
   seeMoreText: {
-    color: '#4A90E2',
+    color: "#4A90E2",
     fontSize: 14,
     marginTop: 8,
   },
   contactContainer: {
     borderTopWidth: 1,
-    borderTopColor: '#E0E0E0',
+    borderTopColor: "#E0E0E0",
     paddingTop: 16,
   },
   contactTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 12,
   },
   contactItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 8,
   },
   contactText: {
     fontSize: 14,
-    color: '#333',
+    color: "#333",
     marginLeft: 8,
     flex: 1,
   },
   bottomNav: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    backgroundColor: '#FFF',
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    backgroundColor: "#FFF",
     paddingVertical: 12,
     borderTopWidth: 1,
-    borderTopColor: '#E0E0E0',
+    borderTopColor: "#E0E0E0",
   },
 });

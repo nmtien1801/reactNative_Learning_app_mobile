@@ -1,17 +1,22 @@
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, SafeAreaView } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import React from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+  SafeAreaView,
+} from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function LoginScreen() {
   return (
     <View style={styles.container}>
-      <LinearGradient
-        colors={['#FFC0CB', '#A9C6EB']}
-        style={styles.background}
-      >
+      <LinearGradient colors={["#FFC0CB", "#A9C6EB"]} style={styles.background}>
         <View style={styles.content}>
           <Image
-            source={require('../img/Login_Register/Login.jpg')}
+            source={require("../../img/Login_Register/Login.jpg")}
             style={styles.img}
           />
           <View style={styles.formContainer}>
@@ -33,7 +38,9 @@ export default function LoginScreen() {
             <TouchableOpacity style={styles.loginButton}>
               <Text style={styles.loginButtonText}>Login</Text>
             </TouchableOpacity>
-            <Text style={styles.errorText}>Username hoặc mật khẩu không chính xác</Text>
+            <Text style={styles.errorText}>
+              Username hoặc mật khẩu không chính xác
+            </Text>
             <TouchableOpacity>
               <Text style={styles.signupText}>Not a member? Signup</Text>
             </TouchableOpacity>
@@ -54,64 +61,63 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     // justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: "center",
     padding: 20,
   },
   img: {
     width: 150,
     height: 150,
     marginLeft: 180,
-    marginTop: 40
+    marginTop: 40,
   },
   formContainer: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     padding: 20,
     borderRadius: 10,
-    width: '100%',
-    alignItems: 'center',
+    width: "100%",
+    alignItems: "center",
     justifyContent: "center",
-    height: 400
+    height: 400,
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
   },
   input: {
-    width: '100%',
+    width: "100%",
     height: 40,
-    borderColor: '#484646',
+    borderColor: "#484646",
     borderBottomWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
     marginBottom: 10,
   },
   forgotPassword: {
-    color: '#999',
+    color: "#999",
     marginBottom: 20,
     marginRight: 180,
-    fontStyle: "italic"
-    
+    fontStyle: "italic",
   },
   loginButton: {
-    backgroundColor: '#1E90FF',
+    backgroundColor: "#1E90FF",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 20,
-    width: '100%',
-    alignItems: 'center',
+    width: "100%",
+    alignItems: "center",
   },
   loginButtonText: {
-    color: 'white',
+    color: "white",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   errorText: {
-    color: 'red',
+    color: "red",
     marginTop: 10,
   },
   signupText: {
     marginTop: 20,
-    color: '#1E90FF',
+    color: "#1E90FF",
   },
 });

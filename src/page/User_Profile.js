@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   Text,
@@ -6,25 +6,25 @@ import {
   ScrollView,
   StyleSheet,
   FlatList,
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import Footer from './Footer'
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import Footer from "../component/Footer";
 
 const data = [
   {
     id: 1,
-    image: require('../img/User_Profile/ProductDesign.jpg'),
-    title: 'Product Design',
-    author: 'Dennis Sweeney',
+    image: require("../../img/User_Profile/ProductDesign.jpg"),
+    title: "Product Design",
+    author: "Dennis Sweeney",
     price: 190,
     rating: 4.5,
     lessons: 12,
   },
   {
     id: 2,
-    image: require('../img/User_Profile/Website_Design.jpg'),
-    title: 'Website Design',
-    author: 'Ramono Wultschner',
+    image: require("../../img/User_Profile/Website_Design.jpg"),
+    title: "Website Design",
+    author: "Ramono Wultschner",
     price: 59,
     rating: 4.5,
     lessons: 12,
@@ -32,9 +32,9 @@ const data = [
 
   {
     id: 3,
-    image: require('../img/User_Profile/Mobile_UI_Design.jpg'),
-    title: 'Mobile UI Design',
-    author: 'Ramono Wultschner',
+    image: require("../../img/User_Profile/Mobile_UI_Design.jpg"),
+    title: "Mobile UI Design",
+    author: "Ramono Wultschner",
     price: 320,
     rating: 4.5,
     lessons: 12,
@@ -42,9 +42,9 @@ const data = [
 
   {
     id: 4,
-    image: require('../img/User_Profile/Digital.jpg'),
-    title: 'Digital Portrait',
-    author: 'Ramono Wultschner',
+    image: require("../../img/User_Profile/Digital.jpg"),
+    title: "Digital Portrait",
+    author: "Ramono Wultschner",
     price: 67,
     rating: 4.5,
     lessons: 12,
@@ -52,9 +52,9 @@ const data = [
 
   {
     id: 5,
-    image: require('../img/User_Profile/ProductDesign.jpg'),
-    title: 'Product Design',
-    author: 'Dennis Sweeney',
+    image: require("../../img/User_Profile/ProductDesign.jpg"),
+    title: "Product Design",
+    author: "Dennis Sweeney",
     price: 190,
     rating: 4.5,
     lessons: 12,
@@ -62,9 +62,9 @@ const data = [
 
   {
     id: 6,
-    image: require('../img/User_Profile/ProductDesign.jpg'),
-    title: 'Product Design',
-    author: 'Dennis Sweeney',
+    image: require("../../img/User_Profile/ProductDesign.jpg"),
+    title: "Product Design",
+    author: "Dennis Sweeney",
     price: 190,
     rating: 4.5,
     lessons: 12,
@@ -99,11 +99,11 @@ export default function UserProfileScreen() {
         </View>
         <View style={styles.profileSection}>
           <Image
-            source={require('../img/User_Profile/UserProfile1.jpg')}
+            source={require("../../img/User_Profile/UserProfile1.jpg")}
             style={styles.bannerImage}
           />
           <Image
-            source={require('../img/User_Profile/User_Profile.jpg')}
+            source={require("../../img/User_Profile/User_Profile.jpg")}
             style={styles.profileImage}
           />
           <Text style={styles.userName}>Nhi Nhi</Text>
@@ -143,7 +143,7 @@ export default function UserProfileScreen() {
           />
         </View>
       </ScrollView>
-     <Footer/>
+      <Footer />
     </View>
   );
 }
@@ -151,72 +151,72 @@ export default function UserProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: "#F5F5F5",
   },
   header: {
     padding: 16,
-    backgroundColor: '#FFF',
+    backgroundColor: "#FFF",
   },
   headerTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   profileSection: {
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 20,
   },
   bannerImage: {
-    width: '100%',
+    width: "100%",
     height: 150,
-    resizeMode: 'cover',
+    resizeMode: "cover",
   },
   profileImage: {
     width: 100,
     height: 100,
     borderRadius: 50,
     borderWidth: 3,
-    borderColor: '#FFF',
-    position: 'absolute',
+    borderColor: "#FFF",
+    position: "absolute",
     top: 100,
   },
   userName: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginTop: 60,
   },
   userTitle: {
     fontSize: 16,
-    color: '#666',
+    color: "#666",
     marginTop: 4,
   },
   statsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "100%",
     marginTop: 20,
   },
   statItem: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   statNumber: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   statLabel: {
     fontSize: 14,
-    color: '#666',
+    color: "#666",
   },
   savedCoursesSection: {
     padding: 16,
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 16,
   },
   courseItem: {
-    flexDirection: 'row',
-    backgroundColor: '#FFF',
+    flexDirection: "row",
+    backgroundColor: "#FFF",
     borderRadius: 8,
     marginBottom: 16,
     padding: 12,
@@ -232,26 +232,26 @@ const styles = StyleSheet.create({
   },
   courseTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   courseAuthor: {
     fontSize: 14,
-    color: '#666',
+    color: "#666",
     marginTop: 4,
   },
   courseDetails: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginTop: 8,
   },
   coursePrice: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#4A90E2',
+    fontWeight: "bold",
+    color: "#4A90E2",
   },
   ratingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginLeft: 12,
   },
   ratingText: {
@@ -260,14 +260,14 @@ const styles = StyleSheet.create({
   },
   lessonCount: {
     fontSize: 14,
-    color: '#666',
+    color: "#666",
     marginLeft: 12,
   },
   bookmarkIcon: {
-    position: 'absolute',
+    position: "absolute",
     top: 12,
     right: 12,
     fontSize: 24,
-    color: '#4A90E2',
+    color: "#4A90E2",
   },
 });
