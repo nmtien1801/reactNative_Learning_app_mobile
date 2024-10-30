@@ -9,20 +9,9 @@ import App_Intro from "./page/App_Intro";
 import LoginScreen from "./page/Login";
 import RegisterScreen from "./page/Register";
 import User_Profile from "./page/User_Profile";
-import Teacher_Profile from "./page/Teacher_Profile";
-
-// click -> Login
-function handleLogin({ navigation }) {
-  return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Login!</Text>
-      <Button
-        title="Go to Login"
-        onPress={() => navigation.navigate("Login")}
-      />
-    </View>
-  );
-}
+import TeacherOverviewScreen from "./page/TeacherOverviewScreen";
+import TeacherCoursesScreen from "./page/TeacherCoursesScreen";
+import TeacherReviewsScreen from "./page/TeacherReviewsScreen";
 
 const Stack = createStackNavigator();
 export default function App() {
@@ -37,9 +26,22 @@ export default function App() {
     // <MyCourse />
 
     // <App_Intro />
-    <LoginScreen />
+    // <LoginScreen />
     // <RegisterScreen />
     // <User_Profile />
-    // <Teacher_Profile />
+    // <TeacherOverviewScreen />
+    // <TeacherCoursesScreen />
+    // <TeacherReviewsScreen />
+
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="TeacherOverview">
+        <Stack.Screen
+          name="TeacherOverview"
+          component={TeacherOverviewScreen}
+        />
+        <Stack.Screen name="TeacherCourses" component={TeacherCoursesScreen} />
+        <Stack.Screen name="TeacherReviews" component={TeacherReviewsScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }

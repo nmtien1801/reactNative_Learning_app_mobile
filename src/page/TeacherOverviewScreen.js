@@ -9,45 +9,18 @@ import {
   SafeAreaView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import Header_Teacher from "../component/TeacherProfile/Header_Teacher";
+import Nav_Teacher from "../component/TeacherProfile/Nav_Teacher";
+import { useNavigation } from "@react-navigation/native";
+import Footer from "../component/index";
 
-export default function TeacherProfileScreen() {
+export default function TeacherOverViewScreen() {
+  const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>Teacher's profile</Text>
-        </View>
-        <View style={styles.profileSection}>
-          <Image
-            source={require("../../img/Teacher_Profile/Teacher_Nen.jpg")}
-            style={styles.bannerImage}
-          />
-          <Image
-            source={require("../../img/Teacher_Profile/teacher.jpg")}
-            style={styles.profileImage}
-          />
-          <View style={styles.profileInfo}>
-            <Text style={styles.teacherName}>Minh Tiến</Text>
-            <View style={styles.jobTitleContainer}>
-              <Text style={styles.jobTitle}>UX/UI Designer</Text>
-              <View style={styles.teacherTag}>
-                <Text style={styles.teacherTagText}>Teacher</Text>
-              </View>
-            </View>
-            <Text style={styles.timeZone}>Korea • 9:30 AM</Text>
-          </View>
-        </View>
-        <View style={styles.tabContainer}>
-          <TouchableOpacity style={[styles.tab, styles.activeTab]}>
-            <Text style={[styles.tabText, styles.activeTabText]}>OVERVIEW</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.tab}>
-            <Text style={styles.tabText}>COURSES</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.tab}>
-            <Text style={styles.tabText}>REVIEW</Text>
-          </TouchableOpacity>
-        </View>
+        <Header_Teacher />
+        <Nav_Teacher />
         <View style={styles.infoCard}>
           <View style={styles.infoCardHeader}>
             <Image
@@ -91,12 +64,7 @@ export default function TeacherProfileScreen() {
           </View>
         </View>
       </ScrollView>
-      <View style={styles.bottomNav}>
-        <Ionicons name="home-outline" size={24} color="#000" />
-        <Ionicons name="search-outline" size={24} color="#000" />
-        <Ionicons name="book-outline" size={24} color="#000" />
-        <Ionicons name="person-outline" size={24} color="#000" />
-      </View>
+      <Footer />
     </SafeAreaView>
   );
 }
@@ -106,88 +74,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#F5F5F5",
   },
-  header: {
-    padding: 16,
-    backgroundColor: "#FFF",
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  profileSection: {
-    alignItems: "center",
-    marginBottom: 20,
-  },
-  bannerImage: {
-    width: "100%",
-    height: 150,
-    resizeMode: "cover",
-  },
-  profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    borderWidth: 3,
-    borderColor: "#FFF",
-    position: "absolute",
-    top: 100,
-  },
-  profileInfo: {
-    alignItems: "center",
-    marginTop: 60,
-  },
-  teacherName: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  jobTitleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 4,
-  },
-  jobTitle: {
-    fontSize: 16,
-    color: "#666",
-  },
-  teacherTag: {
-    backgroundColor: "#4A90E2",
-    borderRadius: 12,
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    marginLeft: 8,
-  },
-  teacherTagText: {
-    color: "#FFF",
-    fontSize: 12,
-  },
-  timeZone: {
-    fontSize: 14,
-    color: "#666",
-    marginTop: 4,
-  },
-  tabContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    backgroundColor: "#FFF",
-    paddingVertical: 12,
-    marginBottom: 16,
-  },
-  tab: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-  },
-  activeTab: {
-    borderBottomWidth: 2,
-    borderBottomColor: "#4A90E2",
-  },
-  tabText: {
-    fontSize: 14,
-    color: "#666",
-  },
-  activeTabText: {
-    color: "#4A90E2",
-    fontWeight: "bold",
-  },
+
   infoCard: {
     backgroundColor: "#FFF",
     borderRadius: 8,
