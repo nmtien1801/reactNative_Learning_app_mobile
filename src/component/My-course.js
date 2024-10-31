@@ -104,7 +104,7 @@ const CourseItem = ({ title, duration, progress, image }) => (
     </View>
       </ScrollView>
 
-      <Footer />
+      <Footer navigation={navigation} route={route}/>
     </View>
   );
 }

@@ -85,6 +85,14 @@ export default function App() {
           options={{ header: () => {} }}
         />
 
+        {/* ===================== user - student */}
+        <Stack.Screen
+          name="userProfile"
+          component={User_Profile}
+          options={{ header: () => {} }}
+        />
+
+
         {/* ===================== teacher */}
         <Stack.Screen
           name="TeacherOverview"

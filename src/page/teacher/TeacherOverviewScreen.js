@@ -14,7 +14,7 @@ import Nav_Teacher from "../../component/TeacherProfile/Nav_Teacher";
 import { useNavigation } from "@react-navigation/native";
 import Footer from "../../component/index";
 
-export default function TeacherOverViewScreen() {
+export default function TeacherOverViewScreen({navigation, route}) {
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
@@ -64,7 +64,7 @@ export default function TeacherOverViewScreen() {
           </View>
         </View>
       </ScrollView>
-      <Footer />
+      <Footer navigation={navigation} route={route}/>
     </SafeAreaView>
   );
 }

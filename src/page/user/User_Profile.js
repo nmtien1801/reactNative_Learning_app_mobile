@@ -90,7 +90,7 @@ const Item = ({ image, title, author, price, rating, lessons }) => (
   </View>
 );
 
-export default function UserProfileScreen() {
+export default function UserProfileScreen({navigation, route}) {
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -143,7 +143,7 @@ export default function UserProfileScreen() {
           />
         </View>
       </ScrollView>
-      <Footer />
+      <Footer navigation={navigation} route={route}/>
     </View>
   );
 }

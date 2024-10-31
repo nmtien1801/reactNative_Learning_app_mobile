@@ -61,7 +61,7 @@ const categories = [
   },
 ];
 
-export default function TeacherCoursesScreen() {
+export default function TeacherCoursesScreen({navigation, route}) {
   const renderCourseItem = ({ item }) => (
     <View style={styles.courseCard}>
       <Image
@@ -119,7 +119,7 @@ export default function TeacherCoursesScreen() {
         />
       </ScrollView>
 
-      <Footer />
+      <Footer navigation={navigation} route={route}/>
     </SafeAreaView>
   );
 }

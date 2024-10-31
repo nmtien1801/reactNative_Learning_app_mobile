@@ -154,7 +154,7 @@ export default function CourseSearch({ navigation, route }) {
         </View>
       </ScrollView>
 
-     <Footer />
+     <Footer navigation={navigation} route={route}/>
     </View>
   );
 }

@@ -137,7 +137,7 @@ export default function CourseListting({ navigation, route }) {
         />
       </ScrollView>
 
-      <Footer />
+      <Footer navigation={navigation} route={route}/>
     </View>
   );
 }

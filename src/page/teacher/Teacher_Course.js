@@ -128,7 +128,7 @@ export default function Component() {
         contentContainerStyle={styles.listContainer}
       />
 
-      <Footer />
+      <Footer navigation={navigation} route={route}/>
     </View>
   );
 }

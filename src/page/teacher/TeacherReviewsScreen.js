@@ -38,7 +38,7 @@ const reviews = [
   },
 ];
 
-export default function TeacherReviewsScreen() {
+export default function TeacherReviewsScreen({ navigation, route }) {
   const renderReviewItem = ({ item }) => (
     <View style={styles.reviewCard}>
       <Image
@@ -89,7 +89,7 @@ export default function TeacherReviewsScreen() {
         </View>
       </ScrollView>
 
-      <Footer />
+      <Footer navigation={navigation} route={route}/>
     </SafeAreaView>
   );
 }
