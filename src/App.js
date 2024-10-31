@@ -21,6 +21,8 @@ import TeacherCoursesScreen from "./page/teacher/TeacherCoursesScreen";
 import TeacherReviewsScreen from "./page/teacher/TeacherReviewsScreen";
 import Teacher_Course from "./page/teacher/Teacher_Course";
 
+import Cart from "./page/user/cart/Cart";
+
 // click -> Login
 function handleLogin({ navigation }) {
   return (
@@ -38,7 +40,7 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="myCourse">
+      <Stack.Navigator initialRouteName="cart">
         <Stack.Screen name="home" component={handleLogin} />
         <Stack.Screen name="login" component={Login} />
         <Stack.Screen name="register" component={RegisterScreen} />
@@ -60,21 +62,27 @@ export default function App() {
           name="courseDetailOverView"
           component={CourseDetailOverView}
           options={({ navigation, route }) => ({
-            header: () => <HeaderCourseDetail navigation={navigation} route={route} />
+            header: () => (
+              <HeaderCourseDetail navigation={navigation} route={route} />
+            ),
           })}
         />
         <Stack.Screen
           name="courseDetailLesson"
           component={CourseDetailLesson}
           options={({ navigation, route }) => ({
-            header: () => <HeaderCourseDetail navigation={navigation} route={route} />
+            header: () => (
+              <HeaderCourseDetail navigation={navigation} route={route} />
+            ),
           })}
         />
         <Stack.Screen
           name="courseDetailReview"
           component={CourseDetailReview}
           options={({ navigation, route }) => ({
-            header: () => <HeaderCourseDetail navigation={navigation} route={route} />
+            header: () => (
+              <HeaderCourseDetail navigation={navigation} route={route} />
+            ),
           })}
         />
 
@@ -92,6 +100,11 @@ export default function App() {
           options={{ header: () => {} }}
         />
 
+        <Stack.Screen
+          name="cart"
+          component={Cart}
+          options={{ header: () => {} }}
+        />
 
         {/* ===================== teacher */}
         <Stack.Screen

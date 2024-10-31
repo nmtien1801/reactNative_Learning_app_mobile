@@ -15,7 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 import Footer from "../../component/index";
 
 export default function TeacherOverViewScreen({navigation, route}) {
-  const navigation = useNavigation();
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
