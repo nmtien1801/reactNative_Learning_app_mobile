@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Bookmark, Star } from "lucide-react-native";
+import Footer from "./Footer";
 
 export default function CourseListting({ navigation, route }) {
   const CourseListItem = ({ item }) => (
@@ -106,14 +107,7 @@ export default function CourseListting({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.time}>9:41</Text>
-        <View style={styles.statusIcons}>
-          <Ionicons name="cellular" size={16} color="black" />
-          <Ionicons name="wifi" size={16} color="black" />
-          <Ionicons name="battery-full" size={16} color="black" />
-        </View>
-      </View>
+      
 
       <ScrollView style={styles.content}>
         <View style={styles.searchContainer}>
@@ -143,27 +137,7 @@ export default function CourseListting({ navigation, route }) {
         />
       </ScrollView>
 
-      <View style={styles.tabBar}>
-        <TouchableOpacity style={styles.tabItem}>
-          <Ionicons name="home" size={24} color="#666" />
-          <Text style={styles.tabLabel}>Home</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.tabItem}
-          onPress={() => navigation.navigate("courseSearch")}
-        >
-          <Ionicons name="search" size={24} color="#00BCD4" />
-          <Text style={[styles.tabLabel, styles.activeTabLabel]}>Search</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem} onPress={()=> navigation.navigate('myCourse')}>
-          <Ionicons name="book" size={24} color="#666" />
-          <Text style={styles.tabLabel}>My Courses</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
-          <Ionicons name="person" size={24} color="#666" />
-          <Text style={styles.tabLabel}>Profile</Text>
-        </TouchableOpacity>
-      </View>
+      <Footer />
     </View>
   );
 }
@@ -173,22 +147,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
   },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingTop: 40,
-    paddingHorizontal: 15,
-    paddingBottom: 10,
-  },
-  time: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  statusIcons: {
-    flexDirection: "row",
-    gap: 5,
-  },
+ 
   content: {
     flex: 1,
   },
@@ -197,6 +156,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 15,
     marginBottom: 20,
+    marginTop: 20,
   },
   searchIcon: {
     position: "absolute",
@@ -302,23 +262,5 @@ const styles = StyleSheet.create({
     color: "#666",
   },
 
-  tabBar: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
-    borderTopWidth: 1,
-    borderTopColor: "#F0F0F0",
-    paddingVertical: 10,
-  },
-  tabItem: {
-    alignItems: "center",
-  },
-  tabLabel: {
-    fontSize: 12,
-    marginTop: 5,
-    color: "#666",
-  },
-  activeTabLabel: {
-    color: "#00BCD4",
-  },
+  
 });

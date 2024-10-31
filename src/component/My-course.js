@@ -10,6 +10,7 @@ import {
   FlatList,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import Footer from './Footer';
 
 export default function MyCourse({ navigation, route }) {
 const ProgressBar = ({ progress }) => (
@@ -69,14 +70,7 @@ const CourseItem = ({ title, duration, progress, image }) => (
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.time}>9:41</Text>
-        <View style={styles.statusIcons}>
-          <Ionicons name="cellular" size={16} color="black" />
-          <Ionicons name="wifi" size={16} color="black" />
-          <Ionicons name="battery-full" size={16} color="black" />
-        </View>
-      </View>
+      
 
       <ScrollView style={styles.content}>
       <View style={styles.containerContent}>
@@ -115,26 +109,7 @@ const CourseItem = ({ title, duration, progress, image }) => (
     </View>
       </ScrollView>
 
-      <View style={styles.tabBar}>
-        <TouchableOpacity style={styles.tabItem}>
-          <Ionicons name="home" size={24} color="#666" />
-          <Text style={styles.tabLabel}>Home</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
-          <Ionicons name="search" size={24} color="#666" />
-          <Text style={styles.tabLabel}>Search</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem} >
-          <Ionicons name="book" size={24} color="#00BCD4" />
-          <Text style={[styles.tabLabel, styles.activeTabLabel]}>
-            My Courses
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
-          <Ionicons name="person" size={24} color="#666" />
-          <Text style={styles.tabLabel}>Profile</Text>
-        </TouchableOpacity>
-      </View>
+      <Footer />
     </View>
   );
 }
@@ -144,22 +119,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingTop: 40,
-    paddingHorizontal: 15,
-    paddingBottom: 10,
-  },
-  time: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  statusIcons: {
-    flexDirection: 'row',
-    gap: 5,
-  },
+  
 
   content: {
     flex: 1,
@@ -265,23 +225,5 @@ const styles = StyleSheet.create({
     borderRadius: 2,
   },
 
-  tabBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    borderTopWidth: 1,
-    borderTopColor: '#F0F0F0',
-    paddingVertical: 10,
-  },
-  tabItem: {
-    alignItems: 'center',
-  },
-  tabLabel: {
-    fontSize: 12,
-    marginTop: 5,
-    color: '#666',
-  },
-  activeTabLabel: {
-    color: '#00BCD4',
-  },
+ 
 });
