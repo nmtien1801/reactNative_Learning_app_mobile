@@ -31,11 +31,6 @@ const CourseItem = ({ title, duration, progress, image }) => (
   </View>
 );
 
-
-  const [activeTab, setActiveTab] = useState('ALL');
-
-  const tabs = ['ALL', 'ON GOING', 'COMPLETED'];
-
   const courses = [
     {
       id: '1',
@@ -90,15 +85,15 @@ const CourseItem = ({ title, duration, progress, image }) => (
       </View>
 
       <View style={styles.tabContainer}>
-        {tabs.map((tab) => (
-          <TouchableOpacity
-            key={tab}
-            style={[styles.tab, activeTab === tab && styles.activeTab]}
-            onPress={() => setActiveTab(tab)}
-          >
-            <Text style={[styles.tabText, activeTab === tab && styles.activeTabText]}>{tab}</Text>
+         <TouchableOpacity style={[styles.tab, styles.activeTab]}>
+            <Text style={[styles.tabText, styles.activeTabText]}>ALL</Text>
           </TouchableOpacity>
-        ))}
+          <TouchableOpacity style={styles.tab} onPress={()=>navigation.navigate('')}>
+            <Text style={styles.tabText}>ON GOING</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.tab} onPress={()=>navigation.navigate('')}>
+            <Text style={styles.tabText}>COMPLETED</Text>
+          </TouchableOpacity>
       </View>
 
       <ScrollView style={styles.courseList}>
@@ -178,12 +173,14 @@ const styles = StyleSheet.create({
     borderBottomColor: '#00FFFF',
   },
   tabText: {
-    color: '#888',
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "#757575",
   },
   activeTabText: {
-    color: '#000',
-    fontWeight: 'bold',
+    color: "#00BCD4",
   },
+
   courseList: {
     flex: 1,
   },

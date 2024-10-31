@@ -327,6 +327,7 @@ const styles = StyleSheet.create({
   activeTabText: {
     color: "#00BCD4",
   },
+  
   content: {
     padding: 16,
   },
