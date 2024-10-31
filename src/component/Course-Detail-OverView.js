@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   Text,
@@ -8,19 +8,33 @@ import {
   StyleSheet,
   SafeAreaView,
   StatusBar,
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 function BenefitItem({ icon, text }) {
   return (
     <View style={styles.benefitItem}>
-      <Ionicons name={icon} size={24} color="#00BCD4" style={styles.benefitIcon} />
+      <Ionicons
+        name={icon}
+        size={24}
+        color="#00BCD4"
+        style={styles.benefitIcon}
+      />
       <Text style={styles.benefitText}>{text}</Text>
     </View>
   );
 }
 
-const CourseCard = ({ title, instructor, price, rating, reviews, lessons, image, bookmarked }) => (
+const CourseCard = ({
+  title,
+  instructor,
+  price,
+  rating,
+  reviews,
+  lessons,
+  image,
+  bookmarked,
+}) => (
   <View style={styles.card}>
     <Image source={{ uri: image }} style={styles.thumbnail} />
     <View style={styles.cardContent}>
@@ -36,7 +50,11 @@ const CourseCard = ({ title, instructor, price, rating, reviews, lessons, image,
         </View>
       </View>
       <TouchableOpacity style={styles.bookmarkButton}>
-        <Ionicons name={bookmarked ? "bookmark" : "bookmark-outline"} size={24} color={bookmarked ? "#00BCD4" : "#757575"} />
+        <Ionicons
+          name={bookmarked ? "bookmark" : "bookmark-outline"}
+          size={24}
+          color={bookmarked ? "#00BCD4" : "#757575"}
+        />
       </TouchableOpacity>
     </View>
   </View>
@@ -54,7 +72,7 @@ export default function CourseDetailOverView({navigation, route}) {
       reviews: 1233,
       lessons: 12,
       image: "https://v0.dev/placeholder.svg",
-      bookmarked: false
+      bookmarked: false,
     },
     {
       id: 2,
@@ -65,7 +83,7 @@ export default function CourseDetailOverView({navigation, route}) {
       reviews: 1233,
       lessons: 12,
       image: "https://v0.dev/placeholder.svg",
-      bookmarked: true
+      bookmarked: true,
     },
     {
       id: 3,
@@ -76,8 +94,8 @@ export default function CourseDetailOverView({navigation, route}) {
       reviews: 1233,
       lessons: 12,
       image: "https://v0.dev/placeholder.svg",
-      bookmarked: false
-    }
+      bookmarked: false,
+    },
   ];
 
   return (
@@ -85,8 +103,6 @@ export default function CourseDetailOverView({navigation, route}) {
      
 
       <ScrollView>
-        
-
         <View style={styles.courseHeader}>
           <Text style={styles.courseCategory}>UX Foundations</Text>
           <Text style={styles.courseTitle}>Introduction to UX Design</Text>
@@ -105,16 +121,16 @@ export default function CourseDetailOverView({navigation, route}) {
         </View>
 
         <View style={styles.tabContainer}>
-        <TouchableOpacity style={[styles.tab, styles.activeTab]}>
-          <Text style={[styles.tabText, styles.activeTabText]}>OVERVIEW</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tab} onPress={()=>navigation.navigate('courseDetailLesson')}>
-          <Text style={styles.tabText}>LESSONS</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tab} onPress={()=>navigation.navigate('courseDetailReview')}>
-          <Text style={styles.tabText}>REVIEW</Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity style={[styles.tab, styles.activeTab]}>
+            <Text style={[styles.tabText, styles.activeTabText]}>OVERVIEW</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.tab} onPress={()=>navigation.navigate('courseDetailLesson')}>
+            <Text style={styles.tabText}>LESSONS</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.tab} onPress={()=>navigation.navigate('courseDetailReview')}>
+            <Text style={styles.tabText}>REVIEW</Text>
+          </TouchableOpacity>
+        </View>
 
       <View style={styles.content}>
         <View style={styles.instructorContainer}>
@@ -131,35 +147,53 @@ export default function CourseDetailOverView({navigation, route}) {
           </TouchableOpacity>
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Description</Text>
-          <Text style={styles.description}>
-            Convallis in semper laoreet nibh leo. Vivamus malesuada ipsum pulvinar non rutrum risus dui, risus. Purus massa velit iaculis tincidunt tortor, risus, scelerisque risus...
-          </Text>
-          <TouchableOpacity>
-            <Text style={styles.seeMoreText}>See more</Text>
-          </TouchableOpacity>
-        </View>
+        <View style={styles.content}>
+          <View style={styles.instructorContainer}>
+            <Image
+              source={{ uri: "https://v0.dev/placeholder.svg" }}
+              style={styles.instructorImage}
+            />
+            <View style={styles.instructorInfo}>
+              <Text style={styles.instructorName}>Sara Weise</Text>
+              <Text style={styles.instructorTitle}>UI/UX Designer</Text>
+            </View>
+            <TouchableOpacity style={styles.followButton}>
+              <Text style={styles.followButtonText}>Follow</Text>
+            </TouchableOpacity>
+          </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Benefits</Text>
-          <View style={styles.benefitsList}>
-            <BenefitItem icon="videocam" text="14 hours on-demand video" />
-            <BenefitItem icon="globe" text="Native teacher" />
-            <BenefitItem icon="document-text" text="100% free document" />
-            <BenefitItem icon="time" text="Full lifetime access" />
-            <BenefitItem icon="ribbon" text="Certificate of complete" />
-            <BenefitItem icon="checkmark-circle" text="24/7 support" />
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Description</Text>
+            <Text style={styles.description}>
+              Convallis in semper laoreet nibh leo. Vivamus malesuada ipsum
+              pulvinar non rutrum risus dui, risus. Purus massa velit iaculis
+              tincidunt tortor, risus, scelerisque risus...
+            </Text>
+            <TouchableOpacity>
+              <Text style={styles.seeMoreText}>See more</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Benefits</Text>
+            <View style={styles.benefitsList}>
+              <BenefitItem icon="videocam" text="14 hours on-demand video" />
+              <BenefitItem icon="globe" text="Native teacher" />
+              <BenefitItem icon="document-text" text="100% free document" />
+              <BenefitItem icon="time" text="Full lifetime access" />
+              <BenefitItem icon="ribbon" text="Certificate of complete" />
+              <BenefitItem icon="checkmark-circle" text="24/7 support" />
+            </View>
           </View>
         </View>
-      </View>
 
-      <ScrollView style={[styles.container, styles.containerPadding]}>
-      <Text style={styles.sectionTitle}>Similar courses</Text>
-      {courses.map((course) => (
-        <CourseCard key={course.id} {...course} />
-      ))}
-    </ScrollView>
+        <ScrollView style={[styles.container, styles.containerPadding]}>
+          <Text style={styles.sectionTitle}>Similar courses</Text>
+          {courses.map((course) => (
+            <CourseCard key={course.id} {...course} />
+          ))}
+        </ScrollView>
+      </View>
       </ScrollView>
 
       <View style={styles.footer}>
@@ -178,127 +212,127 @@ export default function CourseDetailOverView({navigation, route}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
 
   statusBar: {
     height: 44,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingHorizontal: 16,
   },
   time: {
     fontSize: 15,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   icons: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   icon: {
     marginLeft: 6,
   },
   batteryContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginLeft: 6,
   },
   battery: {
     width: 22,
     height: 11,
     borderWidth: 1,
-    borderColor: 'black',
+    borderColor: "black",
     borderRadius: 2,
-    justifyContent: 'center',
+    justifyContent: "center",
     padding: 1,
   },
   batteryLevel: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'black',
+    width: "100%",
+    height: "100%",
+    backgroundColor: "black",
   },
   batteryTip: {
     width: 1,
     height: 4,
-    backgroundColor: 'black',
+    backgroundColor: "black",
     marginLeft: 1,
   },
 
  
 
   courseHeader: {
-    backgroundColor: '#7C4DFF',
+    backgroundColor: "#7C4DFF",
     padding: 16,
     height: 200,
-    justifyContent: 'flex-end',
+    justifyContent: "flex-end",
   },
   courseCategory: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 14,
   },
   courseTitle: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginTop: 8,
   },
   playButton: {
-    position: 'absolute',
+    position: "absolute",
     right: 16,
     bottom: 16,
-    backgroundColor: 'rgba(255,255,255,0.3)',
+    backgroundColor: "rgba(255,255,255,0.3)",
     borderRadius: 25,
     width: 50,
     height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   courseInfo: {
     padding: 16,
   },
   courseSubtitle: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   ratingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginTop: 8,
   },
   ratingText: {
     marginLeft: 4,
-    color: '#757575',
+    color: "#757575",
   },
 
-tabContainer: {
-    flexDirection: 'row',
+  tabContainer: {
+    flexDirection: "row",
     borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
+    borderBottomColor: "#E0E0E0",
   },
   tab: {
     flex: 1,
     paddingVertical: 16,
-    alignItems: 'center',
+    alignItems: "center",
   },
   activeTab: {
     borderBottomWidth: 2,
-    borderBottomColor: '#00BCD4',
+    borderBottomColor: "#00BCD4",
   },
   tabText: {
     fontSize: 14,
-    fontWeight: 'bold',
-    color: '#757575',
+    fontWeight: "bold",
+    color: "#757575",
   },
   activeTabText: {
-    color: '#00BCD4',
+    color: "#00BCD4",
   },
   content: {
     padding: 16,
   },
   instructorContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 16,
   },
   instructorImage: {
@@ -312,46 +346,46 @@ tabContainer: {
   },
   instructorName: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   instructorTitle: {
     fontSize: 14,
-    color: '#757575',
+    color: "#757575",
   },
   followButton: {
-    backgroundColor: '#E0F7FA',
+    backgroundColor: "#E0F7FA",
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
   },
   followButtonText: {
-    color: '#00BCD4',
-    fontWeight: 'bold',
+    color: "#00BCD4",
+    fontWeight: "bold",
   },
   section: {
     marginBottom: 24,
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 8,
   },
   description: {
     fontSize: 14,
-    color: '#424242',
+    color: "#424242",
     lineHeight: 20,
   },
   seeMoreText: {
-    color: '#00BCD4',
-    fontWeight: 'bold',
+    color: "#00BCD4",
+    fontWeight: "bold",
     marginTop: 8,
   },
   benefitsList: {
     marginTop: 8,
   },
   benefitItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 12,
   },
   benefitIcon: {
@@ -359,18 +393,18 @@ tabContainer: {
   },
   benefitText: {
     fontSize: 14,
-    color: '#424242',
+    color: "#424242",
   },
 
-containerPadding: {
+  containerPadding: {
     padding: 16,
   },
   card: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginBottom: 16,
     borderRadius: 8,
-    overflow: 'hidden',
-    backgroundColor: '#F5F5F5',
+    overflow: "hidden",
+    backgroundColor: "#F5F5F5",
   },
   thumbnail: {
     width: 100,
@@ -379,42 +413,42 @@ containerPadding: {
   cardContent: {
     flex: 1,
     padding: 12,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   title: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 4,
   },
   instructor: {
     fontSize: 14,
-    color: '#757575',
+    color: "#757575",
     marginBottom: 4,
   },
   price: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#00BCD4',
+    fontWeight: "bold",
+    color: "#00BCD4",
     marginBottom: 4,
   },
   ratingContainerListCourse: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   rating: {
     fontSize: 14,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginLeft: 4,
   },
   reviews: {
     fontSize: 14,
-    color: '#757575',
+    color: "#757575",
     marginLeft: 4,
   },
   lessons: {
     fontSize: 14,
-    color: '#757575',
+    color: "#757575",
     marginLeft: 8,
   },
   bookmarkButton: {
@@ -422,35 +456,35 @@ containerPadding: {
   },
 
   footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     padding: 16,
     borderTopWidth: 1,
-    borderTopColor: '#E0E0E0',
+    borderTopColor: "#E0E0E0",
   },
   priceContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   price: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   originalPrice: {
     fontSize: 16,
-    color: '#757575',
-    textDecorationLine: 'line-through',
+    color: "#757575",
+    textDecorationLine: "line-through",
     marginLeft: 8,
   },
   addToCartButton: {
-    backgroundColor: '#00BCD4',
+    backgroundColor: "#00BCD4",
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 4,
   },
   addToCartText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
   },
 });
