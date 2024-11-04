@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, Button } from "react-native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+// import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 
 import Login from "./auth/Login";
@@ -20,109 +20,118 @@ import TeacherOverviewScreen from "./page/teacher/TeacherOverviewScreen";
 import TeacherCoursesScreen from "./page/teacher/TeacherCoursesScreen";
 import TeacherReviewsScreen from "./page/teacher/TeacherReviewsScreen";
 import Teacher_Course from "./page/teacher/Teacher_Course";
+import Teacher_Lesson from "./page/teacher/Teacher_Lesson";
+import FormCourse from "./page/teacher/FormCourse";
+import FormLesson from "./page/teacher/FormLesson";
 
-import Cart from "./page/user/cart/Cart";
+// import Cart from "./page/user/cart/Cart";
 
 // click -> Login
-function handleLogin({ navigation }) {
-  return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Login!</Text>
-      <Button
-        title="Go to Login"
-        onPress={() => navigation.navigate("Login")}
-      />
-    </View>
-  );
-}
+// function handleLogin({ navigation }) {
+//   return (
+//     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+//       <Text>Login!</Text>
+//       <Button
+//         title="Go to Login"
+//         onPress={() => navigation.navigate("Login")}
+//       />
+//     </View>
+//   );
+// }
 
-const Stack = createNativeStackNavigator();
+// const Stack = createNativeStackNavigator();
 export default function App() {
+  // return (
+  //   <NavigationContainer>
+  //     <Stack.Navigator initialRouteName="cart">
+  //       <Stack.Screen name="home" component={handleLogin} />
+  //       <Stack.Screen name="login" component={Login} />
+  //       <Stack.Screen name="register" component={RegisterScreen} />
+
+  //       {/* ================ search course */}
+  //       <Stack.Screen
+  //         name="courseSearch"
+  //         component={CourseSearch}
+  //         options={{ header: () => {} }}
+  //       />
+  //       <Stack.Screen
+  //         name="courseListting"
+  //         component={CourseListting}
+  //         options={{ header: () => {} }}
+  //       />
+
+  //       {/* ===================== course */}
+  //       <Stack.Screen
+  //         name="courseDetailOverView"
+  //         component={CourseDetailOverView}
+  //         options={({ navigation, route }) => ({
+  //           header: () => (
+  //             <HeaderCourseDetail navigation={navigation} route={route} />
+  //           ),
+  //         })}
+  //       />
+  //       <Stack.Screen
+  //         name="courseDetailLesson"
+  //         component={CourseDetailLesson}
+  //         options={({ navigation, route }) => ({
+  //           header: () => (
+  //             <HeaderCourseDetail navigation={navigation} route={route} />
+  //           ),
+  //         })}
+  //       />
+  //       <Stack.Screen
+  //         name="courseDetailReview"
+  //         component={CourseDetailReview}
+  //         options={({ navigation, route }) => ({
+  //           header: () => (
+  //             <HeaderCourseDetail navigation={navigation} route={route} />
+  //           ),
+  //         })}
+  //       />
+
+  //       {/* ===================== my course */}
+  //       <Stack.Screen
+  //         name="myCourse"
+  //         component={MyCourse}
+  //         options={{ header: () => {} }}
+  //       />
+
+  //       {/* ===================== user - student */}
+  //       <Stack.Screen
+  //         name="userProfile"
+  //         component={User_Profile}
+  //         options={{ header: () => {} }}
+  //       />
+
+  //       <Stack.Screen
+  //         name="cart"
+  //         component={Cart}
+  //         options={{ header: () => {} }}
+  //       />
+
+  //       {/* ===================== teacher */}
+  //       <Stack.Screen
+  //         name="TeacherOverview"
+  //         component={TeacherOverviewScreen}
+  //         options={{ header: () => {} }}
+  //       />
+  //       <Stack.Screen
+  //         name="TeacherCourses"
+  //         component={TeacherCoursesScreen}
+  //         options={{ header: () => {} }}
+  //       />
+  //       <Stack.Screen
+  //         name="TeacherReviews"
+  //         component={TeacherReviewsScreen}
+  //         options={{ header: () => {} }}
+  //       />
+  //     </Stack.Navigator>
+  //   </NavigationContainer>
+  // );
+
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="cart">
-        <Stack.Screen name="home" component={handleLogin} />
-        <Stack.Screen name="login" component={Login} />
-        <Stack.Screen name="register" component={RegisterScreen} />
-
-        {/* ================ search course */}
-        <Stack.Screen
-          name="courseSearch"
-          component={CourseSearch}
-          options={{ header: () => {} }}
-        />
-        <Stack.Screen
-          name="courseListting"
-          component={CourseListting}
-          options={{ header: () => {} }}
-        />
-
-        {/* ===================== course */}
-        <Stack.Screen
-          name="courseDetailOverView"
-          component={CourseDetailOverView}
-          options={({ navigation, route }) => ({
-            header: () => (
-              <HeaderCourseDetail navigation={navigation} route={route} />
-            ),
-          })}
-        />
-        <Stack.Screen
-          name="courseDetailLesson"
-          component={CourseDetailLesson}
-          options={({ navigation, route }) => ({
-            header: () => (
-              <HeaderCourseDetail navigation={navigation} route={route} />
-            ),
-          })}
-        />
-        <Stack.Screen
-          name="courseDetailReview"
-          component={CourseDetailReview}
-          options={({ navigation, route }) => ({
-            header: () => (
-              <HeaderCourseDetail navigation={navigation} route={route} />
-            ),
-          })}
-        />
-
-        {/* ===================== my course */}
-        <Stack.Screen
-          name="myCourse"
-          component={MyCourse}
-          options={{ header: () => {} }}
-        />
-
-        {/* ===================== user - student */}
-        <Stack.Screen
-          name="userProfile"
-          component={User_Profile}
-          options={{ header: () => {} }}
-        />
-
-        <Stack.Screen
-          name="cart"
-          component={Cart}
-          options={{ header: () => {} }}
-        />
-
-        {/* ===================== teacher */}
-        <Stack.Screen
-          name="TeacherOverview"
-          component={TeacherOverviewScreen}
-          options={{ header: () => {} }}
-        />
-        <Stack.Screen
-          name="TeacherCourses"
-          component={TeacherCoursesScreen}
-          options={{ header: () => {} }}
-        />
-        <Stack.Screen
-          name="TeacherReviews"
-          component={TeacherReviewsScreen}
-          options={{ header: () => {} }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    // <Teacher_Lesson />
+    // <FormCourse />
+    <FormLesson />
   );
 }
