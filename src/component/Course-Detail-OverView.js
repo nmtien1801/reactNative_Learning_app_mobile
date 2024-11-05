@@ -8,8 +8,10 @@ import {
   StyleSheet,
   SafeAreaView,
   StatusBar,
+  Platform
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { WebView } from 'react-native-webview';
 
 function BenefitItem({ icon, text }) {
   return (
@@ -100,16 +102,33 @@ export default function CourseDetailOverView({navigation, route}) {
 
   return (
     <View style={styles.container}>
-     
-
       <ScrollView>
-        <View style={styles.courseHeader}>
+
+      {Platform.OS === 'web' ? (
+        // Dùng iframe cho nền web
+        <iframe
+          src="https://www.youtube.com/embed/147SkAVXEqM"
+          width="100%"
+          height="300"
+          title="YouTube Video"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          style={{ border: 'none' }}></iframe>
+      ) : (
+        // Dùng WebView cho Android/iOS
+        <WebView
+          source={{ uri: 'https://www.youtube.com/embed/147SkAVXEqM' }}
+          style={{ flex: 1, width: '100%', height: 10 }}
+        />
+      )}
+
+        {/* <View style={styles.courseHeader}>
           <Text style={styles.courseCategory}>UX Foundations</Text>
           <Text style={styles.courseTitle}>Introduction to UX Design</Text>
           <View style={styles.playButton}>
             <Ionicons name="play" size={24} color="white" />
           </View>
-        </View>
+        </View> */}
         <View style={styles.courseInfo}>
           <Text style={styles.courseSubtitle}>
             UX Foundation: Introduction to User Experience Design

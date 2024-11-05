@@ -12,7 +12,7 @@ import { Ionicons } from "@expo/vector-icons";
 import Header_Teacher from "../../component/TeacherProfile/Header_Teacher";
 import Nav_Teacher from "../../component/TeacherProfile/Nav_Teacher";
 import { useNavigation } from "@react-navigation/native";
-import Footer from "../../component/index";
+import Footer from "../../component/Footer";
 
 export default function TeacherOverViewScreen({navigation, route}) {
 

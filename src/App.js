@@ -39,7 +39,7 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="home">
+      <Stack.Navigator initialRouteName="courseDetailOverView">
         <Stack.Screen name="home" component={handleLogin} />
         <Stack.Screen name="login" component={Login} />
         <Stack.Screen name="register" component={RegisterScreen} />

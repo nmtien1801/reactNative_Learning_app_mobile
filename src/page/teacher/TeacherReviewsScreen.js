@@ -12,7 +12,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import Header_Teacher from "../../component/TeacherProfile/Header_Teacher";
 import Nav_Teacher from "../../component/TeacherProfile/Nav_Teacher";
-import Footer from "../../component/index";
+import Footer from "../../component/Footer";
 
 const reviews = [
   {
