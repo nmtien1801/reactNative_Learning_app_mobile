@@ -3,9 +3,6 @@ import { StyleSheet, Text, View, Button } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 
-import Login from "./auth/Login";
-// import Register from "./auth/Register";
-
 import CourseSearch from "./component/Course-Search";
 import CourseListting from "./component/Course-Listting";
 import CourseDetailOverView from "./component/Course-Detail-OverView";
@@ -15,6 +12,7 @@ import MyCourse from "./component/My-course";
 import HeaderCourseDetail from "./header/Header-Course-Detail";
 
 import RegisterScreen from "./page/auth/Register";
+import Login from "./page/auth/Login";
 import User_Profile from "./page/user/User_Profile";
 import TeacherOverviewScreen from "./page/teacher/TeacherOverviewScreen";
 import TeacherCoursesScreen from "./page/teacher/TeacherCoursesScreen";
@@ -22,6 +20,7 @@ import TeacherReviewsScreen from "./page/teacher/TeacherReviewsScreen";
 import Teacher_Course from "./page/teacher/Teacher_Course";
 
 import Cart from "./page/user/cart/Cart";
+import HistoryCart from "./page/user/cart/History-cart";
 
 // click -> Login
 function handleLogin({ navigation }) {
@@ -40,7 +39,7 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="cart">
+      <Stack.Navigator initialRouteName="home">
         <Stack.Screen name="home" component={handleLogin} />
         <Stack.Screen name="login" component={Login} />
         <Stack.Screen name="register" component={RegisterScreen} />
@@ -103,6 +102,12 @@ export default function App() {
         <Stack.Screen
           name="cart"
           component={Cart}
+          options={{ header: () => {} }}
+        />
+
+        <Stack.Screen
+          name="historyCart"
+          component={HistoryCart}
           options={{ header: () => {} }}
         />
 
