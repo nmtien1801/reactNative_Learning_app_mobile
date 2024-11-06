@@ -13,6 +13,7 @@ import HeaderCourseDetail from "./header/Header-Course-Detail";
 import Intro from "./page/auth/App_Intro";
 import Login from "./page/auth/Login";
 import RegisterScreen from "./page/auth/Register";
+import Login from "./page/auth/Login";
 import User_Profile from "./page/user/User_Profile";
 import TeacherOverview from "./page/teacher/TeacherOverview";
 import TeacherCourses from "./page/teacher/TeacherCourses";
@@ -26,6 +27,7 @@ import Learning_Project from "./page/lesson/Learning_Project";
 import Learning_QA from "./page/lesson/Learning_QA";
 
 import Cart from "./page/user/cart/Cart";
+import HistoryCart from "./page/user/cart/History-cart";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();

@@ -84,7 +84,9 @@ export default function Cart({navigation, route}) {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Giỏ Hàng</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('historyCart')}>
         <Text style={styles.headerRight}>lịch sử mua</Text>
+        </TouchableOpacity>
       </View>
       <FlatList
         data={courses}
