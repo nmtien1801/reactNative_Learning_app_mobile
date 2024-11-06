@@ -23,24 +23,24 @@ import Cart from "./page/user/cart/Cart";
 import HistoryCart from "./page/user/cart/History-cart";
 
 // click -> Login
-function handleLogin({ navigation }) {
-  return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Login!</Text>
-      <Button
-        title="Go to Login"
-        onPress={() => navigation.navigate("Login")}
-      />
-    </View>
-  );
-}
+// function handleLogin({ navigation }) {
+//   return (
+//     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+//       <Text>Login!</Text>
+//       <Button
+//         title="Go to Login"
+//         onPress={() => navigation.navigate("Login")}
+//       />
+//     </View>
+//   );
+// }
 
 const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="courseDetailOverView">
-        <Stack.Screen name="home" component={handleLogin} />
+        {/* <Stack.Screen name="home" component={handleLogin} /> */}
         <Stack.Screen name="login" component={Login} />
         <Stack.Screen name="register" component={RegisterScreen} />
 

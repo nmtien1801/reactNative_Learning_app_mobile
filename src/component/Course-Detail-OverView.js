@@ -118,7 +118,7 @@ export default function CourseDetailOverView({navigation, route}) {
         // Dùng WebView cho Android/iOS
         <WebView
           source={{ uri: 'https://www.youtube.com/embed/147SkAVXEqM' }}
-          style={{ flex: 1, width: '100%', height: 10 }}
+          style={{ flex: 1, width: '100%', height: 300 }}
         />
       )}
 
