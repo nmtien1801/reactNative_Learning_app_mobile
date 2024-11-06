@@ -27,7 +27,7 @@ export default function Nav_Teacher() {
     <SafeAreaView style={styles.container}>
       <View style={styles.tabContainer}>
         <TouchableOpacity
-          style={[styles.tab, styles.activeTab]}
+          style={[styles.tab]}
           onPress={() => navigation.navigate("TeacherOverview")}
         >
           <Text
