@@ -8,7 +8,7 @@ import {
   FlatList,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import Footer from "../../component/index";
+import Footer from "../../component/Footer";
 
 const data = [
   {
@@ -90,7 +90,7 @@ const Item = ({ image, title, author, price, rating, lessons }) => (
   </View>
 );
 
-export default function UserProfileScreen({navigation, route}) {
+export default function UserProfileScreen({ navigation, route }) {
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -143,7 +143,7 @@ export default function UserProfileScreen({navigation, route}) {
           />
         </View>
       </ScrollView>
-      <Footer navigation={navigation} route={route}/>
+      <Footer navigation={navigation} route={route} />
     </View>
   );
 }

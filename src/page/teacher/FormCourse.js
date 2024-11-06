@@ -1,0 +1,195 @@
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  FlatList,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+
+export default function Component() {
+  const [categories, setCategories] = useState({
+    design: false,
+    code: false,
+    business: false,
+    video: false,
+    language: false,
+    other: false,
+  });
+  const [otherText, setOtherText] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+
+  const toggleCategory = (key) => {
+    setCategories((prevCategories) => ({
+      ...prevCategories,
+      [key]: !prevCategories[key],
+    }));
+  };
+
+  const renderCategory = ({ item: [key, value] }) => (
+    <View style={styles.categoryRow}>
+      <TouchableOpacity
+        style={[styles.checkbox, value && styles.checkboxChecked]}
+        onPress={() => toggleCategory(key)}
+      >
+        {value && <Text style={styles.checkboxText}>✓</Text>}
+      </TouchableOpacity>
+      <Text style={styles.categoryText}>
+        {key.charAt(0).toUpperCase() + key.slice(1)}
+      </Text>
+      {key === "other" && value && (
+        <TextInput
+          style={[styles.input, styles.otherInput]}
+          value={otherText}
+          onChangeText={setOtherText}
+          placeholder="Specify other category"
+        />
+      )}
+    </View>
+  );
+
+  return (
+    <View style={styles.container}>
+      <ScrollView>
+        <Text style={styles.header}>Course</Text>
+
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Title</Text>
+          <TextInput style={styles.input} placeholder="Enter title" />
+        </View>
+
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Description</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter description"
+            multiline
+          />
+        </View>
+
+        <View style={styles.categoriesContainer}>
+          <Text style={styles.label}>Categories</Text>
+          <FlatList
+            data={Object.entries(categories)}
+            renderItem={renderCategory}
+            keyExtractor={([key]) => key}
+          />
+        </View>
+
+        <View style={styles.imageContainer}>
+          <Text style={styles.label}>Image</Text>
+          <View style={styles.imageInputContainer}>
+            <TextInput
+              style={[styles.input, styles.imageInput]}
+              value={imageUrl}
+              onChangeText={setImageUrl}
+              placeholder="URL"
+            />
+            <TouchableOpacity style={styles.uploadButton}>
+              <Ionicons name="cloud-upload-outline" size={20} color="#666" />
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <TouchableOpacity style={styles.doneButton}>
+          <Text style={styles.doneButtonText}>Done</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    padding: 20,
+  },
+  header: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+    textAlign: "center",
+  },
+  inputContainer: {
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 16,
+    marginBottom: 8,
+    color: "#333",
+    fontWeight: "bold",
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+  },
+  categoriesContainer: {
+    marginBottom: 20,
+  },
+  categoryRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 12,
+  },
+  checkbox: {
+    width: 24,
+    height: 24,
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 12,
+    backgroundColor: "#f0f0f0",
+  },
+  checkboxChecked: {
+    backgroundColor: "#4CD964",
+  },
+  checkboxText: {
+    fontSize: 12,
+    color: "#fff",
+  },
+  categoryText: {
+    fontSize: 16,
+    flex: 1,
+  },
+  otherInput: {
+    flex: 1,
+    marginLeft: 12,
+  },
+  imageContainer: {
+    marginBottom: 20,
+  },
+  imageInputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  imageInput: {
+    flex: 1,
+    marginRight: 12,
+  },
+  uploadButton: {
+    padding: 12,
+    borderRadius: 8,
+    backgroundColor: "#f0f0f0",
+  },
+  doneButton: {
+    backgroundColor: "#4CD964",
+    padding: 16,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 20,
+  },
+  doneButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+});

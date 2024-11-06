@@ -3,17 +3,12 @@ import {
   View,
   Text,
   Image,
-  ScrollView,
   FlatList,
   TouchableOpacity,
   StyleSheet,
-  SafeAreaView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import Header_Teacher from "../../component/TeacherProfile/Header_Teacher";
-import Nav_Teacher from "../../component/TeacherProfile/Nav_Teacher";
-import Footer from "../../component/index";
-
+import Layout from "../../component/TeacherProfile/Layout_Teacher";
 const categories = [
   {
     id: "1",
@@ -61,7 +56,7 @@ const categories = [
   },
 ];
 
-export default function TeacherCoursesScreen({navigation, route}) {
+export default function TeacherCourses() {
   const renderCourseItem = ({ item }) => (
     <View style={styles.courseCard}>
       <Image
@@ -106,29 +101,18 @@ export default function TeacherCoursesScreen({navigation, route}) {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <Header_Teacher />
-        <Nav_Teacher />
-
-        <FlatList
-          data={categories}
-          renderItem={renderCategoryItem}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.coursesContainer}
-        />
-      </ScrollView>
-
-      <Footer navigation={navigation} route={route}/>
-    </SafeAreaView>
+    <Layout>
+      <FlatList
+        data={categories}
+        renderItem={renderCategoryItem}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={styles.coursesContainer}
+      />
+    </Layout>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#F5F5F5",
-  },
   coursesContainer: {
     padding: 16,
   },
@@ -201,14 +185,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#666",
     marginLeft: 8,
-  },
-  bottomNav: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
-    backgroundColor: "#FFF",
-    paddingVertical: 12,
-    borderTopWidth: 1,
-    borderTopColor: "#E0E0E0",
   },
 });

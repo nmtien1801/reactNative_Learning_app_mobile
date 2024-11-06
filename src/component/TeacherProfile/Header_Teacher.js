@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  View,
-  Text,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-  StyleSheet,
-  SafeAreaView,
-} from "react-native";
+import { View, Text, Image, StyleSheet, SafeAreaView } from "react-native";
 
 export default function Header_Teacher() {
   return (
