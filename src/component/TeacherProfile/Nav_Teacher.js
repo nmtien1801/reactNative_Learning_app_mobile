@@ -1,19 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
-  Image,
-  ScrollView,
   TouchableOpacity,
   StyleSheet,
   SafeAreaView,
 } from "react-native";
 
-import { useNavigation } from "@react-navigation/native";
+import {
+  useNavigation,
+  useRoute,
+  useFocusEffect,
+} from "@react-navigation/native";
 
 export default function Nav_Teacher() {
   const navigation = useNavigation();
+  const route = useRoute();
+  const [activeTab, setActiveTab] = useState("TeacherOverview");
 
+  useFocusEffect(
+    React.useCallback(() => {
+      setActiveTab(route.name);
+    }, [route.name])
+  );
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.tabContainer}>
@@ -21,19 +30,37 @@ export default function Nav_Teacher() {
           style={[styles.tab, styles.activeTab]}
           onPress={() => navigation.navigate("TeacherOverview")}
         >
-          <Text style={[styles.tabText, styles.activeTabText]}>OVERVIEW</Text>
+          <Text
+            style={
+              activeTab === "TeacherOverview" ? styles.tabActive : styles.tab
+            }
+          >
+            OVERVIEW
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.tab}
           onPress={() => navigation.navigate("TeacherCourses")}
         >
-          <Text style={styles.tabText}>COURSES</Text>
+          <Text
+            style={
+              activeTab === "TeacherCourses" ? styles.tabActive : styles.tab
+            }
+          >
+            COURSES
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.tab}
           onPress={() => navigation.navigate("TeacherReviews")}
         >
-          <Text style={styles.tabText}>REVIEW</Text>
+          <Text
+            style={
+              activeTab === "TeacherReviews" ? styles.tabActive : styles.tab
+            }
+          >
+            REVIEW
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -63,5 +90,12 @@ const styles = StyleSheet.create({
   tabText: {
     fontSize: 14,
     color: "#666",
+  },
+  tabActive: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#00BDD6",
+    borderBottomWidth: 2,
+    borderBottomColor: "#00BDD6",
   },
 });
