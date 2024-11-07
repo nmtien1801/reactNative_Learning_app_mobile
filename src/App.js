@@ -14,7 +14,9 @@ import User_Profile from "./page/user/User_Profile";
 import TeacherOverview from "./page/teacher/TeacherOverview";
 import TeacherCourses from "./page/teacher/TeacherCourses";
 import TeacherReviews from "./page/teacher/TeacherReviews";
-import Teacher_Course from "./page/teacher/ManageCourse";
+import ManageCourse from "./page/teacher/ManageCourse";
+import ManageProject from "./page/teacher/ManageProject";
+import ManageLesson from "./page/teacher/ManageLesson";
 import FormCourse from "./page/teacher/FormCourse";
 import FormLesson from "./page/teacher/FormLesson";
 
@@ -64,18 +66,19 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="homeUser">
+
         <Stack.Screen
           name="Intro"
           component={Intro}
           options={{ header: () => {} }}
         />
         <Stack.Screen
-          name="login"
+          name="Login"
           component={Login}
           options={{ header: () => {} }}
         />
         <Stack.Screen
-          name="register"
+          name="SignUp"
           component={RegisterScreen}
           options={{ header: () => {} }}
         />
@@ -96,19 +99,19 @@ export default function App() {
         <Stack.Screen
           name="courseDetailOverView"
           component={DrawerHeader}
-          initialParams={{ screenName: 'CourseDetailOverView' }}
+          initialParams={{ screenName: "CourseDetailOverView" }}
           options={{ header: () => {} }}
         />
         <Stack.Screen
           name="courseDetailLesson"
           component={DrawerHeader}
-          initialParams={{ screenName: 'CourseDetailLesson' }}
+          initialParams={{ screenName: "CourseDetailLesson" }}
           options={{ header: () => {} }}
         />
         <Stack.Screen
           name="courseDetailReview"
           component={DrawerHeader}
-          initialParams={{ screenName: 'CourseDetailReview' }}
+          initialParams={{ screenName: "CourseDetailReview" }}
           options={{ header: () => {} }}
         />
 
@@ -159,10 +162,25 @@ export default function App() {
           component={TeacherTabs}
           options={{ header: () => {} }}
         />
+        <Stack.Screen
+          name="ManageCourse"
+          component={ManageCourse}
+          options={{ header: () => {} }}
+        />
+        <Stack.Screen
+          name="ManageLesson"
+          component={ManageLesson}
+          options={{ header: () => {} }}
+        />
+
+        <Stack.Screen
+          name="ManageProject"
+          component={ManageProject}
+          options={{ header: () => {} }}
+        />
       </Stack.Navigator>
 
       {/* ===================== option header */}
-          
     </NavigationContainer>
   );
 }

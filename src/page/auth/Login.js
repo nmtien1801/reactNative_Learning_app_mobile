@@ -6,11 +6,10 @@ import {
   TouchableOpacity,
   Image,
   StyleSheet,
-  SafeAreaView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
-export default function LoginScreen() {
+export default function LoginScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <LinearGradient colors={["#FFC0CB", "#A9C6EB"]} style={styles.background}>
@@ -35,13 +34,16 @@ export default function LoginScreen() {
             <TouchableOpacity>
               <Text style={styles.forgotPassword}>Forgot Password?</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.loginButton}>
+            <TouchableOpacity
+              style={styles.loginButton}
+              onPress={() => navigation.navigate("myCourse")}
+            >
               <Text style={styles.loginButtonText}>Login</Text>
             </TouchableOpacity>
             <Text style={styles.errorText}>
               Username hoặc mật khẩu không chính xác
             </Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
               <Text style={styles.signupText}>Not a member? Signup</Text>
             </TouchableOpacity>
           </View>

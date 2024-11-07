@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-export default function Component() {
+export default function Component({ navigation }) {
   const [options, setOptions] = useState({
     design: false,
     code: false,
@@ -110,7 +110,10 @@ export default function Component() {
           </View>
         </View>
 
-        <TouchableOpacity style={styles.doneButton}>
+        <TouchableOpacity
+          style={styles.doneButton}
+          onPress={() => navigation.navigate("ManageLesson")}
+        >
           <Text style={styles.doneButtonText}>Done</Text>
         </TouchableOpacity>
       </ScrollView>

@@ -1,16 +1,21 @@
-import React from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Image,
-  StyleSheet,
-  SafeAreaView,
-} from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
+import React, { useEffect } from "react";
+import { View, Image, StyleSheet } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
-export default function SignUpScreen() {
+export default function Intro() {
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    console.log("Chuyển hướng sẽ chạy sau 2 giây...");
+    const timer = setTimeout(() => {
+      console.log("Đang chuyển hướng...");
+      navigation.navigate("Login");
+    }, 3000);
+
+    // Dọn dẹp timer khi component unmount
+    return () => clearTimeout(timer);
+  }, [navigation]);
+
   return (
     <View style={styles.container}>
       <Image
@@ -24,11 +29,12 @@ export default function SignUpScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    height: "auto",
+    justifyContent: "center",
+    alignItems: "center",
   },
   img: {
-    flex: 1,
-    height: 700,
-    width: 400,
+    width: "100%",
+    height: "100%",
+    resizeMode: "contain", // Đảm bảo hình ảnh không bị méo
   },
 });
