@@ -10,7 +10,7 @@ import {
   FlatList,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import Footer from './Footer';
+import Footer from '../../component/Footer';
 
 export default function MyCourse({ navigation, route }) {
 const ProgressBar = ({ progress }) => (

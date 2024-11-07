@@ -4,14 +4,10 @@ import { NavigationContainer } from "@react-navigation/native";
 
 import CourseSearch from "./component/Course-Search";
 import CourseListting from "./component/Course-Listting";
-import CourseDetailOverView from "./component/Course-Detail-OverView";
-import CourseDetailLesson from "./component/Course-Detail-Lesson";
-import CourseDetailReview from "./component/Course-Detail-Review";
-import MyCourse from "./component/My-course";
-import HeaderCourseDetail from "./header/Header-Course-Detail";
+
+import MyCourse from "./page/user/My-course";
 
 import Intro from "./page/auth/App_Intro";
-import Login from "./page/auth/Login";
 import RegisterScreen from "./page/auth/Register";
 import Login from "./page/auth/Login";
 import User_Profile from "./page/user/User_Profile";
@@ -28,6 +24,7 @@ import Learning_QA from "./page/lesson/Learning_QA";
 
 import Cart from "./page/user/cart/Cart";
 import HistoryCart from "./page/user/cart/History-cart";
+import DrawerHeader from "./header/drawerNavigatorHeader/DrawerHeader";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -97,30 +94,21 @@ export default function App() {
         {/* ===================== course */}
         <Stack.Screen
           name="courseDetailOverView"
-          component={CourseDetailOverView}
-          options={({ navigation, route }) => ({
-            header: () => (
-              <HeaderCourseDetail navigation={navigation} route={route} />
-            ),
-          })}
+          component={DrawerHeader}
+          initialParams={{ screenName: "CourseDetailOverView" }}
+          options={{ header: () => {} }}
         />
         <Stack.Screen
           name="courseDetailLesson"
-          component={CourseDetailLesson}
-          options={({ navigation, route }) => ({
-            header: () => (
-              <HeaderCourseDetail navigation={navigation} route={route} />
-            ),
-          })}
+          component={DrawerHeader}
+          initialParams={{ screenName: "CourseDetailLesson" }}
+          options={{ header: () => {} }}
         />
         <Stack.Screen
           name="courseDetailReview"
-          component={CourseDetailReview}
-          options={({ navigation, route }) => ({
-            header: () => (
-              <HeaderCourseDetail navigation={navigation} route={route} />
-            ),
-          })}
+          component={DrawerHeader}
+          initialParams={{ screenName: "CourseDetailReview" }}
+          options={{ header: () => {} }}
         />
 
         {/* ===================== my course */}
@@ -163,6 +151,8 @@ export default function App() {
           options={{ header: () => {} }}
         />
       </Stack.Navigator>
+
+      {/* ===================== option header */}
     </NavigationContainer>
   );
 }
