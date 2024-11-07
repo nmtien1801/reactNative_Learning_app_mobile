@@ -72,7 +72,7 @@ const data = [
   },
 ];
 
-const Item = ({ image, title, author, price, rating, lessons }) => (
+const Item = ({ image, title, author, price, rating, lessons, navigation }) => (
   <TouchableOpacity onPress={() => navigation.navigate("Lesson")}>
     <View style={styles.courseItem}>
       <Image source={image} style={styles.courseImage} />
@@ -140,6 +140,7 @@ export default function UserProfileScreen({ navigation, route }) {
                 price={item.price}
                 rating={item.rating}
                 lesson={item.lesson}
+                navigation={navigation}
               />
             )}
             keyExtractor={(item) => item.id}

@@ -22,7 +22,7 @@ export default function Header() {
           <Ionicons name="ellipsis-vertical" size={24} color="black" />
         </TouchableOpacity>
       </View>
-      {/* {Platform.OS === 'web' ? (
+      {Platform.OS === "web" ? (
         // Dùng iframe cho nền web
         <iframe
           src="https://www.youtube.com/embed/147SkAVXEqM"
@@ -31,14 +31,15 @@ export default function Header() {
           title="YouTube Video"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
-          style={{ border: 'none' }}></iframe>
+          style={{ border: "none" }}
+        ></iframe>
       ) : (
         // Dùng WebView cho Android/iOS
         <WebView
-          source={{ uri: 'https://www.youtube.com/embed/147SkAVXEqM' }}
-          style={{ flex: 1, width: '100%', height: 300 }}
+          source={{ uri: "https://www.youtube.com/embed/147SkAVXEqM" }}
+          style={{ flex: 1, width: "100%", height: 300 }}
         />
-      )} */}
+      )}
 
       {/* Course Info */}
       <View style={styles.courseInfo}>
