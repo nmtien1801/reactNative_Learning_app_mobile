@@ -64,7 +64,7 @@ const courses = [
   },
 ];
 
-export default function Component() {
+export default function Component({ navigation }) {
   const renderCourseItem = ({ item }) => (
     <TouchableOpacity>
       <View style={styles.courseCard}>
@@ -77,7 +77,7 @@ export default function Component() {
           <Text style={styles.courseCategory}>Categories: {item.category}</Text>
         </View>
         <View style={styles.actionButtons}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("")}>
             <View style={[styles.iconButton, styles.editButton]}>
               <Ionicons name="pencil" size={18} color="#fff" />
             </View>
@@ -112,7 +112,7 @@ export default function Component() {
               </View>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("")}>
             <View style={[styles.iconButton, styles.addButton]}>
               <Ionicons name="add" size={18} color="#FFf" />
             </View>
@@ -128,7 +128,7 @@ export default function Component() {
         contentContainerStyle={styles.listContainer}
       />
 
-      <Footer navigation={navigation} route={route}/>
+      <Footer navigation={navigation} route={route} />
     </View>
   );
 }

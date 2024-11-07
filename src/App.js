@@ -62,19 +62,19 @@ function TeacherTabs() {
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Intro">
+      <Stack.Navigator initialRouteName="courseDetailReview">
         <Stack.Screen
           name="Intro"
           component={Intro}
           options={{ header: () => {} }}
         />
         <Stack.Screen
-          name="login"
+          name="Login"
           component={Login}
           options={{ header: () => {} }}
         />
         <Stack.Screen
-          name="register"
+          name="SignUp"
           component={RegisterScreen}
           options={{ header: () => {} }}
         />

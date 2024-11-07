@@ -38,10 +38,16 @@ export default function RegisterScreen() {
               secureTextEntry
             />
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={[styles.button, styles.createButton]}>
+              <TouchableOpacity
+                style={[styles.button, styles.createButton]}
+                onPress={() => navigation.navigate("Login")}
+              >
                 <Text style={styles.buttonText}>Create</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.button, styles.cancelButton]}>
+              <TouchableOpacity
+                style={[styles.button, styles.cancelButton]}
+                onPress={() => navigation.navigate("Login")}
+              >
                 <Text style={styles.buttonText}>Cancel</Text>
               </TouchableOpacity>
             </View>
