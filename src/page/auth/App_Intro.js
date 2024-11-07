@@ -10,7 +10,19 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
-export default function SignUpScreen() {
+
+export default function Intro() {
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    // Chuyển sang trang login sau 2 giây
+    const timer = setTimeout(() => {
+      navigation.replace("login");
+    }, 2000);
+
+    // Dọn dẹp timer khi component unmount
+    return () => clearTimeout(timer);
+  }, [navigation]);
   return (
     <View style={styles.container}>
       <Image
