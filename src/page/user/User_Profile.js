@@ -6,6 +6,7 @@ import {
   ScrollView,
   StyleSheet,
   FlatList,
+  TouchableOpacity,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Footer from "../../component/Footer";
@@ -72,22 +73,24 @@ const data = [
 ];
 
 const Item = ({ image, title, author, price, rating, lessons }) => (
-  <View style={styles.courseItem}>
-    <Image source={image} style={styles.courseImage} />
-    <View style={styles.courseInfo}>
-      <Text style={styles.courseTitle}>{title}</Text>
-      <Text style={styles.courseAuthor}>{author}</Text>
-      <View style={styles.courseDetails}>
-        <Text style={styles.coursePrice}>${price}</Text>
-        <View style={styles.ratingContainer}>
-          <Ionicons name="star" size={16} color="#FFD700" />
-          <Text style={styles.ratingText}>{rating}</Text>
+  <TouchableOpacity onPress={() => navigation.navigate("Lesson")}>
+    <View style={styles.courseItem}>
+      <Image source={image} style={styles.courseImage} />
+      <View style={styles.courseInfo}>
+        <Text style={styles.courseTitle}>{title}</Text>
+        <Text style={styles.courseAuthor}>{author}</Text>
+        <View style={styles.courseDetails}>
+          <Text style={styles.coursePrice}>${price}</Text>
+          <View style={styles.ratingContainer}>
+            <Ionicons name="star" size={16} color="#FFD700" />
+            <Text style={styles.ratingText}>{rating}</Text>
+          </View>
+          <Text style={styles.lessonCount}>{lessons} lessons</Text>
         </View>
-        <Text style={styles.lessonCount}>{lessons} lessons</Text>
       </View>
+      <Ionicons name="bookmark" style={styles.bookmarkIcon} />
     </View>
-    <Ionicons name="bookmark" style={styles.bookmarkIcon} />
-  </View>
+  </TouchableOpacity>
 );
 
 export default function UserProfileScreen({ navigation, route }) {
