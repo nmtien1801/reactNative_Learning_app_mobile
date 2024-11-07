@@ -16,6 +16,7 @@ import TeacherCourses from "./page/teacher/TeacherCourses";
 import TeacherReviews from "./page/teacher/TeacherReviews";
 import ManageCourse from "./page/teacher/ManageCourse";
 import ManageProject from "./page/teacher/ManageProject";
+import ManageLesson from "./page/teacher/ManageLesson";
 import FormCourse from "./page/teacher/FormCourse";
 import FormLesson from "./page/teacher/FormLesson";
 
@@ -63,7 +64,7 @@ function TeacherTabs() {
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="courseDetailReview">
+      <Stack.Navigator initialRouteName="ManageCourse">
         <Stack.Screen
           name="Intro"
           component={Intro}
@@ -154,6 +155,11 @@ export default function App() {
         <Stack.Screen
           name="ManageCourse"
           component={ManageCourse}
+          options={{ header: () => {} }}
+        />
+        <Stack.Screen
+          name="ManageLesson"
+          component={ManageLesson}
           options={{ header: () => {} }}
         />
 

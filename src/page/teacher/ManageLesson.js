@@ -9,7 +9,7 @@ import {
   SafeAreaView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-
+import Footer from "../../component/Footer";
 // Sample data structure
 const lessons = [
   {
@@ -38,7 +38,7 @@ const lessons = [
   },
 ];
 
-export default function LessonList() {
+export default function LessonList({ navigation }) {
   const renderLesson = ({ item }) => (
     <View style={styles.lessonItem}>
       <Image source={item.imgVideo} style={styles.thumbnail} />
@@ -47,7 +47,10 @@ export default function LessonList() {
         <Text style={styles.duration}>{item.duration}</Text>
       </View>
       <View style={styles.actions}>
-        <TouchableOpacity style={[styles.actionButton, styles.editButton]}>
+        <TouchableOpacity
+          style={[styles.actionButton, styles.editButton]}
+          onPress={() => navigation.navigate("FormLesson")}
+        >
           <Ionicons name="pencil" size={20} color="#fff" />
         </TouchableOpacity>
         <TouchableOpacity style={[styles.actionButton, styles.deleteButton]}>
@@ -62,10 +65,16 @@ export default function LessonList() {
       <View style={styles.header}>
         <Text style={styles.title}>Lesson</Text>
         <View style={styles.headerButtons}>
-          <TouchableOpacity style={[styles.actionButton, styles.addButton]}>
+          <TouchableOpacity
+            style={[styles.actionButton, styles.addButton]}
+            onPress={() => navigation.navigate("FormLesson")}
+          >
             <Ionicons name="add" size={20} color="#fff" />
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.actionButton, styles.projectButton]}>
+          <TouchableOpacity
+            style={[styles.actionButton, styles.projectButton]}
+            onPress={() => navigation.navigate("ManageProject")}
+          >
             <Ionicons name="copy-outline" size={20} color="#fff" />
           </TouchableOpacity>
         </View>
@@ -79,6 +88,7 @@ export default function LessonList() {
         keyExtractor={(item) => item.lessonID}
         contentContainerStyle={styles.listContent}
       />
+      <Footer navigation={navigation} />
     </SafeAreaView>
   );
 }

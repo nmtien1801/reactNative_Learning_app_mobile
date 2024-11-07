@@ -96,7 +96,7 @@ export default function Component({ navigation }) {
 
         <TouchableOpacity
           style={styles.doneButton}
-          onPress={() => navigation.navigate("")}
+          onPress={() => navigation.navigate("ManageCourse")}
         >
           <Text style={styles.doneButtonText}>Done</Text>
         </TouchableOpacity>

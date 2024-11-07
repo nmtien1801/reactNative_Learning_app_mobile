@@ -102,25 +102,7 @@ export default function Component() {
           keyExtractor={(item) => item.id}
         />
       </View>
-
-      <View style={styles.navbar}>
-        <TouchableOpacity style={styles.navItem}>
-          <Ionicons name="home-outline" size={24} color="#999" />
-          <Text style={styles.navText}>Home</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <Ionicons name="search-outline" size={24} color="#999" />
-          <Text style={styles.navText}>Search</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <Ionicons name="book-outline" size={24} color="#00BCD4" />
-          <Text style={[styles.navText, styles.activeNavText]}>My Courses</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <Ionicons name="person-outline" size={24} color="#999" />
-          <Text style={styles.navText}>Profile</Text>
-        </TouchableOpacity>
-      </View>
+      <Footer navigation={navigation} />
     </SafeAreaView>
   );
 }
