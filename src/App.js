@@ -14,7 +14,8 @@ import User_Profile from "./page/user/User_Profile";
 import TeacherOverview from "./page/teacher/TeacherOverview";
 import TeacherCourses from "./page/teacher/TeacherCourses";
 import TeacherReviews from "./page/teacher/TeacherReviews";
-import Teacher_Course from "./page/teacher/ManageCourse";
+import ManageCourse from "./page/teacher/ManageCourse";
+import ManageProject from "./page/teacher/ManageProject";
 import FormCourse from "./page/teacher/FormCourse";
 import FormLesson from "./page/teacher/FormLesson";
 
@@ -148,6 +149,17 @@ export default function App() {
         <Stack.Screen
           name="Teacher"
           component={TeacherTabs}
+          options={{ header: () => {} }}
+        />
+        <Stack.Screen
+          name="ManageCourse"
+          component={ManageCourse}
+          options={{ header: () => {} }}
+        />
+
+        <Stack.Screen
+          name="ManageProject"
+          component={ManageProject}
           options={{ header: () => {} }}
         />
       </Stack.Navigator>
