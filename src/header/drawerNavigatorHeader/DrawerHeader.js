@@ -8,6 +8,7 @@ import {
   Image,
 } from "react-native";
 import React, { useState } from "react";
+import { Ionicons } from "@expo/vector-icons";
 
 import {
   createDrawerNavigator,
@@ -76,7 +77,7 @@ const DrawerHeader = ({ navigation, route }) => {
       }}
     >
       <Drawer.Screen
-        name="Home"
+        name="screenFromApp"
         component={initialScreen}
         options={({ navigation, route }) => ({
           header: () => <Header navigation={navigation} route={route} />,
@@ -86,7 +87,21 @@ const DrawerHeader = ({ navigation, route }) => {
       <Drawer.Screen
         name="Setting"
         component={Setting}
-        options={{ headers: () => {} }}
+        options={({ navigation, route }) => ({
+          header: () => {
+            return (
+              <View style={styles.header}>
+                <TouchableOpacity
+                  style={styles.backButton}
+                  onPress={() => navigation.goBack()}
+                >
+                  <Ionicons name="chevron-back" size={24} color="black" />
+                </TouchableOpacity>
+                <Text style={styles.titleBar}>Setting</Text>
+              </View>
+            );
+          },
+        })}
       />
 
       <Drawer.Screen
@@ -113,6 +128,23 @@ const styles = StyleSheet.create({
   },
   logoText: {
     fontSize: 16,
+    fontWeight: "bold",
+  },
+
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E0E0E0",
+    gap: 16,
+  },
+  backButton: {
+    padding: 4,
+  },
+  titleBar: {
+    fontSize: 18,
     fontWeight: "bold",
   },
 });
