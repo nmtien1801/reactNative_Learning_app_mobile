@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   FlatList,
   StyleSheet,
-  ScrollView,
+
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -55,13 +55,12 @@ export default function Component({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <ScrollView>
-        <Text style={styles.header}>Course</Text>
+      <Text style={styles.header}>Course</Text>
 
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Title</Text>
-          <TextInput style={styles.input} placeholder="Enter title" />
-        </View>
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Title</Text>
+        <TextInput style={styles.input} placeholder="Enter title" />
+      </View>
 
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Description</Text>
@@ -81,29 +80,27 @@ export default function Component({ navigation }) {
           />
         </View>
 
-        <View style={styles.imageContainer}>
-          <Text style={styles.label}>Image</Text>
-          <View style={styles.imageInputContainer}>
-            <TextInput
-              style={[styles.input, styles.imageInput]}
-              value={imageUrl}
-              onChangeText={setImageUrl}
-              placeholder="URL"
-            />
-            <TouchableOpacity style={styles.uploadButton}>
-              <Ionicons name="cloud-upload-outline" size={20} color="#666" />
-            </TouchableOpacity>
-          </View>
+      <View style={styles.imageContainer}>
+        <Text style={styles.label}>Image</Text>
+        <View style={styles.imageInputContainer}>
+          <TextInput
+            style={[styles.input, styles.imageInput]}
+            value={imageUrl}
+            onChangeText={setImageUrl}
+            placeholder="URL"
+          />
+          <TouchableOpacity style={styles.uploadButton}>
+            <Ionicons name="cloud-upload-outline" size={20} color="#666" />
+          </TouchableOpacity>
         </View>
+      </View>
 
-        <TouchableOpacity
-          style={styles.doneButton}
-          onPress={() => navigation.navigate("ManageCourse")}
-        >
+        <TouchableOpacity style={styles.doneButton}>
           <Text style={styles.doneButtonText}>Done</Text>
         </TouchableOpacity>
-      </ScrollView>
+      
     </View>
+  
   );
 }
 

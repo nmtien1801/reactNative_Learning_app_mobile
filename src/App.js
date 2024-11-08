@@ -1,7 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
-
 import CourseSearch from "./component/Course-Search";
 import CourseListting from "./component/Course-Listting";
 
@@ -64,7 +63,7 @@ function TeacherTabs() {
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="userProfile">
+      <Stack.Navigator initialRouteName="Teacher">
         <Stack.Screen
           name="Intro"
           component={Intro}

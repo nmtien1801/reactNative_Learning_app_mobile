@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   FlatList,
   StyleSheet,
-  ScrollView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -21,7 +20,6 @@ export default function Component({ navigation }) {
   });
   const [otherText, setOtherText] = useState("");
   const [imageUrl, setImageUrl] = useState("");
-  const [videoUrl, setVideoUrl] = useState("");
 
   const toggleOption = (key) => {
     setOptions((prevOptions) => ({
@@ -30,15 +28,15 @@ export default function Component({ navigation }) {
     }));
   };
 
-  const renderOption = ({ item: [key, value] }) => (
-    <View style={styles.optionRow}>
+  const renderCategory = ({ item: [key, value] }) => (
+    <View style={styles.categoryRow}>
       <TouchableOpacity
         style={[styles.checkbox, value && styles.checkboxChecked]}
-        onPress={() => toggleOption(key)}
+        onPress={() => toggleCategory(key)}
       >
         {value && <Text style={styles.checkboxText}>✓</Text>}
       </TouchableOpacity>
-      <Text style={styles.optionText}>
+      <Text style={styles.categoryText}>
         {key.charAt(0).toUpperCase() + key.slice(1)}
       </Text>
       {key === "other" && value && (
@@ -46,7 +44,7 @@ export default function Component({ navigation }) {
           style={[styles.input, styles.otherInput]}
           value={otherText}
           onChangeText={setOtherText}
-          placeholder="Specify other option"
+          placeholder="Specify other category"
         />
       )}
     </View>
@@ -54,61 +52,59 @@ export default function Component({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <ScrollView>
-        <Text style={styles.header}>Lesson</Text>
+      <Text style={styles.header}>Lesson</Text>
 
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Title</Text>
-          <TextInput style={styles.input} placeholder="Enter title" />
-        </View>
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Title</Text>
+        <TextInput style={styles.input} placeholder="Enter title" />
+      </View>
 
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Description</Text>
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Description</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter description"
+          multiline
+        />
+      </View>
+
+      <View style={styles.categoriesContainer}>
+        <Text style={styles.label}>Categories</Text>
+        <FlatList
+          data={Object.entries(categories)}
+          renderItem={renderCategory}
+          keyExtractor={([key]) => key}
+        />
+      </View>
+
+      <View style={styles.imageContainer}>
+        <Text style={styles.label}>Image</Text>
+        <View style={styles.imageInputContainer}>
           <TextInput
-            style={styles.input}
-            placeholder="Enter description"
-            multiline
+            style={[styles.input, styles.imageInput]}
+            value={imageUrl}
+            onChangeText={setImageUrl}
+            placeholder="URL"
           />
+          <TouchableOpacity style={styles.uploadButton}>
+            <Ionicons name="cloud-upload-outline" size={20} color="#666" />
+          </TouchableOpacity>
         </View>
-
-        <View style={styles.optionContainer}>
-          <Text style={styles.label}>Options</Text>
-          <FlatList
-            data={Object.entries(options)}
-            renderItem={renderOption}
-            keyExtractor={([key]) => key}
+      </View>
+      <View style={styles.imageContainer}>
+        <Text style={styles.label}>Video</Text>
+        <View style={styles.imageInputContainer}>
+          <TextInput
+            style={[styles.input, styles.imageInput]}
+            value={imageUrl}
+            onChangeText={setImageUrl}
+            placeholder="URL"
           />
+          <TouchableOpacity style={styles.uploadButton}>
+            <Ionicons name="cloud-upload-outline" size={20} color="#666" />
+          </TouchableOpacity>
         </View>
-
-        <View style={styles.mediaContainer}>
-          <Text style={styles.label}>Image URL</Text>
-          <View style={styles.inputWithIcon}>
-            <TextInput
-              style={[styles.input, styles.mediaInput]}
-              value={imageUrl}
-              onChangeText={setImageUrl}
-              placeholder="Enter image URL"
-            />
-            <TouchableOpacity style={styles.uploadButton}>
-              <Ionicons name="cloud-upload-outline" size={20} color="#666" />
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        <View style={styles.mediaContainer}>
-          <Text style={styles.label}>Video URL</Text>
-          <View style={styles.inputWithIcon}>
-            <TextInput
-              style={[styles.input, styles.mediaInput]}
-              value={videoUrl}
-              onChangeText={setVideoUrl}
-              placeholder="Enter video URL"
-            />
-            <TouchableOpacity style={styles.uploadButton}>
-              <Ionicons name="cloud-upload-outline" size={20} color="#666" />
-            </TouchableOpacity>
-          </View>
-        </View>
+      </View>
 
         <TouchableOpacity
           style={styles.doneButton}
@@ -116,7 +112,7 @@ export default function Component({ navigation }) {
         >
           <Text style={styles.doneButtonText}>Done</Text>
         </TouchableOpacity>
-      </ScrollView>
+ 
     </View>
   );
 }
@@ -130,7 +126,8 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 20,
+
+    marginTop: 20,
     textAlign: "center",
   },
   inputContainer: {
@@ -149,10 +146,10 @@ const styles = StyleSheet.create({
     padding: 12,
     fontSize: 16,
   },
-  optionContainer: {
+  categoriesContainer: {
     marginBottom: 20,
   },
-  optionRow: {
+  categoryRow: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 12,
@@ -175,7 +172,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#fff",
   },
-  optionText: {
+  categoryText: {
     fontSize: 16,
     flex: 1,
   },
@@ -183,14 +180,14 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 12,
   },
-  mediaContainer: {
+  imageContainer: {
     marginBottom: 20,
   },
-  inputWithIcon: {
+  imageInputContainer: {
     flexDirection: "row",
     alignItems: "center",
   },
-  mediaInput: {
+  imageInput: {
     flex: 1,
     marginRight: 12,
   },
