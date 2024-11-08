@@ -1,35 +1,50 @@
+// TeacherProfileScreen.js
 import React from "react";
 import { View, Text, Image, StyleSheet, SafeAreaView } from "react-native";
 
-export default function Header_Teacher() {
+export default function TeacherProfileScreen() {
+  // Dữ liệu của giáo viên
+  const teacherData = {
+    name: "Minh Tiến",
+    jobTitle: "UX/UI Designer",
+    tag: "Teacher",
+    timeZone: "Korea • 9:30 AM",
+    bannerImage: require("../../../img/Teacher_Profile/Teacher_Nen.jpg"),
+    profileImage: require("../../../img/Teacher_Profile/teacher.jpg"),
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      {/* <ScrollView> */}
+      {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Teacher's profile</Text>
       </View>
+
+      {/* Profile Section */}
       <View style={styles.profileSection}>
         <Image
-          source={require("../../../img/Teacher_Profile/Teacher_Nen.jpg")}
+          source={teacherData.bannerImage} // Dữ liệu banner image
           style={styles.bannerImage}
         />
         <Image
-          source={require("../../../img/Teacher_Profile/teacher.jpg")}
+          source={teacherData.profileImage} // Dữ liệu profile image
           style={styles.profileImage}
         />
         <View style={styles.profileInfo}>
-          <Text style={styles.teacherName}>Minh Tiến</Text>
+          <Text style={styles.teacherName}>{teacherData.name}</Text>
+          {/* Dữ liệu tên giáo viên */}
           <View style={styles.jobTitleContainer}>
-            <Text style={styles.jobTitle}>UX/UI Designer</Text>
+            <Text style={styles.jobTitle}>{teacherData.jobTitle}</Text>
+            {/* Dữ liệu công việc */}
             <View style={styles.teacherTag}>
-              <Text style={styles.teacherTagText}>Teacher</Text>
+              <Text style={styles.teacherTagText}>{teacherData.tag}</Text>
+              {/* Dữ liệu tag */}
             </View>
           </View>
-          <Text style={styles.timeZone}>Korea • 9:30 AM</Text>
+          <Text style={styles.timeZone}>{teacherData.timeZone}</Text>
+          {/* Dữ liệu timezone */}
         </View>
       </View>
-
-      {/* </ScrollView> */}
     </SafeAreaView>
   );
 }

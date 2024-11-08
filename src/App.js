@@ -26,7 +26,7 @@ import Learning_QA from "./page/lesson/Learning_QA";
 import Cart from "./page/user/cart/Cart";
 import HistoryCart from "./page/user/cart/History-cart";
 import DrawerHeader from "./header/drawerNavigatorHeader/DrawerHeader";
-import HomeUser from "./page/user/Home-User"
+import HomeUser from "./page/user/Home-User";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -64,7 +64,7 @@ function TeacherTabs() {
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="homeUser">
+      <Stack.Navigator initialRouteName="userProfile">
         <Stack.Screen
           name="Intro"
           component={Intro}
