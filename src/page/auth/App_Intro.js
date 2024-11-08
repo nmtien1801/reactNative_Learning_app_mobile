@@ -6,7 +6,7 @@ export default function Intro() {
   const navigation = useNavigation();
 
   useEffect(() => {
-    console.log("Chuyển hướng sẽ chạy sau 2 giây...");
+    console.log("Chuyển hướng sẽ chạy sau 3 giây...");
     const timer = setTimeout(() => {
       console.log("Đang chuyển hướng...");
       navigation.navigate("Login");

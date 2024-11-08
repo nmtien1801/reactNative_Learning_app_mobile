@@ -23,9 +23,10 @@ export default function Component({ navigation }) {
   const [imageUrl, setImageUrl] = useState("");
 
   const toggleCategory = (key) => {
+    // key là tên của category
     setCategories((prevCategories) => ({
-      ...prevCategories,
-      [key]: !prevCategories[key],
+      ...prevCategories, // giữ nguyên các giá trị cũ trước khi thay đổi
+      [key]: !prevCategories[key], // nghĩa là nếu key đã được chọn thì bỏ chọn và ngược lại
     }));
   };
 
@@ -39,13 +40,14 @@ export default function Component({ navigation }) {
       </TouchableOpacity>
       <Text style={styles.categoryText}>
         {key.charAt(0).toUpperCase() + key.slice(1)}
+        {/* // Viết hoa chữ cái đầu tiên */}
       </Text>
       {key === "other" && value && (
         <TextInput
           style={[styles.input, styles.otherInput]}
           value={otherText}
           onChangeText={setOtherText}
-          placeholder="Specify other category"
+          placeholder="Specify other category" // Cho phép người dùng nhập vào category khác
         />
       )}
     </View>
@@ -66,7 +68,7 @@ export default function Component({ navigation }) {
           <TextInput
             style={styles.input}
             placeholder="Enter description"
-            multiline
+            multiline // Cho phép nhập nhiều dòng
           />
         </View>
 
@@ -75,7 +77,7 @@ export default function Component({ navigation }) {
           <FlatList
             data={Object.entries(categories)}
             renderItem={renderCategory}
-            keyExtractor={([key]) => key}
+            keyExtractor={([key]) => key} // key là tên của category
           />
         </View>
 

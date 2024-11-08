@@ -22,6 +22,7 @@ import LoginScreen from "../../page/auth/Login";
 import CourseDetailOverView from "../../page/user/Course-Detail-OverView";
 import CourseDetailLesson from "../../page/user/Course-Detail-Lesson";
 import CourseDetailReview from "../../page/user/Course-Detail-Review";
+import UserProfile from "../../page/user/User_Profile";
 
 const DrawerHeader = ({ navigation, route }) => {
   // đây là nơi lưu những màn hình của drawer
@@ -58,11 +59,12 @@ const DrawerHeader = ({ navigation, route }) => {
   let initialScreen;
   if (route.params?.screenName === "CourseDetailOverView") {
     initialScreen = CourseDetailOverView;
-  } else if (route.params?.screenName === "CourseDetailLesson")  {
+  } else if (route.params?.screenName === "CourseDetailLesson") {
     initialScreen = CourseDetailLesson;
-  }
-  else if (route.params?.screenName === "CourseDetailReview")  {
+  } else if (route.params?.screenName === "CourseDetailReview") {
     initialScreen = CourseDetailReview;
+  } else if (route.params?.screenName === "UserProfile") {
+    initialScreen = UserProfile;
   }
 
   return (
@@ -70,7 +72,7 @@ const DrawerHeader = ({ navigation, route }) => {
       drawerContent={(props) => <CustomDrawerContent {...props} />}
       screenOptions={{
         header: () => {},
-        drawerPosition: 'right', // Đặt Drawer di chuyển từ phải sang trái
+        drawerPosition: "right", // Đặt Drawer di chuyển từ phải sang trái
       }}
     >
       <Drawer.Screen

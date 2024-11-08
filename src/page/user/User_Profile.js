@@ -11,66 +11,57 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import Footer from "../../component/Footer";
 
-const data = [
-  {
-    id: 1,
-    image: require("../../../img/User_Profile/ProductDesign.jpg"),
-    title: "Product Design",
-    author: "Dennis Sweeney",
-    price: 190,
-    rating: 4.5,
-    lessons: 12,
+// Mảng dữ liệu người dùng bao gồm thông tin cá nhân và hình ảnh
+const userData = {
+  name: "Nhi Nhi",
+  title: "UI/UX Designer",
+  bannerImage: require("../../../img/User_Profile/UserProfile1.jpg"),
+  profileImage: require("../../../img/User_Profile/User_Profile.jpg"),
+  stats: {
+    ongoing: 25,
+    completed: 24,
+    cancelled: 25,
   },
-  {
-    id: 2,
-    image: require("../../../img/User_Profile/ProductDesign.jpg"),
-    title: "Website Design",
-    author: "Ramono Wultschner",
-    price: 59,
-    rating: 4.5,
-    lessons: 12,
-  },
+  courses: [
+    {
+      id: 1,
+      image: require("../../../img/User_Profile/ProductDesign.jpg"),
+      title: "Product Design",
+      author: "Dennis Sweeney",
+      price: 190,
+      rating: 4.5,
+      lessons: 12,
+    },
+    {
+      id: 2,
+      image: require("../../../img/User_Profile/ProductDesign.jpg"),
+      title: "Website Design",
+      author: "Ramono Wultschner",
+      price: 59,
+      rating: 4.5,
+      lessons: 12,
+    },
+    {
+      id: 3,
+      image: require("../../../img/User_Profile/ProductDesign.jpg"),
+      title: "Mobile UI Design",
+      author: "Ramono Wultschner",
+      price: 320,
+      rating: 4.5,
+      lessons: 12,
+    },
 
-  {
-    id: 3,
-    image: require("../../../img/User_Profile/ProductDesign.jpg"),
-    title: "Mobile UI Design",
-    author: "Ramono Wultschner",
-    price: 320,
-    rating: 4.5,
-    lessons: 12,
-  },
-
-  {
-    id: 4,
-    image: require("../../../img/User_Profile/ProductDesign.jpg"),
-    title: "Digital Portrait",
-    author: "Ramono Wultschner",
-    price: 67,
-    rating: 4.5,
-    lessons: 12,
-  },
-
-  {
-    id: 5,
-    image: require("../../../img/User_Profile/ProductDesign.jpg"),
-    title: "Product Design",
-    author: "Dennis Sweeney",
-    price: 190,
-    rating: 4.5,
-    lessons: 12,
-  },
-
-  {
-    id: 6,
-    image: require("../../../img/User_Profile/ProductDesign.jpg"),
-    title: "Product Design",
-    author: "Dennis Sweeney",
-    price: 190,
-    rating: 4.5,
-    lessons: 12,
-  },
-];
+    {
+      id: 4,
+      image: require("../../../img/User_Profile/ProductDesign.jpg"),
+      title: "Digital Portrait",
+      author: "Ramono Wultschner",
+      price: 67,
+      rating: 4.5,
+      lessons: 12,
+    },
+  ],
+};
 
 const Item = ({ image, title, author, price, rating, lessons, navigation }) => (
   <TouchableOpacity onPress={() => navigation.navigate("Lesson")}>
@@ -93,7 +84,7 @@ const Item = ({ image, title, author, price, rating, lessons, navigation }) => (
   </TouchableOpacity>
 );
 
-export default function UserProfileScreen({ navigation, route }) {
+export default function UserProfileScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -101,27 +92,21 @@ export default function UserProfileScreen({ navigation, route }) {
           <Text style={styles.headerTitle}>User's profile</Text>
         </View>
         <View style={styles.profileSection}>
-          <Image
-            source={require("./../../../img/User_Profile/UserProfile1.jpg")}
-            style={styles.bannerImage}
-          />
-          <Image
-            source={require("./../../../img/User_Profile/User_Profile.jpg")}
-            style={styles.profileImage}
-          />
-          <Text style={styles.userName}>Nhi Nhi</Text>
-          <Text style={styles.userTitle}>UI/UX Designer</Text>
+          <Image source={userData.bannerImage} style={styles.bannerImage} />
+          <Image source={userData.profileImage} style={styles.profileImage} />
+          <Text style={styles.userName}>{userData.name}</Text>
+          <Text style={styles.userTitle}>{userData.title}</Text>
           <View style={styles.statsContainer}>
             <View style={styles.statItem}>
-              <Text style={styles.statNumber}>25</Text>
+              <Text style={styles.statNumber}>{userData.stats.ongoing}</Text>
               <Text style={styles.statLabel}>On going</Text>
             </View>
             <View style={styles.statItem}>
-              <Text style={styles.statNumber}>24</Text>
+              <Text style={styles.statNumber}>{userData.stats.completed}</Text>
               <Text style={styles.statLabel}>Completed</Text>
             </View>
             <View style={styles.statItem}>
-              <Text style={styles.statNumber}>25</Text>
+              <Text style={styles.statNumber}>{userData.stats.cancelled}</Text>
               <Text style={styles.statLabel}>Cancelled</Text>
             </View>
           </View>
@@ -130,24 +115,23 @@ export default function UserProfileScreen({ navigation, route }) {
           <Text style={styles.sectionTitle}>Saved courses</Text>
 
           <FlatList
-            data={data}
+            data={userData.courses}
             renderItem={({ item }) => (
-              //  image, title, author, price, rating, lessons
               <Item
                 image={item.image}
                 title={item.title}
-                author={item.author}
+                author={item.author} // tên giáo viên
                 price={item.price}
                 rating={item.rating}
-                lesson={item.lesson}
+                lessons={item.lessons}
                 navigation={navigation}
               />
             )}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.id.toString()}
           />
         </View>
       </ScrollView>
-      <Footer navigation={navigation} route={route} />
+      <Footer navigation={navigation} />
     </View>
   );
 }

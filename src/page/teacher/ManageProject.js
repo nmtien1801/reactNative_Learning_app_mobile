@@ -11,7 +11,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-
+import Footer from "../../component/Footer";
 export default function Component() {
   const [projects, setProjects] = useState([
     { id: "1", name: "Nguyen Van A", checked: false },

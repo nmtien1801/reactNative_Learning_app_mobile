@@ -124,8 +124,8 @@ export default function Component({ navigation }) {
         data={courses}
         renderItem={renderCourseItem}
         keyExtractor={(item) => item.id}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.listContainer}
+        showsVerticalScrollIndicator={false} // ẩn thanh cuộn
+        contentContainerStyle={styles.listContainer} // style cho cái view bao bọc FlatList
       />
 
       <Footer navigation={navigation} />

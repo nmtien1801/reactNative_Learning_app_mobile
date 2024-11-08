@@ -3,7 +3,7 @@ import { View, Text, Image, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Layout from "../../component/lesson/Layout_Lesson";
 
-export default function CommentsComponent() {
+export default function CommentsComponent({ navigation }) {
   const comments = [
     {
       id: 1,
@@ -24,7 +24,7 @@ export default function CommentsComponent() {
   ];
 
   return (
-    <Layout>
+    <Layout navigation={navigation}>
       <View style={styles.comments}>
         {comments.map((comment) => (
           <View key={comment.id} style={styles.commentCard}>

@@ -26,7 +26,7 @@ export default function Component({ navigation }) {
   const toggleOption = (key) => {
     setOptions((prevOptions) => ({
       ...prevOptions,
-      [key]: !prevOptions[key],
+      [key]: !prevOptions[key], // nghĩa là nếu key đã được chọn thì bỏ chọn và ngược lại
     }));
   };
 

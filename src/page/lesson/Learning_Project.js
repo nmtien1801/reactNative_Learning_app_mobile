@@ -10,7 +10,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import Layout from "../../component/lesson/Layout_Lesson";
 
-export default function ProjectComponent() {
+export default function ProjectComponent({ navigation }) {
   const studentProjects = [
     {
       id: "1",
@@ -80,7 +80,7 @@ export default function ProjectComponent() {
   );
 
   return (
-    <Layout>
+    <Layout navigation={navigation}>
       <TouchableOpacity style={styles.uploadButton}>
         <Ionicons name="cloud-upload-outline" size={24} color="#00BDD6" />
         <Text style={styles.uploadText}>Upload your project here</Text>

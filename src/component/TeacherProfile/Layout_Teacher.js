@@ -2,9 +2,9 @@ import React from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 import Header from "./Header_Teacher";
 import Nav from "./Nav_Teacher";
-import Footer from "../Footer";
+import Footer from "../../component/Footer";
 
-export default function Layout({ children }) {
+export default function Layout({ children, navigation }) {
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -12,7 +12,7 @@ export default function Layout({ children }) {
         <Nav />
         <View style={styles.content}>{children}</View>
       </ScrollView>
-      <Footer />
+      <Footer navigation={navigation} />
     </View>
   );
 }
