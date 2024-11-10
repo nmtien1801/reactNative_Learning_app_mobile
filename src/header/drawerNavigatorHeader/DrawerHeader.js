@@ -41,6 +41,16 @@ const DrawerHeader = ({ navigation, route }) => {
         </View>
 
         <DrawerItem
+          label="Favorites"
+          onPress={() => props.navigation.navigate("Setting")} // chưa làm
+        />
+
+        <DrawerItem
+          label="Follow"
+          onPress={() => props.navigation.navigate("Setting")} // chưa làm
+        />
+
+        <DrawerItem
           label="Setting"
           onPress={() => props.navigation.navigate("Setting")}
         />
@@ -84,6 +94,46 @@ const DrawerHeader = ({ navigation, route }) => {
         })}
       />
       {/* dưới đây là nơi chứa đường dẫn của thanh drawer */}
+      <Drawer.Screen
+        name="Favorites"
+        component={Setting} // chưa làm
+        options={({ navigation, route }) => ({
+          header: () => {
+            return (
+              <View style={styles.header}>
+                <TouchableOpacity
+                  style={styles.backButton}
+                  onPress={() => navigation.goBack()}
+                >
+                  <Ionicons name="chevron-back" size={24} color="black" />
+                </TouchableOpacity>
+                <Text style={styles.titleBar}>Favorites</Text>
+              </View>
+            );
+          },
+        })}
+      />
+
+      <Drawer.Screen
+        name="Follow"
+        component={Setting} // chưa làm
+        options={({ navigation, route }) => ({
+          header: () => {
+            return (
+              <View style={styles.header}>
+                <TouchableOpacity
+                  style={styles.backButton}
+                  onPress={() => navigation.goBack()}
+                >
+                  <Ionicons name="chevron-back" size={24} color="black" />
+                </TouchableOpacity>
+                <Text style={styles.titleBar}>Follow</Text>
+              </View>
+            );
+          },
+        })}
+      />
+
       <Drawer.Screen
         name="Setting"
         component={Setting}

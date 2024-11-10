@@ -66,7 +66,7 @@ function TeacherTabs() {
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="homeUser">
+      <Stack.Navigator initialRouteName="courseDetailOverView">
         <Stack.Screen
           name="Intro"
           component={Intro}
