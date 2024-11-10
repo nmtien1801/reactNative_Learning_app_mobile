@@ -20,9 +20,9 @@ import Header from "../Header-Course-Detail";
 import Setting from "../../component/setting/Setting";
 import LoginScreen from "../../page/auth/Login";
 
-import CourseDetailOverView from "../../page/user/Course-Detail-OverView";
-import CourseDetailLesson from "../../page/user/Course-Detail-Lesson";
-import CourseDetailReview from "../../page/user/Course-Detail-Review";
+import CourseDetailOverView from "../../page/user/cource/Course-Detail-OverView";
+import CourseDetailLesson from "../../page/user/cource/Course-Detail-Lesson";
+import CourseDetailReview from "../../page/user/cource/Course-Detail-Review";
 import UserProfile from "../../page/user/User_Profile";
 
 const DrawerHeader = ({ navigation, route }) => {

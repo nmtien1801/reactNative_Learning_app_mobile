@@ -7,7 +7,7 @@ import {
   StyleSheet,
   ScrollView,
   FlatList,
-  Dimensions
+  Dimensions,
 } from "react-native";
 import {
   ShoppingCart,
@@ -23,38 +23,9 @@ import {
 } from "lucide-react-native";
 import Footer from "../../component/Footer";
 
-const CategoryItem = ({ icon: Icon, title, color }) => (
-  <TouchableOpacity style={[styles.categoryItem, { backgroundColor: color }]}>
-    <View style={styles.categoryIcon}>
-      <Icon size={24} color="#FFF" />
-    </View>
-    <Text style={styles.categoryText}>{title}</Text>
-  </TouchableOpacity>
-);
 
-const CourseCard = ({ course }) => (
-  <View style={[styles.courseCard, { width: CARD_WIDTH }]}>
-    <Image source={{ uri: course.image }} style={styles.courseImage} />
-    <View style={styles.courseContent}>
-      <View style={styles.titleRow}>
-        <Text style={styles.courseTitle}>{course.title}</Text>
-        <TouchableOpacity>
-          <Bookmark size={24} color="#00BCD4" />
-        </TouchableOpacity>
-      </View>
-      <Text style={styles.instructorName}>{course.instructor}</Text>
-      <Text style={styles.price}>${course.price}</Text>
-      <View style={styles.statsRow}>
-        <View style={styles.ratingContainer}>
-          <Star size={16} color="#FFD700" fill="#FFD700" />
-          <Text style={styles.rating}>{course.rating}</Text>
-          <Text style={styles.reviews}>({course.reviews})</Text>
-        </View>
-        <Text style={styles.lessons}>{course.lessons} lessons</Text>
-      </View>
-    </View>
-  </View>
-);
+
+
 
 const SectionHeader = ({ title }) => (
   <View style={styles.sectionHeader}>
@@ -65,62 +36,11 @@ const SectionHeader = ({ title }) => (
   </View>
 );
 
-const CourseSection = ({ section }) => (
-  <View style={styles.section}>
-    <SectionHeader title={section.title} />
-    <FlatList
-      data={section.data}
-      renderItem={({ item }) => <CourseCard course={item} />}
-      keyExtractor={(item) => item.id}
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={styles.courseList}
-    />
-  </View>
-);
 
-const CourseInspiresCard = ({ course }) => (
-    <View style={styles.courseCard}>
-      <Image source={{ uri: course.image }} style={styles.courseImage} />
-      <View style={styles.courseContent}>
-        <View style={styles.titleRow}>
-          <Text style={styles.courseTitle}>{course.title}</Text>
-          <TouchableOpacity>
-            <Bookmark size={24} color="#00BCD4" />
-          </TouchableOpacity>
-        </View>
-        <Text style={styles.instructorName}>{course.instructor}</Text>
-        <Text style={styles.price}>${course.price}</Text>
-        <View style={styles.statsRow}>
-          <View style={styles.ratingContainer}>
-            <Star size={16} color="#FFD700" fill="#FFD700" />
-            <Text style={styles.rating}>{course.rating}</Text>
-            <Text style={styles.reviews}>({course.reviews})</Text>
-          </View>
-          <Text style={styles.lessons}>{course.lessons} lessons</Text>
-        </View>
-      </View>
-    </View>
-  );  
 
-  const TeacherCard = ({ teacher }) => (
-    <View style={styles.teacherCard}>
-      <Image source={{ uri: teacher.image }} style={styles.teacherImage} />
-      <Text style={styles.teacherName}>{teacher.name}</Text>
-      <Text style={styles.institution}>{teacher.institution}</Text>
-      <View style={styles.teacherStats}>
-        <View style={styles.ratingContainer}>
-        <Star size={16} color="#FFD700" fill="#FFD700" />
-          <Text style={styles.rating}>{teacher.rating}</Text>
-          <Text style={styles.reviews}>({teacher.reviews})</Text>
-        </View>
-        <Text style={styles.lessons}>{teacher.lessons} lessons</Text>
-      </View>
-    </View>
-  );
-  
 
-const { width } = Dimensions.get('window');
+
+const { width } = Dimensions.get("window");
 const CARD_WIDTH = width * 0.5;
 
 export default function HomeUser({ navigation, route }) {
@@ -196,63 +116,158 @@ export default function HomeUser({ navigation, route }) {
         },
       ],
     },
-    
   ];
 
   const courses = [
     {
-      id: '1',
-      title: 'Digital Portrait',
-      instructor: 'Ramono Wultschner',
+      id: "1",
+      title: "Digital Portrait",
+      instructor: "Ramono Wultschner",
       price: 59,
       rating: 4.5,
       reviews: 1233,
       lessons: 18,
-      image: 'https://v0.dev/placeholder.svg?height=200&width=200',
+      image: "https://v0.dev/placeholder.svg?height=200&width=200",
     },
     {
-      id: '2',
-      title: 'Digital Portrait',
-      instructor: 'Ramono Wultschner',
+      id: "2",
+      title: "Digital Portrait",
+      instructor: "Ramono Wultschner",
       price: 59,
       rating: 4.5,
       reviews: 1233,
       lessons: 18,
-      image: 'https://v0.dev/placeholder.svg?height=200&width=200',
+      image: "https://v0.dev/placeholder.svg?height=200&width=200",
     },
     {
-      id: '3',
-      title: 'Design',
-      instructor: 'Ramono Wultschner',
+      id: "3",
+      title: "Design",
+      instructor: "Ramono Wultschner",
       price: 59,
       rating: 4.5,
       reviews: 1233,
       lessons: 18,
-      image: 'https://v0.dev/placeholder.svg?height=200&width=200',
+      image: "https://v0.dev/placeholder.svg?height=200&width=200",
     },
   ];
 
   const teachers = [
     {
-      id: '1',
-      name: 'Nhi Nhi',
-      institution: 'Industrial University of Ho Chi Minh City',
+      id: "1",
+      name: "Nhi Nhi",
+      institution: "Industrial University of Ho Chi Minh City",
       rating: 4.5,
       reviews: 1233,
       lessons: 18,
-      image: 'https://v0.dev/placeholder.svg?height=200&width=200',
+      image: "https://v0.dev/placeholder.svg?height=200&width=200",
     },
     {
-      id: '2',
-      name: 'Minh Tien',
-      institution: 'Ramono Wultschner',
+      id: "2",
+      name: "Minh Tien",
+      institution: "Ramono Wultschner",
       rating: 4.5,
       reviews: 1233,
       lessons: 18,
-      image: 'https://v0.dev/placeholder.svg?height=200&width=200',
+      image: "https://v0.dev/placeholder.svg?height=200&width=200",
     },
   ];
 
+  const CourseCard = ({ course }) => (
+    <TouchableOpacity style={[styles.courseCard, { width: CARD_WIDTH }]} onPress={() => navigation.navigate("courseDetailOverView")}>
+      <Image
+        source={{ uri: course.image }}
+        style={styles.courseImage}
+      />
+      <View style={styles.courseContent}>
+        <View style={styles.titleRow}>
+          <Text
+            style={styles.courseTitle}
+          >
+            {course.title}
+          </Text>
+          <TouchableOpacity>
+            <Bookmark size={24} color="#00BCD4" />
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.instructorName}>{course.instructor}</Text>
+        <Text style={styles.price}>${course.price}</Text>
+        <View style={styles.statsRow}>
+          <View style={styles.ratingContainer}>
+            <Star size={16} color="#FFD700" fill="#FFD700" />
+            <Text style={styles.rating}>{course.rating}</Text>
+            <Text style={styles.reviews}>({course.reviews})</Text>
+          </View>
+          <Text style={styles.lessons}>{course.lessons} lessons</Text>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+
+  const CourseSection = ({ section }) => (
+    <View style={styles.section}>
+      <SectionHeader title={section.title} />
+      <FlatList
+        data={section.data}
+        renderItem={({ item }) => <CourseCard course={item} />}
+        keyExtractor={(item) => item.id}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.courseList}
+      />
+    </View>
+  );
+
+  const CategoryItem = ({ icon: Icon, title, color }) => (
+    <TouchableOpacity style={[styles.categoryItem, { backgroundColor: color }]} onPress={() => navigation.navigate("courseListing")}>
+      <View style={styles.categoryIcon}>
+        <Icon size={24} color="#FFF" />
+      </View>
+      <Text style={styles.categoryText}>{title}</Text>
+    </TouchableOpacity>
+  );
+
+  const CourseInspiresCard = ({ course }) => (
+    <TouchableOpacity style={styles.courseCard} onPress={() => navigation.navigate("courseDetailOverView")}>
+      <Image source={{ uri: course.image }} style={styles.courseImage} />
+      <View style={styles.courseContent}>
+        <View style={styles.titleRow}>
+          <Text style={styles.courseTitle}>{course.title}</Text>
+          <TouchableOpacity>
+            <Bookmark size={24} color="#00BCD4" />
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.instructorName}>{course.instructor}</Text>
+        <Text style={styles.price}>${course.price}</Text>
+        <View style={styles.statsRow}>
+          <View style={styles.ratingContainer}>
+            <Star size={16} color="#FFD700" fill="#FFD700" />
+            <Text style={styles.rating}>{course.rating}</Text>
+            <Text style={styles.reviews}>({course.reviews})</Text>
+          </View>
+          <Text style={styles.lessons}>{course.lessons} lessons</Text>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+
+  
+  const TeacherCard = ({ teacher }) => (
+    <TouchableOpacity style={styles.teacherCard} onPress={() => navigation.navigate("courseDetailOverView")}>
+      <Image source={{ uri: teacher.image }} style={styles.teacherImage} />
+      <Text style={styles.teacherName}>{teacher.name}</Text>
+      <Text style={styles.institution}>{teacher.institution}</Text>
+      <View style={styles.teacherStats}>
+        <View style={styles.ratingContainer}>
+          <Star size={16} color="#FFD700" fill="#FFD700" />
+          <Text style={styles.rating}>{teacher.rating}</Text>
+          <Text style={styles.reviews}>({teacher.reviews})</Text>
+        </View>
+        <Text style={styles.lessons}>{teacher.lessons} lessons</Text>
+      </View>
+    </TouchableOpacity>
+  );
+
+  
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -265,7 +280,10 @@ export default function HomeUser({ navigation, route }) {
             </Text>
           </View>
           <View style={styles.headerIcons}>
-            <TouchableOpacity style={styles.iconButton}>
+            <TouchableOpacity
+              style={styles.iconButton}
+              onPress={() => navigation.navigate("cart")}
+            >
               <ShoppingCart size={24} color="#FFF" />
             </TouchableOpacity>
             <TouchableOpacity style={styles.iconButton}>
@@ -324,32 +342,32 @@ export default function HomeUser({ navigation, route }) {
 
         {/* course inspires Section */}
         <View style={styles.section}>
-        <SectionHeader title="Course that inspires" />
-        <FlatList
-          data={courses}
-          renderItem={({ item }) => <CourseInspiresCard course={item} />}
-          keyExtractor={(item) => item.id}
-          showsVerticalScrollIndicator={false}
-          scrollEnabled={false}
-          contentContainerStyle={{ paddingHorizontal: 16 , gap: 16 }}
-        />
-      </View>
+          <SectionHeader title="Course that inspires" />
+          <FlatList
+            data={courses}
+            renderItem={({ item }) => <CourseInspiresCard course={item} />}
+            keyExtractor={(item) => item.id}
+            showsVerticalScrollIndicator={false}
+            scrollEnabled={false}
+            contentContainerStyle={{ paddingHorizontal: 16, gap: 16 }}
+          />
+        </View>
 
- {/* Teachers Section */}
-      <View style={styles.section}>
-        <SectionHeader title="Top teachers" />
-        <FlatList
-          data={teachers}
-          renderItem={({ item }) => <TeacherCard teacher={item} />}
-          keyExtractor={(item) => item.id}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.teacherList}
-        />
-      </View>
+        {/* Teachers Section */}
+        <View style={styles.section}>
+          <SectionHeader title="Top teachers" />
+          <FlatList
+            data={teachers}
+            renderItem={({ item }) => <TeacherCard teacher={item} />}
+            keyExtractor={(item) => item.id}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.teacherList}
+          />
+        </View>
       </ScrollView>
-        
-      <Footer navigation={navigation} route={route} />
+
+      <Footer navigation={navigation} route={route} showActive="home"/>
     </View>
   );
 }
@@ -475,31 +493,31 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   sectionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingHorizontal: 16,
     marginBottom: 16,
   },
   sectionTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: "bold",
+    color: "#333",
   },
   viewMore: {
     fontSize: 14,
-    color: '#00BCD4',
+    color: "#00BCD4",
   },
   courseList: {
     paddingHorizontal: 16,
   },
   courseCard: {
     // width: CARD_WIDTH,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 8,
     marginRight: 16,
-    overflow: 'hidden',
-    shadowColor: '#000',
+    overflow: "hidden",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -509,60 +527,60 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   courseImage: {
-    width: '100%',
+    width: "100%",
     height: 160,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: "#f0f0f0",
   },
   courseContent: {
     padding: 12,
   },
   titleRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
     marginBottom: 4,
   },
   courseTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: "bold",
+    color: "#333",
     flex: 1,
     marginRight: 8,
   },
   instructorName: {
     fontSize: 14,
-    color: '#666',
+    color: "#666",
     marginBottom: 4,
   },
   price: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#00BCD4',
+    fontWeight: "bold",
+    color: "#00BCD4",
     marginBottom: 4,
   },
   statsRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   ratingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   rating: {
     fontSize: 14,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginLeft: 4,
-    color: '#333',
+    color: "#333",
   },
   reviews: {
     fontSize: 14,
-    color: '#666',
+    color: "#666",
     marginLeft: 4,
   },
   lessons: {
     fontSize: 14,
-    color: '#666',
+    color: "#666",
   },
 
   teacherList: {
@@ -573,25 +591,25 @@ const styles = StyleSheet.create({
     marginRight: 16,
   },
   teacherImage: {
-    width: '100%',
+    width: "100%",
     height: 160,
     borderRadius: 8,
     marginBottom: 8,
   },
   teacherName: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: "bold",
+    color: "#333",
     marginBottom: 4,
   },
   institution: {
     fontSize: 14,
-    color: '#666',
+    color: "#666",
     marginBottom: 8,
   },
   teacherStats: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
 });

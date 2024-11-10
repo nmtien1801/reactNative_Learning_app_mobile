@@ -82,12 +82,7 @@ export default function Cart({navigation, route}) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Giỏ Hàng</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('historyCart')}>
-        <Text style={styles.headerRight}>lịch sử mua</Text>
-        </TouchableOpacity>
-      </View>
+      
       <FlatList
         data={courses}
         renderItem={renderCourseItem}
@@ -120,14 +115,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#e5e7eb',
   },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-  },
-  headerRight: {
-    color: '#6366f1',
-    fontSize: 14,
-  },
+  
   list: {
     padding: 16,
   },

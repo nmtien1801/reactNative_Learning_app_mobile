@@ -11,43 +11,28 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-export default function Footer({ navigation , route}) {
-  const [active, SetActive] = useState("home");
+export default function Footer({ navigation , route, showActive}) {
+  const [active, SetActive] = useState();
 
-  const handleActive = (action) => {
-    if(action === 'home'){
-      SetActive(action);
-      navigation.navigate('home')
-    }
-    else if(action === 'search'){
-      SetActive(action);
-      navigation.navigate('courseSearch')
-    }
-    else if(action === 'book'){
-      SetActive(action);
-      navigation.navigate('myCourse')
-    }
-    else if(action === 'person'){
-      SetActive(action);
-      navigation.navigate('userProfile')
-    }
-    
-  }
+  useEffect(() => {
+    SetActive(showActive);
+  }, [active]);
+
   return (
     <View style={styles.tabBar}>
-      <TouchableOpacity style={styles.tabItem} onPress={() => handleActive('home')}>
+      <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('homeUser')}>
         <Ionicons name="home" size={24} color={(active === 'home') ? "#00BCD4" : "#666"} />
         <Text style={[styles.tabLabel, active === 'home' && styles.activeTabLabel]}>Home</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.tabItem} onPress={() => handleActive('search')}>
+      <TouchableOpacity style={styles.tabItem} onPress={() =>  navigation.navigate('courseSearch')}>
         <Ionicons name="search" size={24} color={(active === 'search') ? "#00BCD4" : "#666"} />
         <Text style={[styles.tabLabel,active === 'search' && styles.activeTabLabel]}>Search</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.tabItem} onPress={() => handleActive('book')}>
+      <TouchableOpacity style={styles.tabItem} onPress={() =>  navigation.navigate('myCourse')}>
         <Ionicons name="book" size={24} color={(active === 'book') ? "#00BCD4" : "#666"} />
         <Text style={[styles.tabLabel, active === 'book' && styles.activeTabLabel]}>My Courses</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.tabItem} onPress={() => handleActive('person')}>
+      <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('userProfile')}>
         <Ionicons name="person" size={24} color={(active === 'person') ? "#00BCD4" : "#666"}/>
         <Text style={[styles.tabLabel, active === 'person' && styles.activeTabLabel]}>Profile</Text>
       </TouchableOpacity>

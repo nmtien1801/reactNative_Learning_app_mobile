@@ -1,8 +1,8 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
-import CourseSearch from "./component/Course-Search";
-import CourseListting from "./component/Course-Listting";
+import CourseSearch from "./page/user/detail-course/Course-Search";
+import CourseListing from "./page/user/detail-course/Course-Listing";
 
 import MyCourse from "./page/user/My-course";
 
@@ -26,7 +26,9 @@ import Learning_QA from "./page/lesson/Learning_QA";
 import Cart from "./page/user/cart/Cart";
 import HistoryCart from "./page/user/cart/History-cart";
 import DrawerHeader from "./header/drawerNavigatorHeader/DrawerHeader";
-import HomeUser from "./page/user/Home-User"
+import HomeUser from "./page/user/Home-User";
+
+import HeaderCart from "./header/Header-Cart";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -88,8 +90,8 @@ export default function App() {
           options={{ header: () => {} }}
         />
         <Stack.Screen
-          name="courseListting"
-          component={CourseListting}
+          name="courseListing"
+          component={CourseListing}
           options={{ header: () => {} }}
         />
 
@@ -130,7 +132,9 @@ export default function App() {
         <Stack.Screen
           name="cart"
           component={Cart}
-          options={{ header: () => {} }}
+          options={({ navigation, route }) => ({
+            header: () => <HeaderCart navigation={navigation} route={route} />,
+          })}
         />
         {/* ===================== user - home */}
         <Stack.Screen

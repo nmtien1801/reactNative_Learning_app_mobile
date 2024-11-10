@@ -84,7 +84,7 @@ const Item = ({ image, title, author, price, rating, lessons, navigation }) => (
   </TouchableOpacity>
 );
 
-export default function UserProfileScreen({ navigation }) {
+export default function UserProfileScreen({ navigation , route}) {
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -131,7 +131,7 @@ export default function UserProfileScreen({ navigation }) {
           />
         </View>
       </ScrollView>
-      <Footer navigation={navigation} />
+      <Footer navigation={navigation} route={route} showActive="person"/>
     </View>
   );
 }

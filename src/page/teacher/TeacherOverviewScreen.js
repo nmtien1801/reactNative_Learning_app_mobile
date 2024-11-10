@@ -64,7 +64,7 @@ export default function TeacherOverViewScreen({navigation, route}) {
           </View>
         </View>
       </ScrollView>
-      <Footer navigation={navigation} route={route}/>
+      <Footer navigation={navigation} route={route} action={""}/>
     </SafeAreaView>
   );
 }

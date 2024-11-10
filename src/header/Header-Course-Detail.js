@@ -38,15 +38,7 @@ const HeaderCourseDetail = ({ navigation, route }) => {
 };
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: "#E0E0E0",
-  },
+  
 
   backButton: {
     padding: 4,
