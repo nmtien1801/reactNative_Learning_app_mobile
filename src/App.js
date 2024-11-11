@@ -30,6 +30,9 @@ import HomeUser from "./page/user/Home-User";
 
 import HeaderCart from "./header/Header-Cart";
 
+import { store } from "./redux/store";
+import { Provider } from "react-redux";
+
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -65,8 +68,16 @@ function TeacherTabs() {
 
 export default function App() {
   return (
+    <Provider store={store}>
+      <Project />
+    </Provider>
+  );
+}
+
+const Project = () => {
+  return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="courseDetailOverView">
+      <Stack.Navigator initialRouteName="Login">
         <Stack.Screen
           name="Intro"
           component={Intro}
@@ -185,4 +196,4 @@ export default function App() {
       {/* ===================== option header */}
     </NavigationContainer>
   );
-}
+};
