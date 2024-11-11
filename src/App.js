@@ -4,7 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import CourseSearch from "./page/user/detail-course/Course-Search";
 import CourseListing from "./page/user/detail-course/Course-Listing";
 
-import MyCourse from "./page/user/My-course";
+import MyCourse from "./page/user/my-course/My-course";
 
 import Intro from "./page/auth/App_Intro";
 import RegisterScreen from "./page/auth/Register";
@@ -77,7 +77,7 @@ export default function App() {
 const Project = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator initialRouteName="myCourse">
         <Stack.Screen
           name="Intro"
           component={Intro}
