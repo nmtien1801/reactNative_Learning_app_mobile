@@ -25,7 +25,27 @@ import CourseDetailLesson from "../../page/user/cource/Course-Detail-Lesson";
 import CourseDetailReview from "../../page/user/cource/Course-Detail-Review";
 import UserProfile from "../../page/user/User_Profile";
 
+import { toast } from "react-toastify";
+import {logOutUser} from "../../service/userService";
+import { useDispatch, useSelector } from 'react-redux'
+import {handleLogout} from "../../redux/authSlice";
+
 const DrawerHeader = ({ navigation, route }) => {
+  const dispatch = useDispatch(); 
+
+  OnClickLogout = async (props) => {
+    let res = await logOutUser();  // clear cookies
+    console.log("res: ", res);
+    
+    if (res && +res.data.EC === 0) {
+      dispatch(handleLogout()); // clear store
+      toast.success("logout success...");
+      props.navigation.navigate("LoginScreen")
+    } else {
+      toast.error(res.payload.EM);
+    }
+  };
+
   // đây là nơi lưu những màn hình của drawer
   function CustomDrawerContent(props) {
     return (
@@ -57,7 +77,7 @@ const DrawerHeader = ({ navigation, route }) => {
 
         <DrawerItem
           label="Log out"
-          onPress={() => props.navigation.navigate("LoginScreen")}
+          onPress={() => OnClickLogout(props)}
         />
       </DrawerContentScrollView>
     );

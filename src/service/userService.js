@@ -1,7 +1,11 @@
 import axios from "axios";
 
-const handleLoginApi = (valueLogin, password) => {
-  return axios.post(`/api/login`, { valueLogin, password });
+const handleLoginApi = (email, password) => {
+  return axios.post(`http://localhost:8080/api/login`, { email, password });
 };
 
-export { handleLoginApi };
+const logOutUser = () => {
+  return axios.post("http://localhost:8080/api/logout");
+};
+
+export { handleLoginApi, logOutUser };

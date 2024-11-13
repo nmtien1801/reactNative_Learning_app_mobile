@@ -32,6 +32,8 @@ import HeaderCart from "./header/Header-Cart";
 
 import { store } from "./redux/store";
 import { Provider } from "react-redux";
+import { ToastContainer, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -77,7 +79,7 @@ export default function App() {
 const Project = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="myCourse">
+      <Stack.Navigator initialRouteName="Login">
         <Stack.Screen
           name="Intro"
           component={Intro}
@@ -193,7 +195,21 @@ const Project = () => {
         />
       </Stack.Navigator>
 
-      {/* ===================== option header */}
+      {/* ===================== toast */}
+
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition={Bounce}
+      />
     </NavigationContainer>
   );
 };
