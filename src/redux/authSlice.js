@@ -54,7 +54,7 @@ const authSlice = createSlice({
         
 
         // state.token = action.payload.token;
-        localStorage.setItem("learning_App", action.payload.DT.access_token); // Lưu token vào localStorage
+        // localStorage.setItem("learning_App", action.payload.DT.access_token); // Lưu token vào localStorage
       })
       .addCase(handleLogin.rejected, (state, action) => {
         state.isLoading = false;
@@ -71,7 +71,7 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.user = {};
         state.isLogin = false;
-        localStorage.removeItem("learning_App"); // Xóa token khỏi localStorage
+        // localStorage.removeItem("learning_App"); // Xóa token khỏi localStorage
         console.log("action: ", action);
       })
       .addCase(handleLogout.rejected, (state, action) => {

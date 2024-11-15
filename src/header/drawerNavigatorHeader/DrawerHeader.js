@@ -25,13 +25,14 @@ import CourseDetailLesson from "../../page/user/cource/Course-Detail-Lesson";
 import CourseDetailReview from "../../page/user/cource/Course-Detail-Review";
 import UserProfile from "../../page/user/User_Profile";
 
-import { toast } from "react-toastify";
+import {  useToast } from "../../component/customToast";
 import {logOutUser} from "../../service/userService";
 import { useDispatch, useSelector } from 'react-redux'
 import {handleLogout} from "../../redux/authSlice";
 
 const DrawerHeader = ({ navigation, route }) => {
   const dispatch = useDispatch(); 
+  const toast = useToast();
 
   OnClickLogout = async (props) => {
     let res = await logOutUser();  // clear cookies
@@ -39,10 +40,10 @@ const DrawerHeader = ({ navigation, route }) => {
     
     if (res && +res.data.EC === 0) {
       dispatch(handleLogout()); // clear store
-      toast.success("logout success...");
+      toast("logout success...");
       props.navigation.navigate("LoginScreen")
     } else {
-      toast.error(res.payload.EM);
+      toast(res.payload.EM , "error");
     }
   };
 

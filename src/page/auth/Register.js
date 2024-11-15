@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
-import { toast } from "react-toastify";
+import {  useToast } from "../../component/customToast";
 
 import { useDispatch, useSelector } from 'react-redux'
 import { handleRegister } from "../../redux/authSlice";
@@ -20,15 +20,16 @@ export default function RegisterScreen({navigation, route}) {
   const [userName, setUserName] = useState(""); // tên người dùng
   const [confirmPassword, setConfirmPassword] = useState(""); // xác nhận password
   const dispatch = useDispatch();
+  const toast = useToast();
 
   onClickRegister = async () => {
     let res = await dispatch(handleRegister({email, userName, password}));
     
     if(res.payload.EC == 0){
-      toast.success(res.payload.EM);
+      toast(res.payload.EM);
       navigation.navigate("Login")
     }else{
-      toast.error(res.payload.EM);
+      toast(res.payload.EM, "error");
     }
   };
   return (

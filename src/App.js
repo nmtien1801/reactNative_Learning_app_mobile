@@ -32,8 +32,7 @@ import HeaderCart from "./header/Header-Cart";
 
 import { store } from "./redux/store";
 import { Provider } from "react-redux";
-import { ToastContainer, Bounce } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { CustomToast } from "./component/customToast";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -71,7 +70,9 @@ function TeacherTabs() {
 export default function App() {
   return (
     <Provider store={store}>
-      <Project />
+      <CustomToast>
+        <Project />
+      </CustomToast>
     </Provider>
   );
 }
@@ -194,22 +195,6 @@ const Project = () => {
           options={{ header: () => {} }}
         />
       </Stack.Navigator>
-
-      {/* ===================== toast */}
-
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-        transition={Bounce}
-      />
     </NavigationContainer>
   );
 };

@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
-import { toast } from "react-toastify";
+import {  useToast } from "../../component/customToast";
 
 import { useDispatch, useSelector } from 'react-redux'
 import { handleLogin } from "../../redux/authSlice";
@@ -25,18 +25,19 @@ export default function LoginScreen({ navigation, route }) {
   
   const user = useSelector((state) => state.user.user); // lấy thông tin user từ store khi đăng nhập thành công
   const dispatch = useDispatch();
+  const toast = useToast();
 
   const OnClickLogin = async () => {
 
     setErrMessage("");  
 
     if (!email) {
-      toast.error("please enter your email or phone number");
+      toast("please enter your email or phone number", "error");
       setIsValidValueEmail(false);
       return;
     }
     if (!password) {
-      toast.error("please enter your password");
+      toast("please enter your password", "error");
       setIsValidValuePassword(false);
       return;
     }
@@ -45,10 +46,10 @@ export default function LoginScreen({ navigation, route }) {
     console.log("res: ", res);
     
     if (res.payload && +res.payload.EC === 0) {
-      toast.success(res.payload.EM);
+      toast(res.payload.EM);
       navigation.navigate("homeUser");
     } else {
-      toast.error(res.payload.EM);
+      toast(res.payload.EM, "error");
       setErrMessage(res.payload.EM);
     }
   };
