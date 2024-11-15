@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { handleLoginApi, logOutUser } from "../service/userService";
+import { handleLoginApi, logOutUser, registerUser } from "../service/userService";
 
 const initialState = {
   user: {}, // user info nào login(hs - teacher)
@@ -21,6 +21,14 @@ export const handleLogout = createAsyncThunk(
   "users/handleLogout",
   async (thunkAPI) => {
     const response = await logOutUser();
+    return response.data;
+  }
+);
+
+export const handleRegister = createAsyncThunk(
+  "users/handleRegister",
+  async ({email, userName, password},thunkAPI) => {
+    const response = await registerUser(email, userName, password);
     return response.data;
   }
 );
@@ -67,6 +75,23 @@ const authSlice = createSlice({
         console.log("action: ", action);
       })
       .addCase(handleLogout.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+      });
+
+    // register user
+    builder
+      .addCase(handleRegister.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+      })
+      .addCase(handleRegister.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        console.log("action: ", action);
+        
+      })
+      .addCase(handleRegister.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
       });
