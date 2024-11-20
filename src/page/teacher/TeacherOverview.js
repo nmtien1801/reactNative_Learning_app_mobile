@@ -1,3 +1,5 @@
+// screens/TeacherOverview.js
+
 import React, { useEffect } from "react";
 import {
   View,
@@ -20,14 +22,13 @@ export default function TeacherOverview() {
   );
   const { showToast } = useToast();
 
-  const teacherID = 1; // ID của giáo viên
+  const teacherID = 1;
 
-  // Fetch dữ liệu khi component được mount
   useEffect(() => {
-    dispatch(fetchTeacherOverview(teacherID));
+    dispatch(fetchTeacherOverview(teacherID)); // Truyền teacherID trực tiếp
   }, [dispatch]);
 
-  // Trạng thái loading
+  // Loading state
   if (isLoading) {
     return (
       <Layout>
@@ -39,7 +40,7 @@ export default function TeacherOverview() {
     );
   }
 
-  // Trạng thái lỗi
+  // Error state
   if (isError) {
     showToast("Failed to load teacher data");
     return (
@@ -51,8 +52,10 @@ export default function TeacherOverview() {
     );
   }
 
-  // Không có dữ liệu
-  if (!teacherOverview || Object.keys(teacherOverview).length === 0) {
+  // No data available
+  if (!teacherOverview) {
+    console.log("No data available", teacherOverview);
+
     return (
       <Layout>
         <View style={styles.errorContainer}>
@@ -61,10 +64,12 @@ export default function TeacherOverview() {
       </Layout>
     );
   }
+  if (teacherOverview) {
+    console.log("data available", teacherOverview);
+  }
 
-  // Destructure dữ liệu giáo viên
-  const { userName, image, description, email, phone, address } =
-    teacherOverview;
+  // Destructure teacher data
+  const { name, img, description, email, phone, address } = teacherOverview;
 
   return (
     <Layout>
@@ -79,7 +84,7 @@ export default function TeacherOverview() {
             style={styles.infoCardImage}
           />
           <View style={styles.infoCardText}>
-            <Text style={styles.infoCardName}>{userName}</Text>
+            <Text style={styles.infoCardName}>{name}</Text>
             <Text style={styles.infoCardJob}>UX/UI Design</Text>
           </View>
           <TouchableOpacity style={styles.followButton}>
@@ -113,6 +118,25 @@ export default function TeacherOverview() {
 }
 
 const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: "#666",
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  errorText: {
+    fontSize: 16,
+    color: "#FF0000",
+  },
   infoCard: {
     backgroundColor: "#FFF",
     borderRadius: 8,
@@ -143,37 +167,34 @@ const styles = StyleSheet.create({
   },
   followButton: {
     backgroundColor: "#4A90E2",
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 12,
   },
   followButtonText: {
     color: "#FFF",
-    fontSize: 14,
     fontWeight: "bold",
   },
   descriptionContainer: {
+    marginTop: 16,
     marginBottom: 16,
   },
   descriptionText: {
     fontSize: 14,
-    color: "#333",
-    lineHeight: 20,
+    color: "#666",
   },
   seeMoreText: {
-    color: "#4A90E2",
     fontSize: 14,
-    marginTop: 8,
+    color: "#4A90E2",
+    marginTop: 4,
   },
   contactContainer: {
-    borderTopWidth: 1,
-    borderTopColor: "#E0E0E0",
-    paddingTop: 16,
+    marginTop: 16,
   },
   contactTitle: {
     fontSize: 16,
     fontWeight: "bold",
-    marginBottom: 12,
+    marginBottom: 8,
   },
   contactItem: {
     flexDirection: "row",
@@ -181,8 +202,6 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   contactText: {
-    fontSize: 14,
-    color: "#333",
     marginLeft: 8,
     flex: 1,
   },

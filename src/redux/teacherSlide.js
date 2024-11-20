@@ -12,7 +12,7 @@ export const fetchTeacherOverview = createAsyncThunk(
   "teacher/fetchTeacherOverview/:teacherID",
   async (teacherID, thunkAPI) => {
     const response = await handleTeacherOverview(teacherID);
-    return response.data; // Trả về dữ liệu từ API
+    return response.data;
   }
 );
 
@@ -27,8 +27,8 @@ const teacherSlice = createSlice({
       })
       .addCase(fetchTeacherOverview.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.teacherOverview = action.payload; // Gán dữ liệu vào state
-        console.log("teacherOverview", action.payload); // Kiểm tra dữ liệu
+        state.teacherOverview = action.payload; // Assign data to state
+        console.log("teacherOverview", action.payload);
       })
       .addCase(fetchTeacherOverview.rejected, (state) => {
         state.isLoading = false;
