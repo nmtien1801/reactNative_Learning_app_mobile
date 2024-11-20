@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Platform } from "react-native";
+import {REACT_APP_BACKEND_ANDROID_URL, REACT_APP_BACKEND_WEB_URL} from '@env'
 
 const baseUrl =
   Platform.OS === "android" 
