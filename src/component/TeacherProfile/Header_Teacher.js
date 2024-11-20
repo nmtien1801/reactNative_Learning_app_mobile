@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTeacherOverview } from "../../redux/teacherSlide"; // Import action
-import { Ionicons } from "@expo/vector-icons";
 
 export default function TeacherProfileScreen() {
   const dispatch = useDispatch();
@@ -19,8 +18,7 @@ export default function TeacherProfileScreen() {
     (state) => state.teacher
   );
 
-  // ID giáo viên (có thể thay đổi theo trường hợp thực tế)
-  const teacherID = 1;
+  const teacherID = 1; // ID của giáo viên, thay đổi nếu cần
 
   // Gửi yêu cầu lấy dữ liệu khi component được mount
   useEffect(() => {
@@ -59,8 +57,6 @@ export default function TeacherProfileScreen() {
         </View>
       </SafeAreaView>
     );
-  } else {
-    console.log("teacherOverview header", teacherOverview);
   }
 
   // Destructure dữ liệu giáo viên
@@ -95,32 +91,28 @@ export default function TeacherProfileScreen() {
         <View style={styles.profileInfo}>
           <Text style={styles.teacherName}>{userName}</Text>
           <View style={styles.jobTitleContainer}>
-            <Text style={styles.jobTitle}>UX/UI Designer</Text>{" "}
+            <Text style={styles.jobTitle}>UX/UI Designer</Text>
             {/* Có thể thay đổi nếu cần */}
             <View style={styles.teacherTag}>
               <Text style={styles.teacherTagText}>Teacher</Text>
             </View>
           </View>
-          <Text style={styles.timeZone}>Korea • 9:30 AM</Text>{" "}
-          {/* Có thể thay đổi nếu cần */}
+          <Text style={styles.timeZone}>Korea • 9:30 AM</Text>
         </View>
       </View>
 
       {/* Contact Information
-      <View style={styles.contactContainer}>
-        <Text style={styles.contactTitle}>Contact</Text>
-        <View style={styles.contactItem}>
-          <Ionicons name="call-outline" size={20} color="#666" />
-          <Text style={styles.contactText}>{phone}</Text>
-        </View>
-        <View style={styles.contactItem}>
-          <Ionicons name="location-outline" size={20} color="#666" />
-          <Text style={styles.contactText}>{address}</Text>
-        </View>
-        <View style={styles.contactItem}>
-          <Ionicons name="mail-outline" size={20} color="#666" />
-          <Text style={styles.contactText}>{email}</Text>
-        </View>
+      // <View style={styles.contactContainer}>
+      //   <Text style={styles.contactTitle}>Contact</Text>
+      //   <View style={styles.contactItem}>
+      //     <Text style={styles.contactText}>{phone}</Text>
+      //   </View>
+      //   <View style={styles.contactItem}>
+      //     <Text style={styles.contactText}>{address}</Text>
+      //   </View>
+      //   <View style={styles.contactItem}>
+      //     <Text style={styles.contactText}>{email}</Text>
+      //   </View>
       </View> */}
     </SafeAreaView>
   );

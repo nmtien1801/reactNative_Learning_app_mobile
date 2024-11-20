@@ -20,7 +20,7 @@
     "@reduxjs/toolkit": "2.3.0",
     "@types/react": "18.2.79",
     "axios": "1.7.7",
-    "expo": "51.0.39",
+    "expo": "^52.0.8",
     "expo-linear-gradient": "~13.0.2",
     "expo-status-bar": "~1.12.1",
     "lucide-react-native": "^0.447.0",

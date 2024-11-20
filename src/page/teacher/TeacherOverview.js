@@ -75,7 +75,7 @@ export default function TeacherOverview() {
               image
                 ? { uri: image }
                 : require("../../../img/Teacher_Profile/teacher.jpg")
-            } // Image mặc định nếu không có ảnh
+            }
             style={styles.infoCardImage}
           />
           <View style={styles.infoCardText}>
@@ -185,5 +185,23 @@ const styles = StyleSheet.create({
     color: "#333",
     marginLeft: 8,
     flex: 1,
+  },
+  loadingContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
+  },
+  loadingText: {
+    marginTop: 10,
+    color: "#4A90E2",
+  },
+  errorContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
+  },
+  errorText: {
+    fontSize: 18,
+    color: "red",
   },
 });
