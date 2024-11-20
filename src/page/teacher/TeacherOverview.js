@@ -3,17 +3,24 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Layout from "../../component/TeacherProfile/Layout_Teacher";
 
+const data = {
+  name: "Minh Tiến",
+  img: require("../../../img/Teacher_Profile/teacher.jpg"), // Thay thế bằng URI nếu dùng link ảnh online
+  description:
+    "Curabitur in semper lacerat nibh leo. Vivamus malesuada ipsum pulvinar non rutrum risus dui, risus. Purus massa velit iaculis tincidunt tortor, risus, scelerisque risus...",
+  email: "nickname1801@gmail.com",
+  phone: "0967273063",
+  address: "1/15/4 Nguyễn Thái Sơn, Phường 3, Gò Vấp, TP HCM",
+};
+
 export default function TeacherOverView() {
   return (
     <Layout>
       <View style={styles.infoCard}>
         <View style={styles.infoCardHeader}>
-          <Image
-            source={require("../../../img/Teacher_Profile/teacher.jpg")}
-            style={styles.infoCardImage}
-          />
+          <Image source={data.img} style={styles.infoCardImage} />
           <View style={styles.infoCardText}>
-            <Text style={styles.infoCardName}>Minh Tiến</Text>
+            <Text style={styles.infoCardName}>{data.name}</Text>
             <Text style={styles.infoCardJob}>UX/UI Design</Text>
           </View>
           <TouchableOpacity style={styles.followButton}>
@@ -21,11 +28,7 @@ export default function TeacherOverView() {
           </TouchableOpacity>
         </View>
         <View style={styles.descriptionContainer}>
-          <Text style={styles.descriptionText}>
-            Curabitur in semper lacerat nibh leo. Vivamus malesuada ipsum
-            pulvinar non rutrum risus dui, risus. Purus massa velit iaculis
-            tincidunt tortor, risus, scelerisque risus...
-          </Text>
+          <Text style={styles.descriptionText}>{data.description}</Text>
           <TouchableOpacity>
             <Text style={styles.seeMoreText}>See more</Text>
           </TouchableOpacity>
@@ -34,17 +37,15 @@ export default function TeacherOverView() {
           <Text style={styles.contactTitle}>Contact</Text>
           <View style={styles.contactItem}>
             <Ionicons name="call-outline" size={20} color="#666" />
-            <Text style={styles.contactText}>0967273063</Text>
+            <Text style={styles.contactText}>{data.phone}</Text>
           </View>
           <View style={styles.contactItem}>
             <Ionicons name="location-outline" size={20} color="#666" />
-            <Text style={styles.contactText}>
-              1/15/4 Nguyễn Thái Sơn, Phường 3, Gò Vấp, TP HCM
-            </Text>
+            <Text style={styles.contactText}>{data.address}</Text>
           </View>
           <View style={styles.contactItem}>
             <Ionicons name="mail-outline" size={20} color="#666" />
-            <Text style={styles.contactText}>nickname1801@gmail.com</Text>
+            <Text style={styles.contactText}>{data.email}</Text>
           </View>
         </View>
       </View>

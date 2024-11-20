@@ -1,4 +1,3 @@
-import React from "react";
 import {
   View,
   Text,
@@ -22,28 +21,20 @@ import {
   Star,
 } from "lucide-react-native";
 import Footer from "../../component/Footer";
+import { useEffect, useState } from "react";
+import { useToast } from "../../component/customToast";
 
-
-
-
-
-const SectionHeader = ({ title }) => (
-  <View style={styles.sectionHeader}>
-    <Text style={styles.sectionTitle}>{title}</Text>
-    <TouchableOpacity>
-      <Text style={styles.viewMore}>View more</Text>
-    </TouchableOpacity>
-  </View>
-);
-
-
-
-
+import { useDispatch, useSelector } from "react-redux";
+import { findAllCourses } from "../../redux/courseSlide";
 
 const { width } = Dimensions.get("window");
 const CARD_WIDTH = width * 0.5;
 
 export default function HomeUser({ navigation, route }) {
+  const listCourse = useSelector((state) => state.course.listCourse); // lấy thông tin user từ store khi đăng nhập thành công
+  const dispatch = useDispatch();
+  const toast = useToast();
+
   const categories = [
     { icon: BarChart2, title: "Business", color: "#FF8A8A" },
     { icon: Pen, title: "Design", color: "#8B5CF6" },
@@ -51,71 +42,6 @@ export default function HomeUser({ navigation, route }) {
     { icon: FileText, title: "Writing", color: "#4C6EF5" },
     { icon: Tv, title: "Movie", color: "#7C3AED" },
     { icon: Globe, title: "Language", color: "#F97316" },
-  ];
-
-  const sections = [
-    {
-      id: "1",
-      title: "Popular courses",
-      data: [
-        {
-          id: "1",
-          title: "PHP in One Click",
-          instructor: "Ramono Wultschner",
-          price: 59,
-          rating: 4.5,
-          reviews: 1233,
-          lessons: 18,
-          image: "https://v0.dev/placeholder.svg?height=200&width=200",
-        },
-        {
-          id: "2",
-          title: "Web Design",
-          instructor: "Ramono Wultschner",
-          price: 39,
-          rating: 4.5,
-          reviews: 1233,
-          lessons: 18,
-          image: "https://v0.dev/placeholder.svg?height=200&width=200",
-        },
-        {
-          id: "",
-          title: "Web Design",
-          instructor: "Ramono Wultschner",
-          price: 39,
-          rating: 4.5,
-          reviews: 1233,
-          lessons: 18,
-          image: "https://v0.dev/placeholder.svg?height=200&width=200",
-        },
-      ],
-    },
-    {
-      id: "2",
-      title: "Recommended for you",
-      data: [
-        {
-          id: "3",
-          title: "PHP in One Click",
-          instructor: "Ramono Wultschner",
-          price: 59,
-          rating: 4.5,
-          reviews: 1233,
-          lessons: 18,
-          image: "https://v0.dev/placeholder.svg?height=200&width=200",
-        },
-        {
-          id: "4",
-          title: "Web Design",
-          instructor: "Ramono Wultschner",
-          price: 39,
-          rating: 4.5,
-          reviews: 1233,
-          lessons: 18,
-          image: "https://v0.dev/placeholder.svg?height=200&width=200",
-        },
-      ],
-    },
   ];
 
   const courses = [
@@ -172,19 +98,72 @@ export default function HomeUser({ navigation, route }) {
     },
   ];
 
+  //////////////////////////////
+  const [section, setSection] = useState([]);
+
+  useEffect(() => {
+    dispatch(findAllCourses());
+  }, []);
+
+  // popular + recommended for you courses
+  useEffect(() => {
+    if (listCourse.length !== 0) {
+      setSection([
+        ...section,
+        {
+          id: "1",
+          title: "Popular courses",
+          data: [
+            ...listCourse.map((course, index) => ({
+              id: course.id, // Sử dụng kết hợp giữa id và index để đảm bảo tính duy nhất
+              title: course.name,
+              instructor: "Ramono Wultschner",
+              price: 39,
+              rating: course.averageRating,
+              reviews: 1233,
+              lessons: 18,
+              image: "https://v0.dev/placeholder.svg?height=200&width=200",
+            })),
+          ],
+        },
+        {
+          id: "2",
+          title: "Recommended for you",
+          data: [
+            ...listCourse.map((course, index) => ({
+              id: course.id, // Sử dụng kết hợp giữa id và index để đảm bảo tính duy nhất
+              title: course.name,
+              instructor: "Ramono Wultschner",
+              price: 39,
+              rating: course.averageRating,
+              reviews: 1233,
+              lessons: 18,
+              image: "https://v0.dev/placeholder.svg?height=200&width=200",
+            })),
+          ],
+        },
+      ]);
+    }
+  }, [listCourse]);
+
+  const SectionHeader = ({ title }) => (
+    <View style={styles.sectionHeader}>
+      <Text style={styles.sectionTitle}>{title}</Text>
+      <TouchableOpacity>
+        <Text style={styles.viewMore}>View more</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
   const CourseCard = ({ course }) => (
-    <TouchableOpacity style={[styles.courseCard, { width: CARD_WIDTH }]} onPress={() => navigation.navigate("courseDetailOverView")}>
-      <Image
-        source={{ uri: course.image }}
-        style={styles.courseImage}
-      />
+    <TouchableOpacity
+      style={[styles.courseCard, { width: CARD_WIDTH }]}
+      onPress={() => navigation.navigate("courseDetailOverView")}
+    >
+      <Image source={{ uri: course.image }} style={styles.courseImage} />
       <View style={styles.courseContent}>
         <View style={styles.titleRow}>
-          <Text
-            style={styles.courseTitle}
-          >
-            {course.title}
-          </Text>
+          <Text style={styles.courseTitle}>{course.title}</Text>
           <TouchableOpacity>
             <Bookmark size={24} color="#00BCD4" />
           </TouchableOpacity>
@@ -218,7 +197,10 @@ export default function HomeUser({ navigation, route }) {
   );
 
   const CategoryItem = ({ icon: Icon, title, color }) => (
-    <TouchableOpacity style={[styles.categoryItem, { backgroundColor: color }]} onPress={() => navigation.navigate("courseListing")}>
+    <TouchableOpacity
+      style={[styles.categoryItem, { backgroundColor: color }]}
+      onPress={() => navigation.navigate("courseListing")}
+    >
       <View style={styles.categoryIcon}>
         <Icon size={24} color="#FFF" />
       </View>
@@ -227,7 +209,10 @@ export default function HomeUser({ navigation, route }) {
   );
 
   const CourseInspiresCard = ({ course }) => (
-    <TouchableOpacity style={styles.courseCard} onPress={() => navigation.navigate("courseDetailOverView")}>
+    <TouchableOpacity
+      style={styles.courseCard}
+      onPress={() => navigation.navigate("courseDetailOverView")}
+    >
       <Image source={{ uri: course.image }} style={styles.courseImage} />
       <View style={styles.courseContent}>
         <View style={styles.titleRow}>
@@ -250,9 +235,11 @@ export default function HomeUser({ navigation, route }) {
     </TouchableOpacity>
   );
 
-  
   const TeacherCard = ({ teacher }) => (
-    <TouchableOpacity style={styles.teacherCard} onPress={() => navigation.navigate("courseDetailOverView")}>
+    <TouchableOpacity
+      style={styles.teacherCard}
+      onPress={() => navigation.navigate("courseDetailOverView")}
+    >
       <Image source={{ uri: teacher.image }} style={styles.teacherImage} />
       <Text style={styles.teacherName}>{teacher.name}</Text>
       <Text style={styles.institution}>{teacher.institution}</Text>
@@ -267,7 +254,6 @@ export default function HomeUser({ navigation, route }) {
     </TouchableOpacity>
   );
 
-  
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -333,7 +319,7 @@ export default function HomeUser({ navigation, route }) {
 
         {/* Courses popular - recoment Section */}
         <FlatList
-          data={sections}
+          data={section}
           renderItem={({ item }) => <CourseSection section={item} />}
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}
@@ -367,7 +353,7 @@ export default function HomeUser({ navigation, route }) {
         </View>
       </ScrollView>
 
-      <Footer navigation={navigation} route={route} showActive="home"/>
+      <Footer navigation={navigation} route={route} showActive="home" />
     </View>
   );
 }
