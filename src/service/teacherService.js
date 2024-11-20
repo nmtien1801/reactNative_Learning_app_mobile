@@ -11,4 +11,8 @@ const handleTeacherOverview = (teacherID) => {
   return axios.get(`${baseUrl}/teacherOverview/${teacherID}`);
 };
 
-export { handleTeacherOverview };
+const handleFindCourseByTeacherID_Categories = (teacherID) => {
+  return axios.get(`${baseUrl}/findCourseByTeacherID_Categories/${teacherID}`);
+};
+
+export { handleTeacherOverview, handleFindCourseByTeacherID_Categories };

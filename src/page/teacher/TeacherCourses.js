@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
@@ -6,57 +6,112 @@ import {
   FlatList,
   TouchableOpacity,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Layout from "../../component/TeacherProfile/Layout_Teacher";
-const categories = [
-  {
-    id: "1",
-    title: "UI/UX Design",
-    courses: [
-      {
-        id: "1-1",
-        title: "PHP in One Click",
-        price: "$59",
-        rating: 4.5,
-        reviews: 1233,
-        lessons: 18,
-      },
-      {
-        id: "1-2",
-        title: "Web Design",
-        price: "$39",
-        rating: 4.5,
-        reviews: 1233,
-        lessons: 18,
-      },
-    ],
-  },
-  {
-    id: "2",
-    title: "Graphic Design",
-    courses: [
-      {
-        id: "2-1",
-        title: "Adobe Photoshop Advanced",
-        price: "$45",
-        rating: 4.7,
-        reviews: 5231,
-        lessons: 15,
-      },
-      {
-        id: "2-2",
-        title: "Illustrator Masterclass",
-        price: "$50",
-        rating: 4.8,
-        reviews: 4276,
-        lessons: 20,
-      },
-    ],
-  },
-];
+import { useDispatch, useSelector } from "react-redux";
+import { fetchTeacherCourses } from "../../redux/teacherSlide";
+import { useToast } from "../../component/customToast";
 
 export default function TeacherCourses() {
+  const dispatch = useDispatch();
+  const { TeacherCourses, isLoading, isError } = useSelector(
+    (state) => state.teacher
+  );
+  const { showToast } = useToast();
+  const teacherID = 1; // ID của giáo viên
+
+  // Fetch dữ liệu khi component được mount
+  useEffect(() => {
+    dispatch(fetchTeacherCourses(teacherID));
+  }, [dispatch, teacherID]);
+
+  // Trạng thái loading
+  if (isLoading) {
+    return (
+      <Layout>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#4A90E2" />
+          <Text style={styles.loadingText}>Loading...</Text>
+        </View>
+      </Layout>
+    );
+  }
+
+  // Trạng thái lỗi
+  if (isError) {
+    showToast("Failed to load teacher data");
+    return (
+      <Layout>
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>Failed to load data</Text>
+        </View>
+      </Layout>
+    );
+  }
+
+  // Không có dữ liệu
+  if (!TeacherCourses || TeacherCourses.length === 0) {
+    return (
+      <Layout>
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>No courses available</Text>
+        </View>
+      </Layout>
+    );
+  } else {
+    console.log("TeacherCourses", TeacherCourses);
+  }
+
+  // const categories = [
+  //   {
+  //     id: "1",
+  //     title: "UI/UX Design",
+  //     courses: [
+  //       {
+  //         id: "1-1",
+  //         title: "PHP in One Click",
+  //         price: "$59",
+  //         rating: 4.5,
+  //         reviews: 1233,
+  //         lessons: 18,
+  //       },
+  //       {
+  //         id: "1-2",
+  //         title: "Web Design",
+  //         price: "$39",
+  //         rating: 4.5,
+  //         reviews: 1233,
+  //         lessons: 18,
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     id: "2",
+  //     title: "Graphic Design",
+  //     courses: [
+  //       {
+  //         id: "2-1",
+  //         title: "Adobe Photoshop Advanced",
+  //         price: "$45",
+  //         rating: 4.7,
+  //         reviews: 5231,
+  //         lessons: 15,
+  //       },
+  //       {
+  //         id: "2-2",
+  //         title: "Illustrator Masterclass",
+  //         price: "$50",
+  //         rating: 4.8,
+  //         reviews: 4276,
+  //         lessons: 20,
+  //       },
+  //     ],
+  //   },
+  // ];
+  // Destructure dữ liệu giáo viên và cung cấp giá trị mặc định tương tự như const categories
+
   const renderCourseItem = ({ item }) => (
     <View style={styles.courseCard}>
       <Image
@@ -82,30 +137,12 @@ export default function TeacherCourses() {
     </View>
   );
 
-  const renderCategoryItem = ({ item }) => (
-    <View style={styles.categoryContainer}>
-      <View style={styles.categoryHeader}>
-        <Text style={styles.categoryTitle}>{item.title}</Text>
-        <TouchableOpacity>
-          <Text style={styles.viewAllText}>View all</Text>
-        </TouchableOpacity>
-      </View>
-      <FlatList
-        data={item.courses}
-        renderItem={renderCourseItem}
-        keyExtractor={(course) => course.id}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-      />
-    </View>
-  );
-
   return (
     <Layout>
       <FlatList
-        data={categories}
-        renderItem={renderCategoryItem}
-        keyExtractor={(item) => item.id}
+        data={TeacherCourses}
+        renderItem={renderCourseItem}
+        keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={styles.coursesContainer}
       />
     </Layout>
@@ -116,19 +153,24 @@ const styles = StyleSheet.create({
   coursesContainer: {
     padding: 16,
   },
-  categoryHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
     alignItems: "center",
-    marginBottom: 16,
   },
-  categoryTitle: {
+  loadingText: {
+    marginTop: 8,
+    fontSize: 16,
+    color: "#666",
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  errorText: {
     fontSize: 18,
-    fontWeight: "bold",
-  },
-  viewAllText: {
-    color: "#4A90E2",
-    fontSize: 14,
+    color: "#FF5A5F",
   },
   courseCard: {
     backgroundColor: "#FFF",
@@ -137,10 +179,7 @@ const styles = StyleSheet.create({
     padding: 12,
     flexDirection: "row",
     shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,

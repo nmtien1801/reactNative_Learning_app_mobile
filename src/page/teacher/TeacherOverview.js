@@ -11,7 +11,7 @@ import { Ionicons } from "@expo/vector-icons";
 import Layout from "../../component/TeacherProfile/Layout_Teacher";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTeacherOverview } from "../../redux/teacherSlide";
-import { useToast } from "../../component/customToast"; // Toast for messages
+import { useToast } from "../../component/customToast";
 
 export default function TeacherOverview() {
   const dispatch = useDispatch();
