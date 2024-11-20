@@ -60,11 +60,16 @@ export default function TeacherOverview() {
         </View>
       </Layout>
     );
+  } else {
+    // showToast("Data loaded successfully");
+    console.log("Data loaded successfully:", teacherOverview);
   }
 
-  // Destructure dữ liệu giáo viên
+  // Destructure dữ liệu giáo viên và cung cấp giá trị mặc định
   const { userName, image, description, email, phone, address } =
-    teacherOverview;
+    teacherOverview.DT || {};
+
+  console.log("userName: ", userName); // Kiểm tra giá trị userName
 
   return (
     <Layout>

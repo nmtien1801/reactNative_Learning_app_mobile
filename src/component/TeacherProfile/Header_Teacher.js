@@ -49,7 +49,7 @@ export default function TeacherProfileScreen() {
   }
 
   // Nếu không có dữ liệu
-  if (!teacherOverview || Object.keys(teacherOverview).length === 0) {
+  if (!teacherOverview) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.errorContainer}>
@@ -61,7 +61,8 @@ export default function TeacherProfileScreen() {
 
   // Destructure dữ liệu giáo viên
   const { userName, image, description, email, phone, address } =
-    teacherOverview;
+    teacherOverview.DT;
+  console.log("img", image);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -73,11 +74,7 @@ export default function TeacherProfileScreen() {
       {/* Profile Section */}
       <View style={styles.profileSection}>
         <Image
-          source={
-            image
-              ? { uri: image }
-              : require("../../../img/Teacher_Profile/Teacher_Nen.jpg")
-          } // Banner image
+          source={require("../../../img/Teacher_Profile/Teacher_Nen.jpg")}
           style={styles.bannerImage}
         />
         <Image
@@ -85,14 +82,13 @@ export default function TeacherProfileScreen() {
             image
               ? { uri: image }
               : require("../../../img/Teacher_Profile/teacher.jpg")
-          } // Profile image
+          }
           style={styles.profileImage}
         />
         <View style={styles.profileInfo}>
           <Text style={styles.teacherName}>{userName}</Text>
           <View style={styles.jobTitleContainer}>
             <Text style={styles.jobTitle}>UX/UI Designer</Text>
-            {/* Có thể thay đổi nếu cần */}
             <View style={styles.teacherTag}>
               <Text style={styles.teacherTagText}>Teacher</Text>
             </View>
