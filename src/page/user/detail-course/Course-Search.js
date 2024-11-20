@@ -9,17 +9,17 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import Footer from "./Footer";
+import Footer from "../../../component/Footer";
 
 export default function CourseSearch({ navigation, route }) {
   const HotTopic = ({ title }) => (
-    <TouchableOpacity style={styles.hotTopic}>
+    <TouchableOpacity style={styles.hotTopic}  onPress={() => navigation.navigate("courseListing")}>
       <Text style={styles.hotTopicText}>{title}</Text>
     </TouchableOpacity>
   );
 
   const Category = ({ icon, title }) => (
-    <TouchableOpacity style={styles.category}>
+    <TouchableOpacity style={styles.category} onPress={() => navigation.navigate("courseListing")}>
       <Ionicons
         name={icon}
         size={24}
@@ -91,7 +91,7 @@ export default function CourseSearch({ navigation, route }) {
             placeholder="Search course"
             placeholderTextColor="#666"
           />
-          <TouchableOpacity style={styles.filterButton} onPress={()=> navigation.navigate('courseListting')}>
+          <TouchableOpacity style={styles.filterButton} onPress={()=> navigation.navigate('courseListing')}>
             <Text style={styles.filterButtonText}>Filter</Text>
           </TouchableOpacity>
         </View>
@@ -154,7 +154,7 @@ export default function CourseSearch({ navigation, route }) {
         </View>
       </ScrollView>
 
-     <Footer navigation={navigation} route={route}/>
+     <Footer navigation={navigation} route={route} showActive="search"/>
     </View>
   );
 }

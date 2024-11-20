@@ -20,12 +20,33 @@ import Header from "../Header-Course-Detail";
 import Setting from "../../component/setting/Setting";
 import LoginScreen from "../../page/auth/Login";
 
-import CourseDetailOverView from "../../page/user/Course-Detail-OverView";
-import CourseDetailLesson from "../../page/user/Course-Detail-Lesson";
-import CourseDetailReview from "../../page/user/Course-Detail-Review";
+import CourseDetailOverView from "../../page/user/cource/Course-Detail-OverView";
+import CourseDetailLesson from "../../page/user/cource/Course-Detail-Lesson";
+import CourseDetailReview from "../../page/user/cource/Course-Detail-Review";
 import UserProfile from "../../page/user/User_Profile";
 
+import {  useToast } from "../../component/customToast";
+import {logOutUser} from "../../service/userService";
+import { useDispatch, useSelector } from 'react-redux'
+import {handleLogout} from "../../redux/authSlice";
+
 const DrawerHeader = ({ navigation, route }) => {
+  const dispatch = useDispatch(); 
+  const toast = useToast();
+
+  OnClickLogout = async (props) => {
+    let res = await logOutUser();  // clear cookies
+    console.log("res: ", res);
+    
+    if (res && +res.data.EC === 0) {
+      dispatch(handleLogout()); // clear store
+      toast("logout success...");
+      props.navigation.navigate("LoginScreen")
+    } else {
+      toast(res.payload.EM , "error");
+    }
+  };
+
   // đây là nơi lưu những màn hình của drawer
   function CustomDrawerContent(props) {
     return (
@@ -41,13 +62,23 @@ const DrawerHeader = ({ navigation, route }) => {
         </View>
 
         <DrawerItem
+          label="Favorites"
+          onPress={() => props.navigation.navigate("Setting")} // chưa làm
+        />
+
+        <DrawerItem
+          label="Follow"
+          onPress={() => props.navigation.navigate("Setting")} // chưa làm
+        />
+
+        <DrawerItem
           label="Setting"
           onPress={() => props.navigation.navigate("Setting")}
         />
 
         <DrawerItem
           label="Log out"
-          onPress={() => props.navigation.navigate("LoginScreen")}
+          onPress={() => OnClickLogout(props)}
         />
       </DrawerContentScrollView>
     );
@@ -84,6 +115,46 @@ const DrawerHeader = ({ navigation, route }) => {
         })}
       />
       {/* dưới đây là nơi chứa đường dẫn của thanh drawer */}
+      <Drawer.Screen
+        name="Favorites"
+        component={Setting} // chưa làm
+        options={({ navigation, route }) => ({
+          header: () => {
+            return (
+              <View style={styles.header}>
+                <TouchableOpacity
+                  style={styles.backButton}
+                  onPress={() => navigation.goBack()}
+                >
+                  <Ionicons name="chevron-back" size={24} color="black" />
+                </TouchableOpacity>
+                <Text style={styles.titleBar}>Favorites</Text>
+              </View>
+            );
+          },
+        })}
+      />
+
+      <Drawer.Screen
+        name="Follow"
+        component={Setting} // chưa làm
+        options={({ navigation, route }) => ({
+          header: () => {
+            return (
+              <View style={styles.header}>
+                <TouchableOpacity
+                  style={styles.backButton}
+                  onPress={() => navigation.goBack()}
+                >
+                  <Ionicons name="chevron-back" size={24} color="black" />
+                </TouchableOpacity>
+                <Text style={styles.titleBar}>Follow</Text>
+              </View>
+            );
+          },
+        })}
+      />
+
       <Drawer.Screen
         name="Setting"
         component={Setting}

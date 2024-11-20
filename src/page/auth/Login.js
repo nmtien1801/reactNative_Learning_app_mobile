@@ -8,8 +8,51 @@ import {
   StyleSheet,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { useState } from "react";
+import {  useToast } from "../../component/customToast";
 
-export default function LoginScreen({ navigation }) {
+import { useDispatch, useSelector } from 'react-redux'
+import { handleLogin } from "../../redux/authSlice";
+
+
+
+export default function LoginScreen({ navigation, route }) {
+  const [email, setEmail] = useState(""); // email đăng nhập
+  const [password, setPassword] = useState(""); // password đăng nhập
+  const [errMessage, setErrMessage] = useState(""); // chữ đỏ thông báo lỗi khi nhập sai
+  const [isValidValueEmail, setIsValidValueEmail] = useState(true); // kiểm tra email hợp lệ
+  const [isValidValuePassword, setIsValidValuePassword] = useState(true); // kiểm tra password hợp lệ
+  
+  const user = useSelector((state) => state.user.user); // lấy thông tin user từ store khi đăng nhập thành công
+  const dispatch = useDispatch();
+  const toast = useToast();
+
+  const OnClickLogin = async () => {
+
+    setErrMessage("");  
+
+    if (!email) {
+      toast("please enter your email or phone number", "error");
+      setIsValidValueEmail(false);
+      return;
+    }
+    if (!password) {
+      toast("please enter your password", "error");
+      setIsValidValuePassword(false);
+      return;
+    }
+
+    let res = await dispatch(handleLogin({email, password}));
+    console.log("res: ", res);
+    
+    if (res.payload && +res.payload.EC === 0) {
+      toast(res.payload.EM);
+      navigation.navigate("homeUser");
+    } else {
+      toast(res.payload.EM, "error");
+      setErrMessage(res.payload.EM);
+    }
+  };
   return (
     <View style={styles.container}>
       <LinearGradient colors={["#FFC0CB", "#A9C6EB"]} style={styles.background}>
@@ -24,28 +67,42 @@ export default function LoginScreen({ navigation }) {
               style={styles.input}
               placeholder="Username/Email"
               placeholderTextColor="#999"
+              onChangeText={setEmail}
             />
             <TextInput
               style={styles.input}
               placeholder="Password"
               placeholderTextColor="#999"
               secureTextEntry
+              onChangeText={setPassword}
             />
-            <TouchableOpacity>
-              <Text style={styles.forgotPassword}>Forgot Password?</Text>
-            </TouchableOpacity>
+
             <TouchableOpacity
               style={styles.loginButton}
-              onPress={() => navigation.navigate("myCourse")}
+              onPress={() => OnClickLogin()}
             >
               <Text style={styles.loginButtonText}>Login</Text>
             </TouchableOpacity>
             <Text style={styles.errorText}>
               Username hoặc mật khẩu không chính xác
             </Text>
-            <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-              <Text style={styles.signupText}>Not a member? Signup</Text>
-            </TouchableOpacity>
+
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 20,
+                marginTop: 20,
+              }}
+            >
+              <TouchableOpacity>
+                <Text style={styles.forgotPassword}>Forgot Password?</Text>
+              </TouchableOpacity>
+              <Text>|</Text>
+              <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
+                <Text style={styles.signupText}>Not a member? Signup</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </LinearGradient>
@@ -97,8 +154,6 @@ const styles = StyleSheet.create({
   },
   forgotPassword: {
     color: "#999",
-    marginBottom: 20,
-    marginRight: 180,
     fontStyle: "italic",
   },
   loginButton: {
@@ -108,6 +163,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     width: "100%",
     alignItems: "center",
+    marginTop: 20,
   },
   loginButtonText: {
     color: "white",
@@ -119,7 +175,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   signupText: {
-    marginTop: 20,
     color: "#1E90FF",
   },
 });

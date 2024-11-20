@@ -11,9 +11,9 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Bookmark, Star } from "lucide-react-native";
-import Footer from "./Footer";
+import Footer from "../../../component/Footer";
 
-export default function CourseListting({ navigation, route }) {
+export default function CourseListing({ navigation, route }) {
   const CourseListItem = ({ item }) => (
     <View style={styles.courseItem}>
       <TouchableOpacity
@@ -137,7 +137,7 @@ export default function CourseListting({ navigation, route }) {
         />
       </ScrollView>
 
-      <Footer navigation={navigation} route={route}/>
+      <Footer navigation={navigation} route={route} showActive="search"/>
     </View>
   );
 }

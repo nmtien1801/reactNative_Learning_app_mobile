@@ -8,8 +8,30 @@ import {
   StyleSheet,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { useState } from "react";
+import {  useToast } from "../../component/customToast";
 
-export default function RegisterScreen() {
+import { useDispatch, useSelector } from 'react-redux'
+import { handleRegister } from "../../redux/authSlice";
+
+export default function RegisterScreen({navigation, route}) {
+  const [email, setEmail] = useState(""); // email đăng nhập
+  const [password, setPassword] = useState(""); // password đăng nhập
+  const [userName, setUserName] = useState(""); // tên người dùng
+  const [confirmPassword, setConfirmPassword] = useState(""); // xác nhận password
+  const dispatch = useDispatch();
+  const toast = useToast();
+
+  onClickRegister = async () => {
+    let res = await dispatch(handleRegister({email, userName, password}));
+    
+    if(res.payload.EC == 0){
+      toast(res.payload.EM);
+      navigation.navigate("Login")
+    }else{
+      toast(res.payload.EM, "error");
+    }
+  };
   return (
     <View style={styles.container}>
       <LinearGradient colors={["#A9C6EB", "#FFC0CB"]} style={styles.background}>
@@ -22,25 +44,34 @@ export default function RegisterScreen() {
             <Text style={styles.title}>Sign up</Text>
             <TextInput
               style={styles.input}
-              placeholder="Username/Email"
+              placeholder="UserName"
               placeholderTextColor="#999"
+              onChangeText={setUserName}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              placeholderTextColor="#999"
+              onChangeText={setEmail}
             />
             <TextInput
               style={styles.input}
               placeholder="Password"
               placeholderTextColor="#999"
               secureTextEntry
+              onChangeText={setPassword}
             />
             <TextInput
               style={styles.input}
               placeholder="Confirm password"
               placeholderTextColor="#999"
               secureTextEntry
+              
             />
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={[styles.button, styles.createButton]}
-                onPress={() => navigation.navigate("Login")}
+                onPress={() => onClickRegister()}
               >
                 <Text style={styles.buttonText}>Create</Text>
               </TouchableOpacity>

@@ -102,7 +102,7 @@ export default function Component() {
           keyExtractor={(item) => item.id}
         />
       </View>
-      <Footer navigation={navigation} />
+      <Footer navigation={navigation} /> 
     </SafeAreaView>
   );
 }
