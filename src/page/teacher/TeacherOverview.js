@@ -1,3 +1,5 @@
+// screens/TeacherOverview.js
+
 import React, { useEffect } from "react";
 import {
   View,
@@ -8,22 +10,22 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import Layout from "../../component/TeacherProfile/Layout_Teacher"; // Layout of your profile page
+import Layout from "../../component/TeacherProfile/Layout_Teacher";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTeacherOverview } from "../../redux/teacherSlide";
-import { useToast } from "../../component/customToast"; // Toast notification
+import { useToast } from "../../component/customToast"; // Toast for messages
 
 export default function TeacherOverview() {
   const dispatch = useDispatch();
   const { teacherOverview, isLoading, isError } = useSelector(
     (state) => state.teacher
-  ); // Redux state
+  );
   const { showToast } = useToast();
 
-  // Fetch teacher data when the component mounts
+  const teacherID = 1;
+
   useEffect(() => {
-    const teacherID = 1; // Replace with dynamic teacherID if needed
-    dispatch(fetchTeacherOverview(teacherID));
+    dispatch(fetchTeacherOverview(teacherID)); // Truyền teacherID trực tiếp
   }, [dispatch]);
 
   // Loading state
@@ -40,7 +42,7 @@ export default function TeacherOverview() {
 
   // Error state
   if (isError) {
-    showToast({ title: "Failed to load data", type: "error" }); // Trigger toast
+    showToast("Failed to load teacher data");
     return (
       <Layout>
         <View style={styles.errorContainer}>
@@ -50,8 +52,10 @@ export default function TeacherOverview() {
     );
   }
 
-  // If no teacher data available
+  // No data available
   if (!teacherOverview) {
+    console.log("No data available", teacherOverview);
+
     return (
       <Layout>
         <View style={styles.errorContainer}>
@@ -59,6 +63,9 @@ export default function TeacherOverview() {
         </View>
       </Layout>
     );
+  }
+  if (teacherOverview) {
+    console.log("data available", teacherOverview);
   }
 
   // Destructure teacher data
@@ -72,7 +79,7 @@ export default function TeacherOverview() {
             source={
               img
                 ? { uri: img }
-                : require("../../../img/Teacher_Profile/teacher.jpg")
+                : require("../../../img/Teacher_Profile/teacher.jpg") // Default image if none
             }
             style={styles.infoCardImage}
           />
