@@ -1,26 +1,83 @@
-import React from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import React, { useEffect } from "react";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  ActivityIndicator,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import Layout from "../../component/TeacherProfile/Layout_Teacher";
+import Layout from "../../component/TeacherProfile/Layout_Teacher"; // Layout of your profile page
+import { useDispatch, useSelector } from "react-redux";
+import { fetchTeacherOverview } from "../../redux/teacherSlide";
+import { useToast } from "../../component/customToast"; // Toast notification
 
-const data = {
-  name: "Minh Tiến",
-  img: require("../../../img/Teacher_Profile/teacher.jpg"), // Thay thế bằng URI nếu dùng link ảnh online
-  description:
-    "Curabitur in semper lacerat nibh leo. Vivamus malesuada ipsum pulvinar non rutrum risus dui, risus. Purus massa velit iaculis tincidunt tortor, risus, scelerisque risus...",
-  email: "nickname1801@gmail.com",
-  phone: "0967273063",
-  address: "1/15/4 Nguyễn Thái Sơn, Phường 3, Gò Vấp, TP HCM",
-};
+export default function TeacherOverview() {
+  const dispatch = useDispatch();
+  const { teacherOverview, isLoading, isError } = useSelector(
+    (state) => state.teacher
+  ); // Redux state
+  const { showToast } = useToast();
 
-export default function TeacherOverView() {
+  // Fetch teacher data when the component mounts
+  useEffect(() => {
+    const teacherID = 1; // Replace with dynamic teacherID if needed
+    dispatch(fetchTeacherOverview(teacherID));
+  }, [dispatch]);
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <Layout>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#4A90E2" />
+          <Text style={styles.loadingText}>Loading...</Text>
+        </View>
+      </Layout>
+    );
+  }
+
+  // Error state
+  if (isError) {
+    showToast({ title: "Failed to load data", type: "error" }); // Trigger toast
+    return (
+      <Layout>
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>Failed to load data</Text>
+        </View>
+      </Layout>
+    );
+  }
+
+  // If no teacher data available
+  if (!teacherOverview) {
+    return (
+      <Layout>
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>No data available</Text>
+        </View>
+      </Layout>
+    );
+  }
+
+  // Destructure teacher data
+  const { name, img, description, email, phone, address } = teacherOverview;
+
   return (
     <Layout>
       <View style={styles.infoCard}>
         <View style={styles.infoCardHeader}>
-          <Image source={data.img} style={styles.infoCardImage} />
+          <Image
+            source={
+              img
+                ? { uri: img }
+                : require("../../../img/Teacher_Profile/teacher.jpg")
+            }
+            style={styles.infoCardImage}
+          />
           <View style={styles.infoCardText}>
-            <Text style={styles.infoCardName}>{data.name}</Text>
+            <Text style={styles.infoCardName}>{name}</Text>
             <Text style={styles.infoCardJob}>UX/UI Design</Text>
           </View>
           <TouchableOpacity style={styles.followButton}>
@@ -28,7 +85,7 @@ export default function TeacherOverView() {
           </TouchableOpacity>
         </View>
         <View style={styles.descriptionContainer}>
-          <Text style={styles.descriptionText}>{data.description}</Text>
+          <Text style={styles.descriptionText}>{description}</Text>
           <TouchableOpacity>
             <Text style={styles.seeMoreText}>See more</Text>
           </TouchableOpacity>
@@ -37,15 +94,15 @@ export default function TeacherOverView() {
           <Text style={styles.contactTitle}>Contact</Text>
           <View style={styles.contactItem}>
             <Ionicons name="call-outline" size={20} color="#666" />
-            <Text style={styles.contactText}>{data.phone}</Text>
+            <Text style={styles.contactText}>{phone}</Text>
           </View>
           <View style={styles.contactItem}>
             <Ionicons name="location-outline" size={20} color="#666" />
-            <Text style={styles.contactText}>{data.address}</Text>
+            <Text style={styles.contactText}>{address}</Text>
           </View>
           <View style={styles.contactItem}>
             <Ionicons name="mail-outline" size={20} color="#666" />
-            <Text style={styles.contactText}>{data.email}</Text>
+            <Text style={styles.contactText}>{email}</Text>
           </View>
         </View>
       </View>
@@ -54,6 +111,25 @@ export default function TeacherOverView() {
 }
 
 const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: "#666",
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  errorText: {
+    fontSize: 16,
+    color: "#FF0000",
+  },
   infoCard: {
     backgroundColor: "#FFF",
     borderRadius: 8,
@@ -84,37 +160,34 @@ const styles = StyleSheet.create({
   },
   followButton: {
     backgroundColor: "#4A90E2",
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 12,
   },
   followButtonText: {
     color: "#FFF",
-    fontSize: 14,
     fontWeight: "bold",
   },
   descriptionContainer: {
+    marginTop: 16,
     marginBottom: 16,
   },
   descriptionText: {
     fontSize: 14,
-    color: "#333",
-    lineHeight: 20,
+    color: "#666",
   },
   seeMoreText: {
-    color: "#4A90E2",
     fontSize: 14,
-    marginTop: 8,
+    color: "#4A90E2",
+    marginTop: 4,
   },
   contactContainer: {
-    borderTopWidth: 1,
-    borderTopColor: "#E0E0E0",
-    paddingTop: 16,
+    marginTop: 16,
   },
   contactTitle: {
     fontSize: 16,
     fontWeight: "bold",
-    marginBottom: 12,
+    marginBottom: 8,
   },
   contactItem: {
     flexDirection: "row",
@@ -122,9 +195,8 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   contactText: {
-    fontSize: 14,
-    color: "#333",
     marginLeft: 8,
-    flex: 1,
+    fontSize: 14,
+    color: "#666",
   },
 });
