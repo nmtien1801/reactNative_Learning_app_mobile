@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTeacherOverview } from "../../redux/teacherSlide"; // Import action
-import { Ionicons } from "@expo/vector-icons";
 
 export default function TeacherProfileScreen() {
   const dispatch = useDispatch();
@@ -19,8 +18,7 @@ export default function TeacherProfileScreen() {
     (state) => state.teacher
   );
 
-  // ID giáo viên (có thể thay đổi theo trường hợp thực tế)
-  const teacherID = 1;
+  const teacherID = 1; // ID của giáo viên, thay đổi nếu cần
 
   // Gửi yêu cầu lấy dữ liệu khi component được mount
   useEffect(() => {
@@ -59,8 +57,6 @@ export default function TeacherProfileScreen() {
         </View>
       </SafeAreaView>
     );
-  } else {
-    console.log("teacherOverview header", teacherOverview);
   }
 
   // Destructure dữ liệu giáo viên
@@ -77,42 +73,44 @@ export default function TeacherProfileScreen() {
       {/* Profile Section */}
       <View style={styles.profileSection}>
         <Image
-          source={teacherData.bannerImage} // Dữ liệu banner image
+          source={
+            image
+              ? { uri: image }
+              : require("../../../img/Teacher_Profile/Teacher_Nen.jpg")
+          } // Banner image
           style={styles.bannerImage}
         />
         <Image
-          source={teacherData.profileImage} // Dữ liệu profile image
+          source={
+            image
+              ? { uri: image }
+              : require("../../../img/Teacher_Profile/teacher.jpg")
+          } // Profile image
           style={styles.profileImage}
         />
         <View style={styles.profileInfo}>
-          <Text style={styles.teacherName}>{teacherData.name}</Text>
-          {/* Dữ liệu tên giáo viên */}
+          <Text style={styles.teacherName}>{userName}</Text>
           <View style={styles.jobTitleContainer}>
-            <Text style={styles.jobTitle}>UX/UI Designer</Text>{" "}
+            <Text style={styles.jobTitle}>UX/UI Designer</Text>
             {/* Có thể thay đổi nếu cần */}
             <View style={styles.teacherTag}>
-              <Text style={styles.teacherTagText}>{teacherData.tag}</Text>
-              {/* Dữ liệu tag */}
+              <Text style={styles.teacherTagText}>Teacher</Text>
             </View>
           </View>
-          <Text style={styles.timeZone}>Korea • 9:30 AM</Text>{" "}
-          {/* Có thể thay đổi nếu cần */}
+          <Text style={styles.timeZone}>Korea • 9:30 AM</Text>
         </View>
       </View>
 
-      {/* Contact Information
-      <View style={styles.contactContainer}>
+      {/* Contact Information */}
+      {/* <View style={styles.contactContainer}>
         <Text style={styles.contactTitle}>Contact</Text>
         <View style={styles.contactItem}>
-          <Ionicons name="call-outline" size={20} color="#666" />
           <Text style={styles.contactText}>{phone}</Text>
         </View>
         <View style={styles.contactItem}>
-          <Ionicons name="location-outline" size={20} color="#666" />
           <Text style={styles.contactText}>{address}</Text>
         </View>
         <View style={styles.contactItem}>
-          <Ionicons name="mail-outline" size={20} color="#666" />
           <Text style={styles.contactText}>{email}</Text>
         </View>
       </View> */}
@@ -141,6 +139,8 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 150,
     resizeMode: "cover",
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
   },
   profileImage: {
     width: 100,
@@ -183,5 +183,43 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#666",
     marginTop: 4,
+  },
+  contactContainer: {
+    marginTop: 20,
+    paddingHorizontal: 16,
+  },
+  contactTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 12,
+  },
+  contactItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  contactText: {
+    fontSize: 14,
+    color: "#333",
+    marginLeft: 8,
+    flex: 1,
+  },
+  loadingContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
+  },
+  loadingText: {
+    fontSize: 16,
+    color: "#4A90E2",
+  },
+  errorContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
+  },
+  errorText: {
+    fontSize: 16,
+    color: "red",
   },
 });
