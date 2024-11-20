@@ -7,8 +7,12 @@ const baseUrl =
     ? "http://172.16.0.159:8080/api" // URL cho Android và iOS
     : "http://localhost:8080/api"; // URL cho web hoặc môi trường khác
 
-const handleTeacherOverview = () => {
-  return axios.get(`${baseUrl}/teacherOverview/:teacherID`);
+// const handleTeacherOverview = () => {
+//   return axios.get(`${baseUrl}/teacherOverview/:teacherID`);
+// };
+
+const handleTeacherOverview = (teacherID) => {
+  return axios.get(`${baseUrl}/teacherOverview/${teacherID}`); // Thay thế :teacherID bằng teacherID thực
 };
 
 export { handleTeacherOverview };

@@ -1,5 +1,3 @@
-// screens/TeacherOverview.js
-
 import React, { useEffect } from "react";
 import {
   View,
@@ -22,13 +20,14 @@ export default function TeacherOverview() {
   );
   const { showToast } = useToast();
 
-  const teacherID = 1;
+  const teacherID = 1; // ID của giáo viên
 
+  // Fetch dữ liệu khi component được mount
   useEffect(() => {
-    dispatch(fetchTeacherOverview(teacherID)); // Truyền teacherID trực tiếp
+    dispatch(fetchTeacherOverview(teacherID));
   }, [dispatch]);
 
-  // Loading state
+  // Trạng thái loading
   if (isLoading) {
     return (
       <Layout>
@@ -40,7 +39,7 @@ export default function TeacherOverview() {
     );
   }
 
-  // Error state
+  // Trạng thái lỗi
   if (isError) {
     showToast("Failed to load teacher data");
     return (
@@ -52,10 +51,8 @@ export default function TeacherOverview() {
     );
   }
 
-  // No data available
-  if (!teacherOverview) {
-    console.log("No data available", teacherOverview);
-
+  // Không có dữ liệu
+  if (!teacherOverview || Object.keys(teacherOverview).length === 0) {
     return (
       <Layout>
         <View style={styles.errorContainer}>
@@ -64,12 +61,10 @@ export default function TeacherOverview() {
       </Layout>
     );
   }
-  if (teacherOverview) {
-    console.log("data available", teacherOverview);
-  }
 
-  // Destructure teacher data
-  const { name, img, description, email, phone, address } = teacherOverview;
+  // Destructure dữ liệu giáo viên
+  const { userName, image, description, email, phone, address } =
+    teacherOverview;
 
   return (
     <Layout>
@@ -77,14 +72,14 @@ export default function TeacherOverview() {
         <View style={styles.infoCardHeader}>
           <Image
             source={
-              img
-                ? { uri: img }
-                : require("../../../img/Teacher_Profile/teacher.jpg") // Default image if none
-            }
+              image
+                ? { uri: image }
+                : require("../../../img/Teacher_Profile/teacher.jpg")
+            } // Image mặc định nếu không có ảnh
             style={styles.infoCardImage}
           />
           <View style={styles.infoCardText}>
-            <Text style={styles.infoCardName}>{name}</Text>
+            <Text style={styles.infoCardName}>{userName}</Text>
             <Text style={styles.infoCardJob}>UX/UI Design</Text>
           </View>
           <TouchableOpacity style={styles.followButton}>
@@ -118,25 +113,6 @@ export default function TeacherOverview() {
 }
 
 const styles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  loadingText: {
-    marginTop: 10,
-    fontSize: 16,
-    color: "#666",
-  },
-  errorContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  errorText: {
-    fontSize: 16,
-    color: "#FF0000",
-  },
   infoCard: {
     backgroundColor: "#FFF",
     borderRadius: 8,
@@ -167,34 +143,37 @@ const styles = StyleSheet.create({
   },
   followButton: {
     backgroundColor: "#4A90E2",
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
   },
   followButtonText: {
     color: "#FFF",
+    fontSize: 14,
     fontWeight: "bold",
   },
   descriptionContainer: {
-    marginTop: 16,
     marginBottom: 16,
   },
   descriptionText: {
     fontSize: 14,
-    color: "#666",
+    color: "#333",
+    lineHeight: 20,
   },
   seeMoreText: {
-    fontSize: 14,
     color: "#4A90E2",
-    marginTop: 4,
+    fontSize: 14,
+    marginTop: 8,
   },
   contactContainer: {
-    marginTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: "#E0E0E0",
+    paddingTop: 16,
   },
   contactTitle: {
     fontSize: 16,
     fontWeight: "bold",
-    marginBottom: 8,
+    marginBottom: 12,
   },
   contactItem: {
     flexDirection: "row",
@@ -202,8 +181,9 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   contactText: {
-    marginLeft: 8,
     fontSize: 14,
-    color: "#666",
+    color: "#333",
+    marginLeft: 8,
+    flex: 1,
   },
 });

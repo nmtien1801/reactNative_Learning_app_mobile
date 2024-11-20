@@ -33,7 +33,6 @@ import HeaderCart from "./header/Header-Cart";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-// Lesson Tabs (for navigating between lessons, projects, and QA)
 function LessonTabs() {
   return (
     <Tab.Navigator
@@ -46,7 +45,6 @@ function LessonTabs() {
   );
 }
 
-// Teacher Tabs (for navigating between teacher overview, courses, and reviews)
 function TeacherTabs() {
   return (
     <Tab.Navigator
@@ -68,49 +66,17 @@ export default function App() {
             initialRouteName="Teacher"
             screenOptions={{ headerShown: false }}
           >
-            {/* Authentication Screens */}
             <Stack.Screen name="Intro" component={Intro} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="SignUp" component={RegisterScreen} />
-
-            {/* Course Screens */}
             <Stack.Screen name="courseSearch" component={CourseSearch} />
             <Stack.Screen name="courseListing" component={CourseListing} />
-            <Stack.Screen
-              name="courseDetailOverView"
-              component={DrawerHeader}
-              initialParams={{ screenName: "CourseDetailOverView" }}
-            />
-            <Stack.Screen
-              name="courseDetailLesson"
-              component={DrawerHeader}
-              initialParams={{ screenName: "CourseDetailLesson" }}
-            />
-            <Stack.Screen
-              name="courseDetailReview"
-              component={DrawerHeader}
-              initialParams={{ screenName: "CourseDetailReview" }}
-            />
-
-            {/* User Screens */}
             <Stack.Screen name="myCourse" component={MyCourse} />
             <Stack.Screen name="userProfile" component={User_Profile} />
-            <Stack.Screen
-              name="cart"
-              component={Cart}
-              options={({ navigation, route }) => ({
-                header: () => (
-                  <HeaderCart navigation={navigation} route={route} />
-                ),
-              })}
-            />
+            <Stack.Screen name="cart" component={Cart} />
             <Stack.Screen name="homeUser" component={HomeUser} />
-
-            {/* Teacher Screens */}
-            <Stack.Screen name="FormCourse" component={FormCourse} />
-            <Stack.Screen name="FormLesson" component={FormLesson} />
-            <Stack.Screen name="Lesson" component={LessonTabs} />
             <Stack.Screen name="Teacher" component={TeacherTabs} />
+            <Stack.Screen name="Lesson" component={LessonTabs} />
             <Stack.Screen name="ManageCourse" component={ManageCourse} />
             <Stack.Screen name="ManageLesson" component={ManageLesson} />
             <Stack.Screen name="ManageProject" component={ManageProject} />
