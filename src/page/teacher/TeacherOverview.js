@@ -1,19 +1,90 @@
-import React from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import React, { useEffect } from "react";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  ActivityIndicator,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Layout from "../../component/TeacherProfile/Layout_Teacher";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchTeacherOverview } from "../../redux/teacherSlide";
+import { useToast } from "../../component/customToast";
 
-export default function TeacherOverView() {
+export default function TeacherOverview() {
+  const dispatch = useDispatch();
+  const { teacherOverview, isLoading, isError } = useSelector(
+    (state) => state.teacher
+  );
+  const { showToast } = useToast();
+
+  const teacherID = 1; // ID của giáo viên
+
+  // Fetch dữ liệu khi component được mount
+  useEffect(() => {
+    dispatch(fetchTeacherOverview(teacherID));
+  }, [dispatch]);
+
+  // Trạng thái loading
+  if (isLoading) {
+    return (
+      <Layout>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#4A90E2" />
+          <Text style={styles.loadingText}>Loading...</Text>
+        </View>
+      </Layout>
+    );
+  }
+
+  // Trạng thái lỗi
+  if (isError) {
+    showToast("Failed to load teacher data");
+    return (
+      <Layout>
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>Failed to load data</Text>
+        </View>
+      </Layout>
+    );
+  }
+
+  // Không có dữ liệu
+  if (!teacherOverview || Object.keys(teacherOverview).length === 0) {
+    return (
+      <Layout>
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>No data available</Text>
+        </View>
+      </Layout>
+    );
+  } else {
+    // showToast("Data loaded successfully");
+    console.log("Data loaded successfully:", teacherOverview);
+  }
+
+  // Destructure dữ liệu giáo viên và cung cấp giá trị mặc định
+  const { userName, image, description, email, phone, address } =
+    teacherOverview.DT || {};
+
+  console.log("userName: ", userName); // Kiểm tra giá trị userName
+
   return (
     <Layout>
       <View style={styles.infoCard}>
         <View style={styles.infoCardHeader}>
           <Image
-            source={require("../../../img/Teacher_Profile/teacher.jpg")}
+            source={
+              image
+                ? { uri: image }
+                : require("../../../img/Teacher_Profile/teacher.jpg")
+            }
             style={styles.infoCardImage}
           />
           <View style={styles.infoCardText}>
-            <Text style={styles.infoCardName}>Minh Tiến</Text>
+            <Text style={styles.infoCardName}>{userName}</Text>
             <Text style={styles.infoCardJob}>UX/UI Design</Text>
           </View>
           <TouchableOpacity style={styles.followButton}>
@@ -21,11 +92,7 @@ export default function TeacherOverView() {
           </TouchableOpacity>
         </View>
         <View style={styles.descriptionContainer}>
-          <Text style={styles.descriptionText}>
-            Curabitur in semper lacerat nibh leo. Vivamus malesuada ipsum
-            pulvinar non rutrum risus dui, risus. Purus massa velit iaculis
-            tincidunt tortor, risus, scelerisque risus...
-          </Text>
+          <Text style={styles.descriptionText}>{description}</Text>
           <TouchableOpacity>
             <Text style={styles.seeMoreText}>See more</Text>
           </TouchableOpacity>
@@ -34,17 +101,15 @@ export default function TeacherOverView() {
           <Text style={styles.contactTitle}>Contact</Text>
           <View style={styles.contactItem}>
             <Ionicons name="call-outline" size={20} color="#666" />
-            <Text style={styles.contactText}>0967273063</Text>
+            <Text style={styles.contactText}>{phone}</Text>
           </View>
           <View style={styles.contactItem}>
             <Ionicons name="location-outline" size={20} color="#666" />
-            <Text style={styles.contactText}>
-              1/15/4 Nguyễn Thái Sơn, Phường 3, Gò Vấp, TP HCM
-            </Text>
+            <Text style={styles.contactText}>{address}</Text>
           </View>
           <View style={styles.contactItem}>
             <Ionicons name="mail-outline" size={20} color="#666" />
-            <Text style={styles.contactText}>nickname1801@gmail.com</Text>
+            <Text style={styles.contactText}>{email}</Text>
           </View>
         </View>
       </View>
@@ -125,5 +190,23 @@ const styles = StyleSheet.create({
     color: "#333",
     marginLeft: 8,
     flex: 1,
+  },
+  loadingContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
+  },
+  loadingText: {
+    marginTop: 10,
+    color: "#4A90E2",
+  },
+  errorContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
+  },
+  errorText: {
+    fontSize: 18,
+    color: "red",
   },
 });

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
@@ -6,108 +6,131 @@ import {
   FlatList,
   TouchableOpacity,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Layout from "../../component/TeacherProfile/Layout_Teacher";
-const categories = [
-  {
-    id: "1",
-    title: "UI/UX Design",
-    courses: [
-      {
-        id: "1-1",
-        title: "PHP in One Click",
-        price: "$59",
-        rating: 4.5,
-        reviews: 1233,
-        lessons: 18,
-      },
-      {
-        id: "1-2",
-        title: "Web Design",
-        price: "$39",
-        rating: 4.5,
-        reviews: 1233,
-        lessons: 18,
-      },
-    ],
-  },
-  {
-    id: "2",
-    title: "Graphic Design",
-    courses: [
-      {
-        id: "2-1",
-        title: "Adobe Photoshop Advanced",
-        price: "$45",
-        rating: 4.7,
-        reviews: 5231,
-        lessons: 15,
-      },
-      {
-        id: "2-2",
-        title: "Illustrator Masterclass",
-        price: "$50",
-        rating: 4.8,
-        reviews: 4276,
-        lessons: 20,
-      },
-    ],
-  },
-];
+import { useDispatch, useSelector } from "react-redux";
+import { fetchTeacherCourses } from "../../redux/teacherSlide";
+import { useToast } from "../../component/customToast";
 
 export default function TeacherCourses() {
-  const renderCourseItem = ({ item }) => (
-    <View style={styles.courseCard}>
-      <Image
-        source={require("../../../img/Login_Register/Login.jpg")}
-        style={styles.courseImage}
-      />
-      <View style={styles.courseInfo}>
-        <View style={styles.courseHeader}>
-          <Text style={styles.courseTitle}>{item.title}</Text>
-          <TouchableOpacity>
-            <Ionicons name="bookmark-outline" size={24} color="#666" />
-          </TouchableOpacity>
-        </View>
-        <Text style={styles.coursePrice}>{item.price}</Text>
-        <View style={styles.courseStats}>
-          <Ionicons name="star" size={16} color="#FFD700" />
-          <Text style={styles.ratingText}>
-            {item.rating} ({item.reviews})
-          </Text>
-          <Text style={styles.studentsText}>• {item.lessons} lessons</Text>
-        </View>
-      </View>
-    </View>
+  const dispatch = useDispatch();
+  const { TeacherCourses, isLoading, isError } = useSelector(
+    (state) => state.teacher
   );
+  const { showToast } = useToast();
+  const teacherID = 1; // ID của giáo viên
 
-  const renderCategoryItem = ({ item }) => (
-    <View style={styles.categoryContainer}>
-      <View style={styles.categoryHeader}>
-        <Text style={styles.categoryTitle}>{item.title}</Text>
-        <TouchableOpacity>
-          <Text style={styles.viewAllText}>View all</Text>
-        </TouchableOpacity>
+  // Fetch dữ liệu khi component được mount
+  useEffect(() => {
+    dispatch(fetchTeacherCourses(teacherID));
+  }, [dispatch, teacherID]);
+
+  // Trạng thái loading
+  if (isLoading) {
+    return (
+      <Layout>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#4A90E2" />
+          <Text style={styles.loadingText}>Loading...</Text>
+        </View>
+      </Layout>
+    );
+  }
+
+  // Trạng thái lỗi
+  if (isError) {
+    showToast("Failed to load teacher data");
+    return (
+      <Layout>
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>Failed to load data</Text>
+        </View>
+      </Layout>
+    );
+  }
+
+  // Kiểm tra dữ liệu TeacherCourses.DT
+  if (!TeacherCourses || !TeacherCourses.DT) {
+    return (
+      <Layout>
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>No data available</Text>
+        </View>
+      </Layout>
+    );
+  }
+
+  // Destructure dữ liệu từ TeacherCourses.DT
+  const courses = TeacherCourses.DT;
+
+  // Nhóm các khóa học theo Category
+  const groupedByCategory = courses.reduce((acc, course) => {
+    const categoryName = course.Category.name;
+
+    if (!acc[categoryName]) {
+      acc[categoryName] = [];
+    }
+    acc[categoryName].push(course);
+
+    return acc;
+  }, {});
+
+  // Render khóa học
+  const renderCourseItem = ({ item }) => {
+    const { name, title, image } = item;
+    const courseImage =
+      image && image.data && image.data.length > 0
+        ? { uri: image }
+        : require("../../../img/Login_Register/Login.jpg"); // Hình ảnh mặc định
+
+    return (
+      <View style={styles.courseCard}>
+        <Image source={courseImage} style={styles.courseImage} />
+        <View style={styles.courseInfo}>
+          <Text style={styles.courseName}>{name}</Text>
+          <Text style={styles.courseTitle}>{title}</Text>
+        </View>
       </View>
-      <FlatList
-        data={item.courses}
-        renderItem={renderCourseItem}
-        keyExtractor={(course) => course.id}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-      />
-    </View>
-  );
+    );
+  };
+
+  // Render các khóa học theo thể loại
+  const renderCategoryItem = ({ item }) => {
+    const { name: categoryName } = item;
+    const categoryCourses = groupedByCategory[categoryName];
+
+    return (
+      <View style={styles.categoryContainer}>
+        <Text style={styles.categoryTitle}>{categoryName}</Text>
+        <FlatList
+          data={categoryCourses}
+          renderItem={renderCourseItem}
+          keyExtractor={(course) => course.id.toString()}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.coursesContainer}
+        />
+      </View>
+    );
+  };
+
+  const categoryNames = Object.keys(groupedByCategory);
 
   return (
     <Layout>
-      <FlatList
-        data={categories}
-        renderItem={renderCategoryItem}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.coursesContainer}
-      />
+      {categoryNames.map((categoryName) => {
+        return (
+          <View key={categoryName}>
+            <FlatList
+              data={[{ name: categoryName }]}
+              renderItem={renderCategoryItem}
+              keyExtractor={(item) => item.name}
+            />
+          </View>
+        );
+      })}
     </Layout>
   );
 }
@@ -116,74 +139,65 @@ const styles = StyleSheet.create({
   coursesContainer: {
     padding: 16,
   },
-  categoryHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
     alignItems: "center",
-    marginBottom: 16,
+  },
+  loadingText: {
+    marginTop: 8,
+    fontSize: 16,
+    color: "#666",
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  errorText: {
+    fontSize: 18,
+    color: "#FF5A5F",
+  },
+  categoryContainer: {
+    marginBottom: 30,
   },
   categoryTitle: {
     fontSize: 18,
     fontWeight: "bold",
-  },
-  viewAllText: {
-    color: "#4A90E2",
-    fontSize: 14,
+    marginBottom: 12,
   },
   courseCard: {
     backgroundColor: "#FFF",
     borderRadius: 12,
     marginBottom: 16,
     padding: 12,
-    flexDirection: "row",
+    width: 150,
+    height: 150,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
     shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
   },
   courseImage: {
-    width: 100,
-    height: 100,
+    width: 80,
+    height: 80,
     borderRadius: 8,
   },
   courseInfo: {
-    flex: 1,
-    marginLeft: 12,
+    marginTop: 8,
   },
-  courseHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
+  courseName: {
+    fontSize: 12,
+    fontWeight: "600",
+    textAlign: "center",
   },
   courseTitle: {
-    fontSize: 16,
-    fontWeight: "600",
-    flex: 1,
-    marginRight: 8,
-  },
-  coursePrice: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#4A90E2",
-    marginTop: 8,
-  },
-  courseStats: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 8,
-  },
-  ratingText: {
-    fontSize: 14,
+    fontSize: 10,
     color: "#666",
-    marginLeft: 4,
-  },
-  studentsText: {
-    fontSize: 14,
-    color: "#666",
-    marginLeft: 8,
+    textAlign: "center",
   },
 });
