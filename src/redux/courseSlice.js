@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   findAllCoursesService,
   findPopularCourseService,
+  findCourseByStateService,
 } from "../service/userService";
 
 const initialState = {
@@ -90,8 +91,8 @@ const authSlice = createSlice({
       })
       .addCase(findCourseByState.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.listCourseInspire = action.payload.DT || [];
-        console.log("listCourseInspire", action.payload.DT);
+        state.listCourse = action.payload.DT || [];
+        console.log("listCourse", action.payload.DT);
 
         state.isLogin = true;
       })
