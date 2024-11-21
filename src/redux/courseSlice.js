@@ -30,6 +30,14 @@ export const findPopularCourses = createAsyncThunk(
   }
 );
 
+export const findCourseByState = createAsyncThunk(
+  "course/findCourseByState",
+  async (state, thunkAPI) => {
+    const response = await findCourseByStateService(state);
+    return response.data;
+  }
+);
+
 // đây là reducer
 const authSlice = createSlice({
   name: "course",
@@ -70,6 +78,24 @@ const authSlice = createSlice({
         state.isLogin = true;
       })
       .addCase(findPopularCourses.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+      });
+
+    // findCourseByState
+    builder
+      .addCase(findCourseByState.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+      })
+      .addCase(findCourseByState.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.listCourseInspire = action.payload.DT || [];
+        console.log("listCourseInspire", action.payload.DT);
+
+        state.isLogin = true;
+      })
+      .addCase(findCourseByState.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
       });

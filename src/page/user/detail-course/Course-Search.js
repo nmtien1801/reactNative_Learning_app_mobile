@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,9 +7,10 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   TextInput,
+  Image,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { findAllCourses } from "../../../redux/courseSlice"; // Đảm bảo sử dụng đúng action
+import { findAllCourses } from "../../../redux/courseSlice"; // Ensure correct action import
 import { Ionicons } from "@expo/vector-icons";
 import Footer from "../../../component/Footer";
 
@@ -30,33 +31,74 @@ const Category = ({ icon, title, onPress }) => (
 );
 
 // CourseCard Component
-const CourseCard = ({ title, instructor, price, rating, lessons }) => (
-  <View style={styles.courseCard}>
-    <Text style={styles.courseTitle}>{title}</Text>
-    <Text style={styles.courseAuthor}>{instructor}</Text>
-    <View style={styles.courseDetails}>
-      <Text style={styles.coursePrice}>${price}</Text>
-      <View style={styles.ratingContainer}>
-        <Ionicons name="star" size={16} color="#FFD700" />
-        <Text style={styles.ratingText}>{rating}</Text>
-        <Text style={styles.lessonsText}>({lessons} lessons)</Text>
+const CourseCard = ({ course, navigation }) => (
+  <TouchableOpacity
+    style={[styles.courseCard, { width: 250 }]}
+    onPress={() =>
+      navigation.navigate("courseDetailOverView", { courseId: course.id })
+    }
+  >
+    <Image
+      source={{
+        uri:
+          course.image ||
+          "https://inkythuatso.com/uploads/thumbnails/800/2023/03/1-hinh-anh-ngay-moi-hanh-phuc-sieu-cute-inkythuatso-09-13-35-50.jpg", // Fallback image if course image is not available
+      }}
+      style={styles.courseImage}
+    />
+    <View style={styles.courseContent}>
+      <View style={styles.titleRow}>
+        <Text style={styles.courseTitle}>{course.title}</Text>
+        <TouchableOpacity>
+          <Ionicons name="bookmark" size={24} color="#00BCD4" />
+        </TouchableOpacity>
+      </View>
+      <Text style={styles.instructorName}>{course.instructor}</Text>
+      <Text style={styles.price}>${course.price}</Text>
+      <View style={styles.statsRow}>
+        <View style={styles.ratingContainer}>
+          <Ionicons name="star" size={16} color="#FFD700" />
+          <Text style={styles.rating}>{course.rating}</Text>
+          <Text style={styles.reviews}>({course.reviews})</Text>
+        </View>
+        <Text style={styles.lessons}>{course.lessons} lessons</Text>
       </View>
     </View>
-  </View>
+  </TouchableOpacity>
 );
 
 // Main Component
 export default function CourseSearch({ navigation, route }) {
   const dispatch = useDispatch();
   const {
-    listCourse: courses, // Đảm bảo lấy đúng dữ liệu từ Redux store
+    listCourse, // Correctly pulling course data from the Redux store
     isLoading,
     isError,
-  } = useSelector((state) => state.course); // Chỉnh sửa selector để truy cập đúng state
+  } = useSelector((state) => state.course);
+
+  const [courses, setCourses] = useState([]);
+
+  // Fetch courses and update state
+  useEffect(() => {
+    dispatch(findAllCourses());
+  }, [dispatch]);
 
   useEffect(() => {
-    dispatch(findAllCourses()); // Fetch courses when component mounts
-  }, [dispatch]);
+    if (listCourse.length !== 0) {
+      setCourses(
+        listCourse.map((course) => ({
+          id: course.id, // Ensure each course has a unique id
+          title: course.name,
+          instructor: course.UserFollow[0]?.user.userName, // Assuming structure
+          price: course.Orders[0]?.OrderDetail?.price || "Free", // Fallback to 'Free' if no price
+          rating: course.averageRating || "0.0", // Default to 0.0 if no rating
+          reviews: course.totalRating || 0, // Default to 0 reviews if not available
+          lessons: course.totalLessons || 0, // Default to 0 lessons if not available
+          image: course.image,
+        }))
+      );
+    }
+  }, [listCourse]);
 
   // Render loading state
   if (isLoading) {
@@ -78,15 +120,13 @@ export default function CourseSearch({ navigation, route }) {
     );
   }
 
-  // Không có dữ liệu
+  // If no courses are found
   if (!courses.length) {
     return (
       <View style={styles.errorContainer}>
         <Text style={styles.errorText}>No courses found</Text>
       </View>
     );
-  } else {
-    console.log("courses", courses);
   }
 
   return (
@@ -140,14 +180,11 @@ export default function CourseSearch({ navigation, route }) {
         {/* Recommended Courses */}
         <Text style={styles.sectionTitle}>Recommended for You</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {courses.map((course, index) => (
+          {courses.map((course) => (
             <CourseCard
-              key={index}
-              title={course.name}
-              instructor={course.instructor || "Unknown"}
-              price={course.price || "Free"}
-              rating={course.rating || "0.0"}
-              lessons={course.lessons || "0"}
+              key={course.id} // Use the course id to ensure unique key
+              course={course}
+              navigation={navigation} // Pass navigation to CourseCard
             />
           ))}
         </ScrollView>
@@ -163,10 +200,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-  },
-
-  content: {
-    flex: 1,
   },
   searchContainer: {
     flexDirection: "row",
@@ -188,26 +221,11 @@ const styles = StyleSheet.create({
     paddingLeft: 40,
     paddingRight: 10,
   },
-  filterButton: {
-    marginLeft: 10,
-    backgroundColor: "#00BCD4",
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderRadius: 20,
-  },
-  filterButtonText: {
-    color: "#fff",
-    fontWeight: "bold",
-  },
   sectionTitle: {
     fontSize: 18,
     fontWeight: "bold",
     marginLeft: 15,
     marginBottom: 10,
-  },
-  hotTopicsContainer: {
-    paddingLeft: 15,
-    marginBottom: 20,
   },
   hotTopic: {
     backgroundColor: "#E0F7FA",
@@ -217,19 +235,6 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   hotTopicText: {
-    color: "#00BCD4",
-  },
-  categoriesContainer: {
-    marginBottom: 20,
-  },
-  categoriesHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingRight: 15,
-    marginBottom: 10,
-  },
-  viewMoreText: {
     color: "#00BCD4",
   },
   category: {
@@ -247,86 +252,74 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
   },
-  recommendedContainer: {
-    marginBottom: 20,
-  },
-  recommendedHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingRight: 15,
-    marginBottom: 10,
-  },
   courseCard: {
-    width: 250,
     marginLeft: 15,
     marginRight: 5,
   },
   courseImage: {
     width: "100%",
-    height: 140,
-    borderRadius: 8,
-    marginBottom: 10,
+    height: 150,
+    borderRadius: 10,
+    resizeMode: "cover",
   },
-  bestSeller: {
-    position: "absolute",
-    top: 10,
-    left: 10,
-    backgroundColor: "#FFD700",
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 4,
+  courseContent: {
+    padding: 10,
   },
-  bestSellerText: {
-    color: "#000",
-    fontWeight: "bold",
-    fontSize: 12,
-  },
-  discount: {
-    position: "absolute",
-    top: 10,
-    right: 10,
-    backgroundColor: "#FF6347",
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 4,
-  },
-  discountText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 12,
+  titleRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   courseTitle: {
     fontSize: 16,
     fontWeight: "bold",
     marginBottom: 5,
   },
-  courseAuthor: {
+  instructorName: {
     fontSize: 14,
     color: "#666",
     marginBottom: 5,
   },
-  courseDetails: {
+  price: {
+    fontSize: 16,
+    color: "#00BCD4",
+    fontWeight: "bold",
+  },
+  statsRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-  },
-  coursePrice: {
-    fontSize: 16,
-    fontWeight: "bold",
   },
   ratingContainer: {
     flexDirection: "row",
     alignItems: "center",
   },
-  ratingText: {
+  rating: {
+    fontSize: 14,
+    color: "#FFD700",
     marginLeft: 5,
+  },
+  reviews: {
+    fontSize: 12,
+    color: "#666",
+    marginLeft: 5,
+  },
+  lessons: {
     fontSize: 14,
     color: "#666",
   },
-  lessonsText: {
-    marginLeft: 5,
-    fontSize: 14,
-    color: "#666",
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  errorText: {
+    fontSize: 16,
+    color: "red",
   },
 });

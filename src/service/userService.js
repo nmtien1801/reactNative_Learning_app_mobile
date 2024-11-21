@@ -30,6 +30,10 @@ const getTopTeacherService = () => {
 const findPopularCourseService = () => {
   return axios.get(`${baseUrl}/findPopularCourses`);
 };
+
+const findCourseByStateService = (state) => {
+  return axios.get(`${baseUrl}/findCourseByState/${state}`);
+};
 export {
   handleLoginApi,
   logOutUser,
@@ -37,4 +41,5 @@ export {
   findAllCoursesService,
   getTopTeacherService,
   findPopularCourseService,
+  findCourseByStateService,
 };
