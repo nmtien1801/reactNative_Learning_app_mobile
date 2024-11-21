@@ -8,7 +8,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   FlatList,
-  StatusBar 
+  StatusBar,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Footer from "../../../component/Footer";
@@ -18,8 +18,6 @@ const ProgressBar = ({ progress }) => (
     <View style={[styles.progressBar, { width: `${progress}%` }]} />
   </View>
 );
-
-
 
 export default function MyCourse({ navigation, route }) {
   const [activeTab, setActiveTab] = useState("All");
@@ -64,7 +62,10 @@ export default function MyCourse({ navigation, route }) {
   ];
 
   const CourseCard = ({ course }) => (
-    <TouchableOpacity style={styles.courseCard} onPress={() => navigation.navigate("Lesson")}>
+    <TouchableOpacity
+      style={styles.courseCard}
+      onPress={() => navigation.navigate("Lesson")}
+    >
       <Image source={{ uri: course.image }} style={styles.courseImage} />
       <View style={styles.courseInfo}>
         <Text style={styles.courseTitle}>{course.title}</Text>

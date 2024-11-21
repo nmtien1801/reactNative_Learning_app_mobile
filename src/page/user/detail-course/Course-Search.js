@@ -1,84 +1,98 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
-  TextInput,
   ScrollView,
-  Image,
   StyleSheet,
   TouchableOpacity,
+  ActivityIndicator,
+  TextInput,
 } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { findAllCourses } from "../../../redux/courseSlice"; // Đảm bảo sử dụng đúng action
 import { Ionicons } from "@expo/vector-icons";
 import Footer from "../../../component/Footer";
 
-export default function CourseSearch({ navigation, route }) {
-  const HotTopic = ({ title }) => (
-    <TouchableOpacity style={styles.hotTopic}  onPress={() => navigation.navigate("courseListing")}>
-      <Text style={styles.hotTopicText}>{title}</Text>
-    </TouchableOpacity>
-  );
+// HotTopic Component
+const HotTopic = ({ title, onPress }) => (
+  <TouchableOpacity style={styles.hotTopic} onPress={onPress}>
+    <Text style={styles.hotTopicText}>{title}</Text>
+  </TouchableOpacity>
+);
 
-  const Category = ({ icon, title }) => (
-    <TouchableOpacity style={styles.category} onPress={() => navigation.navigate("courseListing")}>
-      <Ionicons
-        name={icon}
-        size={24}
-        color="#666"
-        style={styles.categoryIcon}
-      />
-      <Text style={styles.categoryTitle}>{title}</Text>
-      <Ionicons name="chevron-forward" size={24} color="#666" />
-    </TouchableOpacity>
-  );
+// Category Component
+const Category = ({ icon, title, onPress }) => (
+  <TouchableOpacity style={styles.category} onPress={onPress}>
+    <Ionicons name={icon} size={24} color="#666" style={styles.categoryIcon} />
+    <Text style={styles.categoryTitle}>{title}</Text>
+    <Ionicons name="chevron-forward" size={24} color="#666" />
+  </TouchableOpacity>
+);
 
-  const CourseCard = ({
-    title,
-    author,
-    price,
-    rating,
-    lessons,
-    discount,
-    isBestSeller,
-  }) => (
-    <View style={styles.courseCard}>
-      <TouchableOpacity
-        onPress={() => navigation.navigate("courseDetailOverView")}
-      >
-        <Image
-          source={{ uri: "https://v0.dev/placeholder.svg" }}
-          style={styles.courseImage}
-        />
-      </TouchableOpacity>
-      {isBestSeller && (
-        <View style={styles.bestSeller}>
-          <Text style={styles.bestSellerText}>Best-seller</Text>
-        </View>
-      )}
-      {discount && (
-        <View style={styles.discount}>
-          <Text style={styles.discountText}>{discount}</Text>
-        </View>
-      )}
-      <TouchableOpacity
-        onPress={() => navigation.navigate("courseDetailOverView")}
-      >
-        <Text style={styles.courseTitle}>{title}</Text>
-      </TouchableOpacity>
-      <Text style={styles.courseAuthor}>{author}</Text>
-      <View style={styles.courseDetails}>
-        <Text style={styles.coursePrice}>${price}</Text>
-        <View style={styles.ratingContainer}>
-          <Ionicons name="star" size={16} color="#FFD700" />
-          <Text style={styles.ratingText}>{rating}</Text>
-          <Text style={styles.lessonsText}>({lessons} lessons)</Text>
-        </View>
+// CourseCard Component
+const CourseCard = ({ title, instructor, price, rating, lessons }) => (
+  <View style={styles.courseCard}>
+    <Text style={styles.courseTitle}>{title}</Text>
+    <Text style={styles.courseAuthor}>{instructor}</Text>
+    <View style={styles.courseDetails}>
+      <Text style={styles.coursePrice}>${price}</Text>
+      <View style={styles.ratingContainer}>
+        <Ionicons name="star" size={16} color="#FFD700" />
+        <Text style={styles.ratingText}>{rating}</Text>
+        <Text style={styles.lessonsText}>({lessons} lessons)</Text>
       </View>
     </View>
-  );
+  </View>
+);
+
+// Main Component
+export default function CourseSearch({ navigation, route }) {
+  const dispatch = useDispatch();
+  const {
+    listCourse: courses, // Đảm bảo lấy đúng dữ liệu từ Redux store
+    isLoading,
+    isError,
+  } = useSelector((state) => state.course); // Chỉnh sửa selector để truy cập đúng state
+
+  useEffect(() => {
+    dispatch(findAllCourses()); // Fetch courses when component mounts
+  }, [dispatch]);
+
+  // Render loading state
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#00BCD4" />
+      </View>
+    );
+  }
+
+  // Render error state
+  if (isError) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>
+          Error occurred while fetching courses
+        </Text>
+      </View>
+    );
+  }
+
+  // Không có dữ liệu
+  if (!courses.length) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>No courses found</Text>
+      </View>
+    );
+  } else {
+    console.log("courses", courses);
+  }
 
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.content}>
+      <ScrollView>
+        {/* Search Bar */}
         <View style={styles.searchContainer}>
           <Ionicons
             name="search"
@@ -88,73 +102,59 @@ export default function CourseSearch({ navigation, route }) {
           />
           <TextInput
             style={styles.searchInput}
-            placeholder="Search course"
-            placeholderTextColor="#666"
+            placeholder="Search for courses"
           />
-          <TouchableOpacity style={styles.filterButton} onPress={()=> navigation.navigate('courseListing')}>
-            <Text style={styles.filterButtonText}>Filter</Text>
-          </TouchableOpacity>
         </View>
 
-        <Text style={styles.sectionTitle}>Hot topics</Text>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={styles.hotTopicsContainer}
-        >
-          <HotTopic title="Java" />
-          <HotTopic title="SQL" />
-          <HotTopic title="Javascript" />
-          <HotTopic title="Python" />
-          <HotTopic title="Digital marketing" />
-          <HotTopic title="Photoshop" />
-          <HotTopic title="Watercolor" />
+        {/* Hot Topics */}
+        <Text style={styles.sectionTitle}>Hot Topics</Text>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {["Java", "Python", "SQL", "JavaScript", "Photoshop"].map(
+            (topic, index) => (
+              <HotTopic
+                key={index}
+                title={topic}
+                onPress={() => navigation.navigate("courseListing")}
+              />
+            )
+          )}
         </ScrollView>
 
-        <View style={styles.categoriesContainer}>
-          <View style={styles.categoriesHeader}>
-            <Text style={styles.sectionTitle}>Categories</Text>
-            <TouchableOpacity>
-              <Text style={styles.viewMoreText}>View more</Text>
-            </TouchableOpacity>
-          </View>
-          <Category icon="briefcase" title="Business" />
-          <Category icon="color-palette" title="Design" />
-          <Category icon="code-slash" title="Code" />
-          <Category icon="film" title="Movie" />
-          <Category icon="language" title="Language" />
-        </View>
+        {/* Categories */}
+        <Text style={styles.sectionTitle}>Categories</Text>
+        {[
+          { icon: "briefcase", title: "Business" },
+          { icon: "color-palette", title: "Design" },
+          { icon: "code-slash", title: "Coding" },
+          { icon: "film", title: "Movie" },
+          { icon: "language", title: "Language" },
+        ].map((category, index) => (
+          <Category
+            key={index}
+            icon={category.icon}
+            title={category.title}
+            onPress={() => navigation.navigate("courseListing")}
+          />
+        ))}
 
-        <View style={styles.recommendedContainer}>
-          <View style={styles.recommendedHeader}>
-            <Text style={styles.sectionTitle}>Recommended for you</Text>
-            <TouchableOpacity>
-              <Text style={styles.viewMoreText}>View more</Text>
-            </TouchableOpacity>
-          </View>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        {/* Recommended Courses */}
+        <Text style={styles.sectionTitle}>Recommended for You</Text>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {courses.map((course, index) => (
             <CourseCard
-              title="Website Design"
-              author="Ramona Wullschner"
-              price="590"
-              rating="4.5 (1233)"
-              lessons="9"
-              isBestSeller={true}
+              key={index}
+              title={course.name}
+              instructor={course.instructor || "Unknown"}
+              price={course.price || "Free"}
+              rating={course.rating || "0.0"}
+              lessons={course.lessons || "0"}
             />
-            <CourseCard
-              title="UX Research For..."
-              author="Olivia Wang"
-              price="290"
-              rating="4.5 (1782)"
-              lessons="12"
-              discount="20% Off"
-              onPress={() => navigation.navigate("CourseDetailOverView")}
-            />
-          </ScrollView>
-        </View>
+          ))}
+        </ScrollView>
       </ScrollView>
 
-     <Footer navigation={navigation} route={route} showActive="search"/>
+      {/* Footer */}
+      <Footer navigation={navigation} route={route} showActive="search" />
     </View>
   );
 }
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
   },
-  
+
   content: {
     flex: 1,
   },
@@ -329,5 +329,4 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#666",
   },
- 
 });
