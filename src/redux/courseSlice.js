@@ -1,8 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { findAllCoursesService } from "../service/userService";
+import { findAllCoursesService, findPopularCourseService } from "../service/userService";
 
 const initialState = {
   listCourse: [],
+  listCourseInspire: [],
+  listCoursePopular: [],
   isLogin: false, // kiểm tra xem đã login chưa -> chặn nếu chưa login
   isLoading: false,
   isError: false,
@@ -17,6 +19,14 @@ export const findAllCourses = createAsyncThunk(
   }
 );
 
+export const findPopularCourses = createAsyncThunk(
+  "course/findPopularCourses",
+  async ( thunkAPI) => {
+    const response = await findPopularCourseService(); 
+    return response.data;
+  }
+);
+
 
 // đây là reducer
 const authSlice = createSlice({
@@ -26,7 +36,7 @@ const authSlice = createSlice({
   // dùng api mới sử dụng extraReducers
   // 3 trạng thái của api: pending, fulfilled, rejected
   extraReducers: (builder) => {
-    // login user
+    // findAllCourses
     builder
       .addCase(findAllCourses.pending, (state) => {
         state.isLoading = true;
@@ -44,6 +54,23 @@ const authSlice = createSlice({
         state.isError = true;
       });
 
+    // findPopularCourses
+    builder
+      .addCase(findPopularCourses.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+      })
+      .addCase(findPopularCourses.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.listCoursePopular = action.payload.DT || [];
+        console.log("listCoursePopular", action.payload.DT);
+        
+        state.isLogin = true;
+      })
+      .addCase(findPopularCourses.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+      });
     
   },
 });

@@ -22,4 +22,12 @@ const registerUser = (email, userName, password) => {
 const findAllCoursesService = () => {
   return axios.get(`${baseUrl}/findAllCourses`);
 };
-export { handleLoginApi, logOutUser, registerUser,findAllCoursesService };
+
+const getTopTeacherService = () => {
+  return axios.get(`${baseUrl}/getTopTeacher`);
+}
+
+const findPopularCourseService = () => {
+  return axios.get(`${baseUrl}/findPopularCourses`);
+}
+export { handleLoginApi, logOutUser, registerUser,findAllCoursesService ,getTopTeacherService, findPopularCourseService};

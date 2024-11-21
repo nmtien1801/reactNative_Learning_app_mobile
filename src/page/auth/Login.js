@@ -23,7 +23,7 @@ export default function LoginScreen({ navigation, route }) {
   const [isValidValueEmail, setIsValidValueEmail] = useState(true); // kiểm tra email hợp lệ
   const [isValidValuePassword, setIsValidValuePassword] = useState(true); // kiểm tra password hợp lệ
   
-  const user = useSelector((state) => state.user.user); // lấy thông tin user từ store khi đăng nhập thành công
+  const user = useSelector((state) => state.auth.user); // lấy thông tin user từ store khi đăng nhập thành công
   const dispatch = useDispatch();
   const toast = useToast();
 

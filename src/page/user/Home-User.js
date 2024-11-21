@@ -25,13 +25,18 @@ import { useEffect, useState } from "react";
 import { useToast } from "../../component/customToast";
 
 import { useDispatch, useSelector } from "react-redux";
-import { findAllCourses } from "../../redux/courseSlide";
+import { findAllCourses, findPopularCourses } from "../../redux/courseSlice";
+import { getTopTeacher } from "../../redux/userSlice";
 
 const { width } = Dimensions.get("window");
 const CARD_WIDTH = width * 0.5;
 
 export default function HomeUser({ navigation, route }) {
-  const listCourse = useSelector((state) => state.course.listCourse); // lấy thông tin user từ store khi đăng nhập thành công
+  const listCourse = useSelector((state) => state.course.listCourse); // lấy thông tin course trong slide course
+  const listCoursePopular = useSelector(
+    (state) => state.course.listCoursePopular
+  ); // lấy thông tin course phổ biến
+  const topTeacher = useSelector((state) => state.user.topTeacher); // lấy thông tin top teacher
   const dispatch = useDispatch();
   const toast = useToast();
 
@@ -44,84 +49,34 @@ export default function HomeUser({ navigation, route }) {
     { icon: Globe, title: "Language", color: "#F97316" },
   ];
 
-  const courses = [
-    {
-      id: "1",
-      title: "Digital Portrait",
-      instructor: "Ramono Wultschner",
-      price: 59,
-      rating: 4.5,
-      reviews: 1233,
-      lessons: 18,
-      image: "https://v0.dev/placeholder.svg?height=200&width=200",
-    },
-    {
-      id: "2",
-      title: "Digital Portrait",
-      instructor: "Ramono Wultschner",
-      price: 59,
-      rating: 4.5,
-      reviews: 1233,
-      lessons: 18,
-      image: "https://v0.dev/placeholder.svg?height=200&width=200",
-    },
-    {
-      id: "3",
-      title: "Design",
-      instructor: "Ramono Wultschner",
-      price: 59,
-      rating: 4.5,
-      reviews: 1233,
-      lessons: 18,
-      image: "https://v0.dev/placeholder.svg?height=200&width=200",
-    },
-  ];
-
-  const teachers = [
-    {
-      id: "1",
-      name: "Nhi Nhi",
-      institution: "Industrial University of Ho Chi Minh City",
-      rating: 4.5,
-      reviews: 1233,
-      lessons: 18,
-      image: "https://v0.dev/placeholder.svg?height=200&width=200",
-    },
-    {
-      id: "2",
-      name: "Minh Tien",
-      institution: "Ramono Wultschner",
-      rating: 4.5,
-      reviews: 1233,
-      lessons: 18,
-      image: "https://v0.dev/placeholder.svg?height=200&width=200",
-    },
-  ];
-
   //////////////////////////////
-  const [section, setSection] = useState([]);
+  const [section, setSection] = useState([]); // section popular + recommended for you courses
+  const [courses, setCourses] = useState([]); // course that inspires
+  const [teachers, setTeachers] = useState([]); // top teachers
 
   useEffect(() => {
     dispatch(findAllCourses());
+    dispatch(getTopTeacher());
+    dispatch(findPopularCourses());
   }, []);
 
   // popular + recommended for you courses
   useEffect(() => {
-    if (listCourse.length !== 0) {
+    if (listCourse.length !== 0 && listCoursePopular.length !== 0) {
       setSection([
         ...section,
         {
           id: "1",
           title: "Popular courses",
           data: [
-            ...listCourse.map((course, index) => ({
+            ...listCoursePopular.map((course, index) => ({
               id: course.id, // Sử dụng kết hợp giữa id và index để đảm bảo tính duy nhất
               title: course.name,
-              instructor: "Ramono Wultschner",
-              price: 39,
+              instructor: course.UserFollow[0]?.user.userName, // người tạo khóa học
+              price: course.Orders[0]?.OrderDetail?.price,
               rating: course.averageRating,
-              reviews: 1233,
-              lessons: 18,
+              reviews: course.totalRating,
+              lessons: course.totalLessons,
               image: "https://v0.dev/placeholder.svg?height=200&width=200",
             })),
           ],
@@ -133,18 +88,54 @@ export default function HomeUser({ navigation, route }) {
             ...listCourse.map((course, index) => ({
               id: course.id, // Sử dụng kết hợp giữa id và index để đảm bảo tính duy nhất
               title: course.name,
-              instructor: "Ramono Wultschner",
-              price: 39,
+              instructor: course.UserFollow[0]?.user.userName, // người tạo khóa học
+              price: course.Orders[0]?.OrderDetail?.price,
               rating: course.averageRating,
-              reviews: 1233,
-              lessons: 18,
+              reviews: course.totalRating,
+              lessons: course.totalLessons,
               image: "https://v0.dev/placeholder.svg?height=200&width=200",
             })),
           ],
         },
       ]);
     }
+  }, [listCourse && listCoursePopular]);
+
+  // course that inspires
+  useEffect(() => {
+    if (listCourse.length !== 0) {
+      setCourses([
+        ...courses,
+        ...listCourse.map((course, index) => ({
+          id: course.id, // Sử dụng kết hợp giữa id và index để đảm bảo tính duy nhất
+          title: course.name,
+          instructor: course.UserFollow[0]?.user.userName, // người tạo khóa học
+          price: course.Orders[0]?.OrderDetail?.price,
+          rating: course.averageRating,
+          reviews: course.totalRating,
+          lessons: course.totalLessons,
+          image: "https://v0.dev/placeholder.svg?height=200&width=200",
+        })),
+      ]);
+    }
   }, [listCourse]);
+
+  // top teachers
+  useEffect(() => {
+    if (topTeacher.length !== 0) {
+      setTeachers([
+        ...topTeacher.map((teacher, index) => ({
+          id: teacher.id, // Sử dụng kết hợp giữa id và index để đảm bảo tính duy nhất
+          name: teacher.userName,
+          institution: teacher.title,
+          rating: teacher.averageRating,
+          reviews: teacher.averageRating,
+          lessons: teacher.totalLessons,
+          image: "https://v0.dev/placeholder.svg?height=200&width=200",
+        })),
+      ]);
+    }
+  }, [topTeacher]);
 
   const SectionHeader = ({ title }) => (
     <View style={styles.sectionHeader}>
@@ -186,7 +177,7 @@ export default function HomeUser({ navigation, route }) {
     <View style={styles.section}>
       <SectionHeader title={section.title} />
       <FlatList
-        data={section.data}
+        data={section.data.slice(0, 5)} // Lấy 5 phần tử đầu tiên
         renderItem={({ item }) => <CourseCard course={item} />}
         keyExtractor={(item) => item.id}
         horizontal
@@ -330,7 +321,7 @@ export default function HomeUser({ navigation, route }) {
         <View style={styles.section}>
           <SectionHeader title="Course that inspires" />
           <FlatList
-            data={courses}
+            data={courses.slice(0, 3)} // Chỉ lấy 3 phần tử đầu tiên
             renderItem={({ item }) => <CourseInspiresCard course={item} />}
             keyExtractor={(item) => item.id}
             showsVerticalScrollIndicator={false}
@@ -343,7 +334,7 @@ export default function HomeUser({ navigation, route }) {
         <View style={styles.section}>
           <SectionHeader title="Top teachers" />
           <FlatList
-            data={teachers}
+            data={teachers.slice(0, 5)}
             renderItem={({ item }) => <TeacherCard teacher={item} />}
             keyExtractor={(item) => item.id}
             horizontal

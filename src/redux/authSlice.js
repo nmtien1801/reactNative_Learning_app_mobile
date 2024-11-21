@@ -10,7 +10,7 @@ const initialState = {
 
 // action -> export
 export const handleLogin = createAsyncThunk(
-  "users/handleLogin",
+  "auth/handleLogin",
   async ({ email, password }, thunkAPI) => {
     const response = await handleLoginApi(email, password); // Đảm bảo hàm được gọi đúng cách
     return response.data;
@@ -18,7 +18,7 @@ export const handleLogin = createAsyncThunk(
 );
 
 export const handleLogout = createAsyncThunk(
-  "users/handleLogout",
+  "auth/handleLogout",
   async (thunkAPI) => {
     const response = await logOutUser();
     return response.data;
@@ -26,7 +26,7 @@ export const handleLogout = createAsyncThunk(
 );
 
 export const handleRegister = createAsyncThunk(
-  "users/handleRegister",
+  "auth/handleRegister",
   async ({email, userName, password},thunkAPI) => {
     const response = await registerUser(email, userName, password);
     return response.data;
@@ -35,7 +35,7 @@ export const handleRegister = createAsyncThunk(
 
 // đây là reducer
 const authSlice = createSlice({
-  name: "user",
+  name: "auth",
   initialState,
 
   // dùng api mới sử dụng extraReducers
