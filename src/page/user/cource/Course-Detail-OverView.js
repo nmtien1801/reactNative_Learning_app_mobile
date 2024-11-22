@@ -31,45 +31,7 @@ function BenefitItem({ icon, text }) {
   );
 }
 
-const CourseCard = ({
-  id,
-  title,
-  instructor,
-  price,
-  rating,
-  reviews,
-  lessons,
-  image,
-  bookmarked,
-}) => (
-  <TouchableOpacity
-    style={styles.card}
-    // reset lại trang với thông tin khóa học mới
-    onPress={() => navigation.navigate("courseDetailOverView",{courseID: id})} // chuyển sang trang chi tiết khóa học
-  >
-    <Image source={{ uri: image }} style={styles.thumbnail} />
-    <View style={styles.cardContent}>
-      <View>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.instructor}>{instructor}</Text>
-        <Text style={styles.price}>${price}</Text>
-        <View style={styles.ratingContainerListCourse}>
-          <Ionicons name="star" size={16} color="#FFD700" />
-          <Text style={styles.rating}>{rating}</Text>
-          <Text style={styles.reviews}>({reviews})</Text>
-          <Text style={styles.lessons}>{lessons} lessons</Text>
-        </View>
-      </View>
-      <TouchableOpacity style={styles.bookmarkButton}>
-        <Ionicons
-          name={bookmarked ? "bookmark" : "bookmark-outline"}
-          size={24}
-          color={bookmarked ? "#00BCD4" : "#757575"}
-        />
-      </TouchableOpacity>
-    </View>
-  </TouchableOpacity>
-);
+
 
 export default function CourseDetailOverView({ navigation, route }) {
   // const [courseDetail, setCourseDetail] = useState({});
@@ -110,6 +72,46 @@ export default function CourseDetailOverView({ navigation, route }) {
       ]);
     }
   }, [listCourseSimilar]);
+
+  const CourseCard = ({
+    id,
+    title,
+    instructor,
+    price,
+    rating,
+    reviews,
+    lessons,
+    image,
+    bookmarked,
+  }) => (
+    <TouchableOpacity
+      style={styles.card}
+      // reset lại trang với thông tin khóa học mới
+      onPress={() => navigation.replace("courseDetailOverView",{courseID: id})} // chuyển sang trang chi tiết khóa học
+    >
+      <Image source={{ uri: image }} style={styles.thumbnail} />
+      <View style={styles.cardContent}>
+        <View>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.instructor}>{instructor}</Text>
+          <Text style={styles.price}>${price}</Text>
+          <View style={styles.ratingContainerListCourse}>
+            <Ionicons name="star" size={16} color="#FFD700" />
+            <Text style={styles.rating}>{rating}</Text>
+            <Text style={styles.reviews}>({reviews})</Text>
+            <Text style={styles.lessons}>{lessons} lessons</Text>
+          </View>
+        </View>
+        <TouchableOpacity style={styles.bookmarkButton}>
+          <Ionicons
+            name={bookmarked ? "bookmark" : "bookmark-outline"}
+            size={24}
+            color={bookmarked ? "#00BCD4" : "#757575"}
+          />
+        </TouchableOpacity>
+      </View>
+    </TouchableOpacity>
+  );
 
   return (
     <View style={styles.container}>
