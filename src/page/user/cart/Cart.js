@@ -14,53 +14,59 @@ import {
   removeFromCart,
   findCourseByID,
   addToCart,
-} from "../../../redux/courseSlice"; // Import actions from redux
+} from "../../../redux/courseSlice";
 
 export default function Cart({ navigation, route }) {
-  // Get cart courses and course details from Redux state
   const cartCourses = useSelector((state) => state.course.listCart);
   const courseDetail = useSelector((state) => state.course.courseDetail);
   const dispatch = useDispatch();
 
-  // Extract courseID from route params if available
-  const courseID = route.params; // Make sure `courseID` is passed properly
+  const [selectedCourses, setSelectedCourses] = useState([]);
 
-  // Fetch course details when courseID is provided
+  // Lấy courseID từ route nếu có
+  const courseID = route.params;
+
   useEffect(() => {
     if (courseID) {
-      console.log("Fetching course details for ID:", courseID);
-      dispatch(findCourseByID(courseID)); // Dispatch action to fetch course details by ID
+      dispatch(findCourseByID(courseID));
     }
   }, [courseID, dispatch]);
 
-  // Add the fetched course to the cart if available
   useEffect(() => {
     if (courseDetail && courseDetail.id) {
-      // Add course to cart only if it's not already in the cart
       const existingCourse = cartCourses.find(
         (course) => course.id === courseDetail.id
       );
       if (!existingCourse) {
-        dispatch(addToCart(courseDetail)); // Dispatch action to add course to cart
+        dispatch(addToCart(courseDetail));
       }
     }
   }, [courseDetail, cartCourses, dispatch]);
 
-  // Handle removing course from the cart
   const toggleSelection = (id) => {
-    dispatch(removeFromCart({ id })); // Dispatch action to remove course by ID
+    setSelectedCourses((prevSelected) => {
+      if (prevSelected.includes(id)) {
+        return prevSelected.filter((courseId) => courseId !== id);
+      } else {
+        return [...prevSelected, id];
+      }
+    });
   };
 
-  // Calculate the total price of the courses in the cart
+  const deleteSelectedCourses = () => {
+    selectedCourses.forEach((id) => {
+      dispatch(removeFromCart({ id }));
+    });
+    setSelectedCourses([]);
+  };
+
   const total = cartCourses.reduce(
-    (sum, course) => sum + (course.price || 0), // Sum up all the course prices
+    (sum, course) => sum + (course.price || 0),
     0
   );
 
-  // Course Item component to render each course in the cart
   const CourseItem = ({ course }) => (
     <View style={styles.courseCard}>
-      {/* You can display the course image if available */}
       {course.image && (
         <Image source={{ uri: course.image }} style={styles.courseImage} />
       )}
@@ -71,32 +77,41 @@ export default function Cart({ navigation, route }) {
         <Text style={styles.courseLessons}>{course.lessons} lessons</Text>
       </View>
       <Checkbox
-        status={course.selected ? "checked" : "unchecked"} // Checkbox to toggle selection
-        onPress={() => toggleSelection(course.id)} // Toggle selection when clicked
+        status={selectedCourses.includes(course.id) ? "checked" : "unchecked"}
+        onPress={() => toggleSelection(course.id)}
       />
     </View>
   );
 
-  // Render cart page
   return (
     <SafeAreaView style={styles.container}>
-      {/* If courseDetail exists and is not empty, render the cart list */}
       {cartCourses.length > 0 ? (
         <FlatList
-          data={cartCourses} // Use the cartCourses state for the list
-          keyExtractor={(item) => item.id.toString()} // Use the course ID as the key
-          renderItem={({ item }) => <CourseItem course={item} />} // Render each course item
+          data={cartCourses}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => <CourseItem course={item} />}
         />
       ) : (
-        <Text>Loading course details...</Text> // Show loading text if courseDetail is not available
+        <Text>No courses in cart.</Text>
       )}
 
-      {/* Footer displaying total price and checkout button */}
       <View style={styles.footer}>
         <Text style={styles.totalPrice}>Total: ${total}</Text>
+
+        <TouchableOpacity
+          style={[
+            styles.deleteButton,
+            { opacity: selectedCourses.length > 0 ? 1 : 0.5 },
+          ]}
+          onPress={deleteSelectedCourses}
+          disabled={selectedCourses.length === 0}
+        >
+          <Text style={styles.deleteText}>Delete</Text>
+        </TouchableOpacity>
+
         <TouchableOpacity
           style={styles.checkoutButton}
-          onPress={() => navigation.navigate("Checkout")} // Navigate to checkout screen
+          onPress={() => navigation.navigate("homeUser")}
         >
           <Text style={styles.checkoutText}>Proceed to checkout</Text>
         </TouchableOpacity>
@@ -104,7 +119,6 @@ export default function Cart({ navigation, route }) {
     </SafeAreaView>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -165,5 +179,17 @@ const styles = StyleSheet.create({
   checkoutText: {
     color: "#fff",
     fontSize: 16,
+  },
+  deleteButton: {
+    backgroundColor: "#f44336", // Red for delete
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    marginRight: 10,
+  },
+  deleteText: {
+    color: "#fff",
+    fontSize: 16,
+    textAlign: "center",
   },
 });
