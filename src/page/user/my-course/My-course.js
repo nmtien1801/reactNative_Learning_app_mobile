@@ -1,102 +1,100 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
-  TextInput,
-  ScrollView,
-  Image,
-  StyleSheet,
   TouchableOpacity,
   FlatList,
-  StatusBar 
+  StatusBar,
+  StyleSheet,
+  Image,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { findCourseByState } from "../../../redux/courseSlice";
 import Footer from "../../../component/Footer";
-
-const ProgressBar = ({ progress }) => (
-  <View style={styles.progressContainer}>
-    <View style={[styles.progressBar, { width: `${progress}%` }]} />
-  </View>
-);
-
-
 
 export default function MyCourse({ navigation, route }) {
   const [activeTab, setActiveTab] = useState("All");
   const tabs = ["All", "ON GOING", "COMPLETED"];
+  const dispatch = useDispatch();
+  const { listCourse, isLoading, isError } = useSelector(
+    (state) => state.course
+  ); // Getting courses by state from Redux
 
-  const courses = [
-    {
-      id: "1",
-      title: "UX Foundation",
-      duration: "2hrs 25 mins",
-      progress: 30,
-      image: "https://v0.dev/placeholder.svg?height=100&width=100",
-    },
-    {
-      id: "2",
-      title: "Design Basics",
-      duration: "3hrs 25 mins",
-      progress: 70,
-      image: "https://v0.dev/placeholder.svg?height=100&width=100",
-    },
-    {
-      id: "3",
-      title: "Digital Sketching",
-      duration: "4hrs 50 mins",
-      progress: 100,
-      image: "https://v0.dev/placeholder.svg?height=100&width=100",
-    },
-    {
-      id: "4",
-      title: "Digital Portrait",
-      duration: "3hrs 25 mins",
-      progress: 70,
-      image: "https://v0.dev/placeholder.svg?height=100&width=100",
-    },
-    {
-      id: "5",
-      title: "Web Design",
-      duration: "2hrs 25 mins",
-      progress: 30,
-      image: "https://v0.dev/placeholder.svg?height=100&width=100",
-    },
-  ];
+  useEffect(() => {
+    if (activeTab === "ON GOING") {
+      dispatch(findCourseByState(2)); // Fetch ON GOING courses
+    } else if (activeTab === "COMPLETED") {
+      dispatch(findCourseByState(1)); // Fetch COMPLETED courses
+    } else {
+      dispatch(findCourseByState(0)); // Fetch all courses if "All" is selected
+    }
+  }, [activeTab, dispatch]);
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Text style={styles.loadingText}>Loading...</Text>
+      </View>
+    );
+  }
+
+  // Error state
+  if (isError) {
+    console.log("error", isError);
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>Failed to load data</Text>
+      </View>
+    );
+  }
+
+  // No data state
+  if (!listCourse || Object.keys(listCourse).length === 0) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>No data available</Text>
+      </View>
+    );
+  } else {
+    console.log("listCourse", listCourse);
+  }
 
   const CourseCard = ({ course }) => (
-    <TouchableOpacity style={styles.courseCard} onPress={() => navigation.navigate("Lesson")}>
+    <TouchableOpacity
+      style={styles.courseCard}
+      onPress={() => navigation.navigate("Lesson")}
+    >
       <Image source={{ uri: course.image }} style={styles.courseImage} />
       <View style={styles.courseInfo}>
         <Text style={styles.courseTitle}>{course.title}</Text>
-        <Text style={styles.duration}>{course.duration}</Text>
-        <View style={styles.progressSection}>
-          <Text style={styles.progressText}>{course.progress}% Complete</Text>
-          <ProgressBar progress={course.progress} />
-        </View>
+        <Text style={styles.description}>{course.description} description</Text>
       </View>
     </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
-
-      {/* Promotional Banner */}
-      <View style={styles.banner}>
-        <View style={styles.bannerContent}>
-          <Text style={styles.bannerTitle}>PROJECT MANAGEMENT</Text>
-          <Text style={styles.bannerDiscount}>20% OFF</Text>
-          <TouchableOpacity style={styles.joinButton}>
-            <Text style={styles.joinButtonText}>JOIN NOW</Text>
-          </TouchableOpacity>
+      {/* Banner Section */}
+      <View style={styles.bannerContainer}>
+        <View style={styles.banner}>
+          <View style={styles.bannerContent}>
+            <Text style={styles.bannerTitle}>PROJECT MANAGEMENT</Text>
+            <Text style={styles.bannerDiscount}>20% OFF</Text>
+            <TouchableOpacity style={styles.joinButton}>
+              <Text style={styles.joinButtonText}>JOIN NOW</Text>
+            </TouchableOpacity>
+          </View>
+          <Image
+            source={{
+              uri: "https://inkythuatso.com/uploads/thumbnails/800/2023/03/1-hinh-anh-ngay-moi-hanh-phuc-sieu-cute-inkythuatso-09-13-35-50.jpg",
+            }}
+            style={styles.bannerImage}
+          />
         </View>
-        <Image
-          source={{
-            uri: "https://v0.dev/placeholder.svg?height=200&width=200",
-          }}
-          style={styles.bannerImage}
-        />
       </View>
+
+      <StatusBar barStyle="dark-content" />
 
       {/* Tab Navigation */}
       <View style={styles.tabContainer}>
@@ -120,7 +118,7 @@ export default function MyCourse({ navigation, route }) {
 
       {/* Course List */}
       <FlatList
-        data={courses}
+        data={listCourse}
         renderItem={({ item }) => <CourseCard course={item} />}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
@@ -136,48 +134,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-  },
-  banner: {
-    backgroundColor: "#8B5CF6",
-    padding: 20,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginHorizontal: 16,
-    marginVertical: 16,
-    borderRadius: 12,
-    overflow: "hidden",
-  },
-  bannerContent: {
-    flex: 1,
-  },
-  bannerTitle: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 8,
-  },
-  bannerDiscount: {
-    color: "#fff",
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 16,
-  },
-  joinButton: {
-    backgroundColor: "#00BCD4",
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    alignSelf: "flex-start",
-  },
-  joinButtonText: {
-    color: "#fff",
-    fontWeight: "bold",
-  },
-  bannerImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 8,
   },
   tabContainer: {
     flexDirection: "row",
@@ -199,7 +155,7 @@ const styles = StyleSheet.create({
   tabText: {
     color: "#666",
     fontSize: 14,
-    fontWeight: 600,
+    fontWeight: "600",
   },
   activeTabText: {
     color: "#00BCD4",
@@ -227,27 +183,92 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 4,
   },
-  duration: {
+  description: {
     fontSize: 14,
     color: "#666",
     marginBottom: 8,
   },
-  progressSection: {
+  loadingContainer: {
     flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
-  progressText: {
-    fontSize: 14,
+  loadingText: {
+    fontSize: 18,
     color: "#666",
-    marginBottom: 4,
   },
-  progressContainer: {
-    height: 4,
-    backgroundColor: "#F0F0F0",
-    borderRadius: 2,
+  errorContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  errorText: {
+    fontSize: 18,
+    color: "red",
+  },
+  bannerContainer: {
+    padding: 16,
+  },
+  banner: {
+    backgroundColor: "#8B5CF6",
+    borderRadius: 12,
+    padding: 20,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     overflow: "hidden",
   },
-  progressBar: {
-    height: "100%",
+  bannerContent: {
+    flex: 1,
+  },
+  bannerTitle: {
+    color: "#FFF",
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 8,
+  },
+  bannerDiscount: {
+    color: "#FFF",
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 16,
+  },
+  joinButton: {
     backgroundColor: "#00BCD4",
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    alignSelf: "flex-start",
+  },
+  joinButtonText: {
+    color: "#FFF",
+    fontWeight: "bold",
+  },
+  bannerImage: {
+    width: 120,
+    height: 120,
+    borderRadius: 8,
+  },
+  categoriesSection: {
+    padding: 16,
+  },
+  categoriesHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  categoriesTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  viewMoreCategories: {
+    color: "#00BCD4",
+    fontSize: 14,
+  },
+  categoriesGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
   },
 });
