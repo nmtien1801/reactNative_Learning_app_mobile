@@ -46,6 +46,11 @@ const findCourseByStateService = (state) => {
 const getAllLessonService = (state) => {
   return axios.get(`${baseUrl}/getAllLesson`);
 };
+
+const getReviewByCourseService = (id) => {
+  return axios.get(`${baseUrl}/findReviewByCourseID/${id}`);
+}
+
 export {
   handleLoginApi,
   logOutUser,
@@ -56,5 +61,6 @@ export {
   findCourseByIDService,
   findCourseSimilarService,
   findCourseByStateService,
-  getAllLessonService
+  getAllLessonService,
+  getReviewByCourseService
 };

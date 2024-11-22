@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -11,8 +11,39 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Star } from "lucide-react-native"; // add npm (2)
+import { useToast } from "../../../component/customToast";
+
+import { useDispatch, useSelector } from "react-redux";
+import { findCourseByID } from "../../../redux/courseSlice";
+import {getReviewByCourse} from "../../../redux/reviewSlice";
 
 export default function CourseDetailReview({ navigation, route }) {
+  const courseDetail = useSelector((state) => state.course.courseDetail); // lấy thông tin top teacher
+  const listReview = useSelector((state) => state.review.listReview); // lấy thông tin top teacher
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(findCourseByID(route.params.params?.courseID)); // Gửi action để lấy thông tin course
+    dispatch(getReviewByCourse(route.params.params?.courseID)); // Gửi action để lấy thông tin review
+  }, []);
+
+  const [course, setCourse] = useState({}); // khởi tạo state course
+  const [reviews, setReviews] = useState([]); // khởi tạo state reviews
+
+  // top-page detail course
+  useEffect(() => {
+    setCourse(courseDetail);
+  }, [courseDetail]);
+
+  // reviews
+  useEffect(() => {
+    if (listReview.length !== 0) {
+      setReviews(listReview);
+    }
+  }, [listReview]);
+
+  console.log("reviews: ", reviews);
+  
   const StarRating = ({ rating }) => {
     return (
       <View style={styles.starContainer}>
@@ -46,19 +77,22 @@ export default function CourseDetailReview({ navigation, route }) {
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.courseHeader}>
-          <Text style={styles.courseCategory}>UX Foundations</Text>
-          <Text style={styles.courseTitle}>Introduction to UX Design</Text>
+          <Text style={styles.courseCategory}>{course.name}</Text>
+          <Text style={styles.courseTitle}>{course.title}</Text>
           <View style={styles.playButton}>
             <Ionicons name="play" size={24} color="white" />
           </View>
         </View>
         <View style={styles.courseInfo}>
           <Text style={styles.courseSubtitle}>
-            UX Foundation: Introduction to User Experience Design
+            {course.name}: {course.title}
           </Text>
           <View style={styles.ratingContainer}>
             <Ionicons name="star" size={16} color="#FFD700" />
-            <Text style={styles.ratingText}>4.5 (1233) • 12 lessons</Text>
+            <Text style={styles.ratingText}>
+              {course.averageRating} ({course.totalRating}) •{" "}
+              {course.totalLessons} lessons
+            </Text>
           </View>
         </View>
 
@@ -82,8 +116,13 @@ export default function CourseDetailReview({ navigation, route }) {
 
         <View style={styles.content}>
           <View style={styles.ratingContainerContent}>
-            <Text style={styles.ratingTextContent}>4.5/5</Text>
-            <Text style={styles.reviewCount}>(1233+ reviews)</Text>
+            <Text style={styles.ratingTextContent}>
+              {" "}
+              {course.averageRating}/5
+            </Text>
+            <Text style={styles.reviewCount}>
+              ({course.totalRating}+ reviews)
+            </Text>
           </View>
           <TouchableOpacity>
             <Text style={styles.viewAll}>View all</Text>
@@ -116,32 +155,33 @@ export default function CourseDetailReview({ navigation, route }) {
           ))}
         </ScrollView>
 
-        <ReviewItem
+        {/* <ReviewItem
           name="Jinny Oslin"
           time="A day ago"
           rating={5}
           review="Nostrud excepteur magna id est quis in aliqua consequat. Exercitation enim eiusmod elit sint laborum"
           imageUrl="https://v0.dev/placeholder.svg?height=50&width=50"
-        />
+        /> */}
+        
+        {reviews.map((review, index) => (
         <ReviewItem
-          name="Jane Barry"
-          time="A day ago"
-          rating={4}
-          review="Deserunt minim incididunt cillum nostrud do voluptate excepteur excepteur minim ex minim est"
-          imageUrl="https://v0.dev/placeholder.svg?height=50&width=50"
+          key={index} // Sử dụng index làm key (hoặc dùng unique ID nếu có)
+          name={review.user?.userName}
+          time={review.time}
+          rating={review.rating}
+          review={review.review}
+          imageUrl={review.user?.image}
         />
-        <ReviewItem
-          name="Claire Mignard"
-          time="5 days ago"
-          rating={3}
-          review="Magna id sint irure in cillum esse nisi dolor laboris ullamco. Consectetur proident ..."
-          imageUrl="https://v0.dev/placeholder.svg?height=50&width=50"
-        />
+      ))}
+
       </ScrollView>
 
       <View style={styles.footer}>
         <View style={styles.priceContainer}>
-          <Text style={styles.price}>$259</Text>
+          <Text style={styles.price}>
+            {" "}
+            ${course?.Orders?.length > 0 && course.Orders[0]?.OrderDetail.price}
+          </Text>
           <Text style={styles.originalPrice}>$1020</Text>
         </View>
         <TouchableOpacity style={styles.addToCartButton}>
