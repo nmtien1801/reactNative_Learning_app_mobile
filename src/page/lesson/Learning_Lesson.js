@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, FlatList } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Layout from "../../component/lesson/Layout_Lesson";
 
-export default function LessonComponent({ navigation }) {
+export default function LessonComponent({ navigation, route }) {
   const lessons = [
     {
       id: "01",
@@ -85,7 +85,7 @@ export default function LessonComponent({ navigation }) {
   );
 
   return (
-    <Layout navigation={navigation}>
+    <Layout navigation={navigation} route={route}>
       <View style={styles.lessonsList}>
         <FlatList
           data={lessons}

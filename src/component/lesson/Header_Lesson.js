@@ -11,17 +11,11 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { WebView } from "react-native-webview";
+import HeaderCourseDetail from "../../header/Header-Course-Detail";
 
-export default function Header() {
+export default function Header({ navigation, route }) {
   return (
     <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.title}>UX Foundation</Text>
-        <TouchableOpacity>
-          <Ionicons name="ellipsis-vertical" size={24} color="black" />
-        </TouchableOpacity>
-      </View>
       {Platform.OS === "web" ? (
         // Dùng iframe cho nền web
         <iframe

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -10,26 +10,54 @@ import {
   StatusBar,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useToast } from "../../../component/customToast";
+
+import { useDispatch, useSelector } from "react-redux";
+import { getAllLesson } from "../../../redux/lessonSlice";
+import { findCourseByID } from "../../../redux/courseSlice";
 
 export default function CourseDetailLesson({ navigation, route }) {
-  const LessonItem = ({ number, title, duration, status }) => (
+  const listLesson = useSelector((state) => state.lesson.listLesson); // lấy thông tin top teacher
+  const courseDetail = useSelector((state) => state.course.courseDetail); // lấy thông tin top teacher
+
+  const dispatch = useDispatch();
+
+  const [lessons, setLessons] = useState([]); // khởi tạo state lessons
+  const [course, setCourse] = useState({}); // khởi tạo state course
+
+  useEffect(() => {
+    dispatch(findCourseByID(route.params.params?.courseID)); // Gửi action để lấy thông tin course
+    dispatch(getAllLesson()); // gọi api lấy danh sách lesson
+  }, []);
+
+  // top-page detail course
+  useEffect(() => {
+    setCourse(courseDetail);
+  }, [courseDetail]);
+
+  // lessons
+  useEffect(() => {
+    if (listLesson.length !== 0) {
+      setLessons(listLesson);
+    }
+  }, [listLesson]);
+
+  const LessonItem = ({ number, name, status }) => (
     <TouchableOpacity
-      style={[
-        styles.lessonItem,
-        status === "active" && styles.activeLessonItem,
-      ]}
+      style={[styles.lessonItem, status === 1 && styles.activeLessonItem]}
     >
       <View style={styles.lessonInfo}>
-        <Text style={styles.lessonNumber}>{number.padStart(2, "0")}</Text>
+        <Text style={styles.lessonNumber}>
+          {number.toString().padStart(2, "0")}
+        </Text>
         <View>
-          <Text style={styles.lessonTitle}>{title}</Text>
-          <Text style={styles.lessonDuration}>{duration}</Text>
+          <Text style={styles.lessonTitle}>{name}</Text>
         </View>
       </View>
-      {status === "completed" && (
+      {status === 2 && (
         <Ionicons name="checkmark-circle" size={24} color="#4CAF50" />
       )}
-      {status === "active" && (
+      {status === 1 && (
         <Ionicons name="play-circle" size={24} color="#2196F3" />
       )}
       {status === "locked" && (
@@ -53,19 +81,23 @@ export default function CourseDetailLesson({ navigation, route }) {
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.courseHeader}>
-          <Text style={styles.courseCategory}>UX Foundations</Text>
-          <Text style={styles.courseTitle}>Introduction to UX Design</Text>
+          <Text style={styles.courseCategory}>{course.name}</Text>
+          <Text style={styles.courseTitle}>{course.title}</Text>
           <View style={styles.playButton}>
             <Ionicons name="play" size={24} color="white" />
           </View>
         </View>
+
         <View style={styles.courseInfo}>
           <Text style={styles.courseSubtitle}>
-            UX Foundation: Introduction to User Experience Design
+            {course.name}: {course.title}
           </Text>
           <View style={styles.ratingContainer}>
             <Ionicons name="star" size={16} color="#FFD700" />
-            <Text style={styles.ratingText}>4.5 (1233) • 12 lessons</Text>
+            <Text style={styles.ratingText}>
+              {course.averageRating} ({course.totalRating}) •{" "}
+              {course.totalLessons} lessons
+            </Text>
           </View>
         </View>
 
@@ -88,51 +120,29 @@ export default function CourseDetailLesson({ navigation, route }) {
         </View>
 
         <View style={styles.content}>
-          <SectionHeader title="I - Introduction" expanded={true} />
-          <LessonItem
-            number="1"
-            title="Amet adipisicing consectetur"
-            duration="01:23 mins"
-            status="completed"
-          />
-          <LessonItem
-            number="2"
-            title="Adipisicing dolor amet occaeca"
-            duration="01:23 mins"
-            status="active"
-          />
-
-          <SectionHeader
-            title="III - Plan for your UX Research"
-            expanded={true}
-          />
-          <LessonItem
-            number="3"
-            title="Exercitation elit incididunt esse"
-            duration="01:23 mins"
-            status="locked"
-          />
-          <LessonItem
-            number="4"
-            title="Duis esse ipsum laboru"
-            duration="01:23 mins"
-            status="locked"
-          />
-          <LessonItem
-            number="5"
-            title="Labore minim reprehenderit pariatur ea deserunt"
-            duration="01:23 mins"
-            status="locked"
-          />
-
-          <SectionHeader title="III - Conduct UX research" expanded={false} />
-          <SectionHeader title="IV - Articulate findings" expanded={false} />
+          {lessons.map((lesson, index) => (
+            <div key={index}>
+              <SectionHeader title={lesson.title} expanded={true} />
+              {lesson.Video &&
+                lesson.Video.map((video, videoIndex) => (
+                  <LessonItem
+                    key={`${index}-${videoIndex}`}
+                    number={videoIndex}
+                    name={video.name}
+                    status={index >= 1 ? "locked" : video.state} // Set status to 'block' for elements from the second one
+                  />
+                ))}
+            </div>
+          ))}
         </View>
       </ScrollView>
 
       <View style={styles.footer}>
         <View style={styles.priceContainer}>
-          <Text style={styles.price}>$259</Text>
+          <Text style={styles.price}>
+            {" "}
+            ${course?.Orders?.length > 0 && course.Orders[0]?.OrderDetail.price}
+          </Text>
           <Text style={styles.originalPrice}>$1020</Text>
         </View>
         <TouchableOpacity style={styles.addToCartButton}>
@@ -254,11 +264,6 @@ const styles = StyleSheet.create({
   lessonTitle: {
     fontSize: 14,
     fontWeight: "500",
-  },
-  lessonDuration: {
-    fontSize: 12,
-    color: "#757575",
-    marginTop: 4,
   },
 
   courseHeader: {
