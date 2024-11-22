@@ -80,7 +80,7 @@ export default function App() {
 const Project = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="myCourse">
+      <Stack.Navigator initialRouteName="homeUser">
         <Stack.Screen
           name="Intro"
           component={Intro}
@@ -113,7 +113,7 @@ const Project = () => {
         <Stack.Screen
           name="courseDetailOverView"
           component={DrawerHeader}
-          initialParams={{ screenName: "CourseDetailOverView"}}
+          initialParams={{ screenName: "CourseDetailOverView" }}
           options={{ header: () => {} }}
         />
         <Stack.Screen

@@ -11,14 +11,17 @@ const initialState = {
   listCourse: [],
   listCourseInspire: [],
   listCoursePopular: [],
+  listCart: [], // Giỏ hàng sẽ lưu trữ các khóa học đã thêm
   courseDetail: {},
+
   listCourseSimilar: [],
-  isLogin: false, // kiểm tra xem đã login chưa -> chặn nếu chưa login
+  isLogin: false, // Kiểm tra xem người dùng đã đăng nhập chưa
   isLoading: false,
   isError: false,
+  errorMessage: "", // Store error message for debugging
 };
 
-// action -> export
+// Action async để tìm các khóa học
 export const findAllCourses = createAsyncThunk(
   "course/findAllCourses",
   async (thunkAPI) => {
@@ -58,106 +61,121 @@ export const findCourseSimilar = createAsyncThunk(
     return response.data;
   }
 );
-// đây là reducer
-const authSlice = createSlice({
+
+// Reducer
+const courseSlice = createSlice({
   name: "course",
   initialState,
-
-  // dùng api mới sử dụng extraReducers
-  // 3 trạng thái của api: pending, fulfilled, rejected
+  reducers: {
+    // Add course to cart
+    addToCart: (state, action) => {
+      const existingCourse = state.listCart.find(
+        (course) => course.id === action.payload.id
+      );
+      if (!existingCourse) {
+        state.listCart.push(action.payload);
+      }
+    },
+    // Remove course from cart
+    removeFromCart: (state, action) => {
+      state.listCart = state.listCart.filter(
+        (course) => course.id !== action.payload.id
+      );
+    },
+    // Clear cart
+    clearCart: (state) => {
+      state.listCart = [];
+    },
+  },
   extraReducers: (builder) => {
-    // findAllCourses
     builder
       .addCase(findAllCourses.pending, (state) => {
         state.isLoading = true;
         state.isError = false;
+        state.errorMessage = "";
       })
       .addCase(findAllCourses.fulfilled, (state, action) => {
         state.isLoading = false;
         state.listCourse = action.payload.DT || [];
-        console.log("listCourse", action.payload.DT);
-
         state.isLogin = true;
       })
       .addCase(findAllCourses.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
+        state.errorMessage = action.error.message; // Store error message
       });
 
-    // findPopularCourses
     builder
       .addCase(findPopularCourses.pending, (state) => {
         state.isLoading = true;
         state.isError = false;
+        state.errorMessage = "";
       })
       .addCase(findPopularCourses.fulfilled, (state, action) => {
         state.isLoading = false;
         state.listCoursePopular = action.payload.DT || [];
-        console.log("listCoursePopular", action.payload.DT);
-
         state.isLogin = true;
       })
       .addCase(findPopularCourses.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
+        state.errorMessage = action.error.message;
       });
 
-    // findCourseByID
     builder
       .addCase(findCourseByID.pending, (state) => {
         state.isLoading = true;
         state.isError = false;
+        state.errorMessage = "";
       })
       .addCase(findCourseByID.fulfilled, (state, action) => {
         state.isLoading = false;
         state.courseDetail = action.payload?.DT || {};
-        console.log("courseDetail", action.payload?.DT);
-
         state.isLogin = true;
       })
       .addCase(findCourseByID.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
+        state.errorMessage = action.error.message;
       });
 
-    // findCourseSimilar
     builder
       .addCase(findCourseSimilar.pending, (state) => {
         state.isLoading = true;
         state.isError = false;
+        state.errorMessage = "";
       })
       .addCase(findCourseSimilar.fulfilled, (state, action) => {
         state.isLoading = false;
         state.listCourseSimilar = action.payload.DT || [];
-        console.log("listCourseSimilar", action.payload.DT);
-
         state.isLogin = true;
       })
       .addCase(findCourseSimilar.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
+        state.errorMessage = action.error.message;
       });
 
-    // findCourseByState
     builder
       .addCase(findCourseByState.pending, (state) => {
         state.isLoading = true;
         state.isError = false;
+        state.errorMessage = "";
       })
       .addCase(findCourseByState.fulfilled, (state, action) => {
         state.isLoading = false;
         state.listCourse = action.payload.DT || [];
-        console.log("listCourse", action.payload.DT);
-
         state.isLogin = true;
       })
       .addCase(findCourseByState.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
+        state.errorMessage = action.error.message;
       });
   },
 });
 
-export const {} = authSlice.actions; // đây là action -> chỉ dùng khi trong reducer có reducers:{}
+// Export actions
+export const { addToCart, removeFromCart, clearCart } = courseSlice.actions;
 
-export default authSlice.reducer;
+export default courseSlice.reducer;

@@ -37,11 +37,12 @@ const findCourseByIDService = (id) => {
 
 const findCourseSimilarService = (id) => {
   return axios.get(`${baseUrl}/findCourseSimilar/${id}`);
-}
+};
 
 const findCourseByStateService = (state) => {
   return axios.get(`${baseUrl}/findCourseByState/${state}`);
 };
+
 export {
   handleLoginApi,
   logOutUser,

@@ -31,8 +31,6 @@ function BenefitItem({ icon, text }) {
   );
 }
 
-
-
 export default function CourseDetailOverView({ navigation, route }) {
   // const [courseDetail, setCourseDetail] = useState({});
   const courseDetail = useSelector((state) => state.course.courseDetail); // lấy thông tin top teacher
@@ -42,13 +40,15 @@ export default function CourseDetailOverView({ navigation, route }) {
   const [course, setCourse] = useState({});
   const [listSimilar, setListSimilar] = useState([]); // Danh sách course tương tự
   const dispatch = useDispatch();
+  const courseID = route.params.params?.courseID;
+  console.log("courseID", courseID);
 
   useEffect(() => {
     dispatch(findCourseByID(route.params.params?.courseID)); // Gửi action để lấy thông tin course
     dispatch(findCourseSimilar(route.params.params?.courseID)); // Gửi action để lấy thông tin course tương tự
   }, []);
 
-  // top-page detail course 
+  // top-page detail course
   useEffect(() => {
     setCourse(courseDetail);
   }, [courseDetail]);
@@ -87,7 +87,9 @@ export default function CourseDetailOverView({ navigation, route }) {
     <TouchableOpacity
       style={styles.card}
       // reset lại trang với thông tin khóa học mới
-      onPress={() => navigation.replace("courseDetailOverView",{courseID: id})} // chuyển sang trang chi tiết khóa học
+      onPress={() =>
+        navigation.replace("courseDetailOverView", { courseID: id })
+      } // chuyển sang trang chi tiết khóa học
     >
       <Image source={{ uri: image }} style={styles.thumbnail} />
       <View style={styles.cardContent}>
@@ -223,7 +225,10 @@ export default function CourseDetailOverView({ navigation, route }) {
           <Text style={styles.price}>$259</Text>
           <Text style={styles.originalPrice}>$1020</Text>
         </View>
-        <TouchableOpacity style={styles.addToCartButton}>
+        <TouchableOpacity
+          style={styles.addToCartButton}
+          onPress={() => navigation.navigate("cart", courseID)}
+        >
           <Text style={styles.addToCartText}>Add to cart</Text>
         </TouchableOpacity>
       </View>
