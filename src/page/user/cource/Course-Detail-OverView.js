@@ -31,10 +31,7 @@ function BenefitItem({ icon, text }) {
   );
 }
 
-
-
 export default function CourseDetailOverView({ navigation, route }) {
-  // const [courseDetail, setCourseDetail] = useState({});
   const courseDetail = useSelector((state) => state.course.courseDetail); // lấy thông tin top teacher
   const listCourseSimilar = useSelector(
     (state) => state.course.listCourseSimilar
@@ -48,7 +45,7 @@ export default function CourseDetailOverView({ navigation, route }) {
     dispatch(findCourseSimilar(route.params.params?.courseID)); // Gửi action để lấy thông tin course tương tự
   }, []);
 
-  // top-page detail course 
+  // top-page detail course
   useEffect(() => {
     setCourse(courseDetail);
   }, [courseDetail]);
@@ -87,7 +84,9 @@ export default function CourseDetailOverView({ navigation, route }) {
     <TouchableOpacity
       style={styles.card}
       // reset lại trang với thông tin khóa học mới
-      onPress={() => navigation.replace("courseDetailOverView",{courseID: id})} // chuyển sang trang chi tiết khóa học
+      onPress={() =>
+        navigation.replace("courseDetailOverView", { courseID: id })
+      } // chuyển sang trang chi tiết khóa học
     >
       <Image source={{ uri: image }} style={styles.thumbnail} />
       <View style={styles.cardContent}>
@@ -154,13 +153,21 @@ export default function CourseDetailOverView({ navigation, route }) {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.tab}
-            onPress={() => navigation.navigate("courseDetailLesson")}
+            onPress={() =>
+              navigation.navigate("courseDetailLesson", {
+                courseID: route.params.params?.courseID,
+              })
+            }
           >
             <Text style={styles.tabText}>LESSONS</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.tab}
-            onPress={() => navigation.navigate("courseDetailReview")}
+            onPress={() =>
+              navigation.navigate("courseDetailReview", {
+                courseID: route.params.params?.courseID,
+              })
+            }
           >
             <Text style={styles.tabText}>REVIEW</Text>
           </TouchableOpacity>
@@ -220,7 +227,9 @@ export default function CourseDetailOverView({ navigation, route }) {
 
       <View style={styles.footer}>
         <View style={styles.priceContainer}>
-          <Text style={styles.price}>$259</Text>
+          <Text style={styles.price}>
+            ${course?.Orders?.length > 0 && course.Orders[0]?.OrderDetail.price}
+          </Text>
           <Text style={styles.originalPrice}>$1020</Text>
         </View>
         <TouchableOpacity style={styles.addToCartButton}>

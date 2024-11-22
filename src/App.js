@@ -88,7 +88,7 @@ export default function App() {
 const Project = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Lesson">
+      <Stack.Navigator initialRouteName="homeUser">
         <Stack.Screen
           name="Intro"
           component={Intro}

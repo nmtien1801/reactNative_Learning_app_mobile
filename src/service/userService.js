@@ -4,7 +4,7 @@ import { Platform } from "react-native";
 
 const baseUrl =
   Platform.OS === "android"
-    ? "http://172.16.0.159:8080/api" // URL cho Android và iOS
+    ? "http://192.168.1.5:8080/api" // URL cho Android và iOS
     : "http://localhost:8080/api"; // URL cho web hoặc môi trường khác
 
 const handleLoginApi = (email, password) => {
@@ -42,6 +42,10 @@ const findCourseSimilarService = (id) => {
 const findCourseByStateService = (state) => {
   return axios.get(`${baseUrl}/findCourseByState/${state}`);
 };
+
+const getAllLessonService = (state) => {
+  return axios.get(`${baseUrl}/getAllLesson`);
+};
 export {
   handleLoginApi,
   logOutUser,
@@ -52,4 +56,5 @@ export {
   findCourseByIDService,
   findCourseSimilarService,
   findCourseByStateService,
+  getAllLessonService
 };
