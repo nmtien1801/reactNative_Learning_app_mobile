@@ -149,7 +149,7 @@ export default function HomeUser({ navigation, route }) {
   const CourseCard = ({ course }) => (
     <TouchableOpacity
       style={[styles.courseCard, { width: CARD_WIDTH }]}
-      onPress={() => navigation.navigate("courseDetailOverView")}
+      onPress={() => navigation.navigate("courseDetailOverView", {courseID: course.id})}
     >
       <Image source={{ uri: course.image }} style={styles.courseImage} />
       <View style={styles.courseContent}>

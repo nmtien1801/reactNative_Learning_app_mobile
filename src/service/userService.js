@@ -25,10 +25,26 @@ const findAllCoursesService = () => {
 
 const getTopTeacherService = () => {
   return axios.get(`${baseUrl}/getTopTeacher`);
-}
+};
 
 const findPopularCourseService = () => {
   return axios.get(`${baseUrl}/findPopularCourses`);
-}
-export { handleLoginApi, logOutUser, registerUser,findAllCoursesService ,getTopTeacherService, findPopularCourseService};
+};
 
+const findCourseByIDService = (id) => {
+  return axios.get(`${baseUrl}/findCourseByID/${id}`);
+};
+
+const findCourseSimilarService = (id) => {
+  return axios.get(`${baseUrl}/findCourseSimilar/${id}`);
+};
+export {
+  handleLoginApi,
+  logOutUser,
+  registerUser,
+  findAllCoursesService,
+  getTopTeacherService,
+  findPopularCourseService,
+  findCourseByIDService,
+  findCourseSimilarService,
+};

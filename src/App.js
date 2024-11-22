@@ -113,7 +113,7 @@ const Project = () => {
         <Stack.Screen
           name="courseDetailOverView"
           component={DrawerHeader}
-          initialParams={{ screenName: "CourseDetailOverView" }}
+          initialParams={{ screenName: "CourseDetailOverView"}}
           options={{ header: () => {} }}
         />
         <Stack.Screen

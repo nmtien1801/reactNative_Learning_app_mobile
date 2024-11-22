@@ -85,7 +85,7 @@ const DrawerHeader = ({ navigation, route }) => {
   }
 
   const Drawer = createDrawerNavigator();
-
+  
   // đang ở màn hình nào đầu tiên (lấy từ .app qua)
   // nhớ import màn hình
   let initialScreen;
@@ -110,6 +110,7 @@ const DrawerHeader = ({ navigation, route }) => {
       <Drawer.Screen
         name="screenFromApp"
         component={initialScreen}
+        initialParams={route}
         options={({ navigation, route }) => ({
           header: () => <Header navigation={navigation} route={route} />,
         })}

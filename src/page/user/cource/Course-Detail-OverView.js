@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -8,10 +8,14 @@ import {
   StyleSheet,
   SafeAreaView,
   StatusBar,
-  Platform
+  Platform,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { WebView } from 'react-native-webview';
+import { WebView } from "react-native-webview";
+import { useToast } from "../../../component/customToast";
+
+import { useDispatch, useSelector } from "react-redux";
+import { findCourseByID, findCourseSimilar } from "../../../redux/courseSlice";
 
 function BenefitItem({ icon, text }) {
   return (
@@ -28,6 +32,7 @@ function BenefitItem({ icon, text }) {
 }
 
 const CourseCard = ({
+  id,
   title,
   instructor,
   price,
@@ -37,7 +42,11 @@ const CourseCard = ({
   image,
   bookmarked,
 }) => (
-  <View style={styles.card}>
+  <TouchableOpacity
+    style={styles.card}
+    // reset lại trang với thông tin khóa học mới
+    onPress={() => navigation.navigate("courseDetailOverView",{courseID: id})} // chuyển sang trang chi tiết khóa học
+  >
     <Image source={{ uri: image }} style={styles.thumbnail} />
     <View style={styles.cardContent}>
       <View>
@@ -59,83 +68,81 @@ const CourseCard = ({
         />
       </TouchableOpacity>
     </View>
-  </View>
+  </TouchableOpacity>
 );
 
-export default function CourseDetailOverView({navigation, route}) {
+export default function CourseDetailOverView({ navigation, route }) {
+  // const [courseDetail, setCourseDetail] = useState({});
+  const courseDetail = useSelector((state) => state.course.courseDetail); // lấy thông tin top teacher
+  const listCourseSimilar = useSelector(
+    (state) => state.course.listCourseSimilar
+  ); // lấy thông tin top teacher
+  const [course, setCourse] = useState({});
+  const [listSimilar, setListSimilar] = useState([]); // Danh sách course tương tự
+  const dispatch = useDispatch();
 
-  const courses = [
-    {
-      id: 1,
-      title: "Product Design",
-      instructor: "Dennis Sweeney",
-      price: 90,
-      rating: 4.5,
-      reviews: 1233,
-      lessons: 12,
-      image: "https://v0.dev/placeholder.svg",
-      bookmarked: false,
-    },
-    {
-      id: 2,
-      title: "Palettes for Your App",
-      instructor: "Ramono Wultschner",
-      price: 59,
-      rating: 4.5,
-      reviews: 1233,
-      lessons: 12,
-      image: "https://v0.dev/placeholder.svg",
-      bookmarked: true,
-    },
-    {
-      id: 3,
-      title: "Mobile UI Design",
-      instructor: "Ramono Wultschner",
-      price: 32,
-      rating: 4.5,
-      reviews: 1233,
-      lessons: 12,
-      image: "https://v0.dev/placeholder.svg",
-      bookmarked: false,
-    },
-  ];
+  useEffect(() => {
+    dispatch(findCourseByID(route.params.params?.courseID)); // Gửi action để lấy thông tin course
+    dispatch(findCourseSimilar(route.params.params?.courseID)); // Gửi action để lấy thông tin course tương tự
+  }, []);
+
+  // top-page detail course 
+  useEffect(() => {
+    setCourse(courseDetail);
+  }, [courseDetail]);
+
+  // similar course
+  useEffect(() => {
+    if (listCourseSimilar.length !== 0) {
+      setListSimilar([
+        ...listSimilar,
+        ...listCourseSimilar.map((course, index) => ({
+          id: course.id, // Sử dụng kết hợp giữa id và index để đảm bảo tính duy nhất
+          title: course.name,
+          instructor: course.UserFollow[0]?.user.userName, // người tạo khóa học
+          price: course.Orders[0]?.OrderDetail?.price,
+          rating: course.averageRating,
+          reviews: course.totalRating,
+          lessons: course.totalLessons,
+          image: "https://v0.dev/placeholder.svg?height=200&width=200",
+          bookmarked: false, // css màu xanh cho icon bookmark
+        })),
+      ]);
+    }
+  }, [listCourseSimilar]);
 
   return (
     <View style={styles.container}>
       <ScrollView>
+        {Platform.OS === "web" ? (
+          // Dùng iframe cho nền web
+          <iframe
+            src="https://www.youtube.com/embed/147SkAVXEqM"
+            width="100%"
+            height="300"
+            title="YouTube Video"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            style={{ border: "none" }}
+          ></iframe>
+        ) : (
+          // Dùng WebView cho Android/iOS
+          <WebView
+            source={{ uri: "https://www.youtube.com/embed/147SkAVXEqM" }}
+            style={{ flex: 1, width: "100%", height: 300 }}
+          />
+        )}
 
-      {Platform.OS === 'web' ? (
-        // Dùng iframe cho nền web
-        <iframe
-          src="https://www.youtube.com/embed/147SkAVXEqM"
-          width="100%"
-          height="300"
-          title="YouTube Video"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          style={{ border: 'none' }}></iframe>
-      ) : (
-        // Dùng WebView cho Android/iOS
-        <WebView
-          source={{ uri: 'https://www.youtube.com/embed/147SkAVXEqM' }}
-          style={{ flex: 1, width: '100%', height: 300 }}
-        />
-      )}
-
-        {/* <View style={styles.courseHeader}>
-          <Text style={styles.courseCategory}>UX Foundations</Text>
-          <Text style={styles.courseTitle}>Introduction to UX Design</Text>
-          <View style={styles.playButton}>
-            <Ionicons name="play" size={24} color="white" />
-          </View>
-        </View> */}
         <View style={styles.courseInfo}>
           <Text style={styles.courseSubtitle}>
-            UX Foundation: Introduction to User Experience Design
+            {course.name}: {course.title}
           </Text>
           <View style={styles.ratingContainer}>
             <Ionicons name="star" size={16} color="#FFD700" />
-            <Text style={styles.ratingText}>4.5 (1233) • 12 lessons</Text>
+            <Text style={styles.ratingText}>
+              {course.averageRating} ({course.totalRating}) •{" "}
+              {course.totalLessons} lessons
+            </Text>
           </View>
         </View>
 
@@ -143,26 +150,17 @@ export default function CourseDetailOverView({navigation, route}) {
           <TouchableOpacity style={[styles.tab, styles.activeTab]}>
             <Text style={[styles.tabText, styles.activeTabText]}>OVERVIEW</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.tab} onPress={()=>navigation.navigate('courseDetailLesson')}>
+          <TouchableOpacity
+            style={styles.tab}
+            onPress={() => navigation.navigate("courseDetailLesson")}
+          >
             <Text style={styles.tabText}>LESSONS</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.tab} onPress={()=>navigation.navigate('courseDetailReview')}>
+          <TouchableOpacity
+            style={styles.tab}
+            onPress={() => navigation.navigate("courseDetailReview")}
+          >
             <Text style={styles.tabText}>REVIEW</Text>
-          </TouchableOpacity>
-        </View>
-
-      <View style={styles.content}>
-        <View style={styles.instructorContainer}>
-          <Image
-            source={{ uri: 'https://v0.dev/placeholder.svg' }}
-            style={styles.instructorImage}
-          />
-          <View style={styles.instructorInfo}>
-            <Text style={styles.instructorName}>Sara Weise</Text>
-            <Text style={styles.instructorTitle}>UI/UX Designer</Text>
-          </View>
-          <TouchableOpacity style={styles.followButton}>
-            <Text style={styles.followButtonText}>Follow</Text>
           </TouchableOpacity>
         </View>
 
@@ -173,46 +171,49 @@ export default function CourseDetailOverView({navigation, route}) {
               style={styles.instructorImage}
             />
             <View style={styles.instructorInfo}>
-              <Text style={styles.instructorName}>Sara Weise</Text>
-              <Text style={styles.instructorTitle}>UI/UX Designer</Text>
+              <Text style={styles.instructorName}>
+                {course?.UserFollow?.length > 0 &&
+                  course.UserFollow[0]?.user.userName}
+              </Text>
+              <Text style={styles.instructorTitle}>
+                {course?.UserFollow?.length > 0 &&
+                  course.UserFollow[0]?.user.title}
+              </Text>
             </View>
             <TouchableOpacity style={styles.followButton}>
               <Text style={styles.followButtonText}>Follow</Text>
             </TouchableOpacity>
           </View>
 
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Description</Text>
-            <Text style={styles.description}>
-              Convallis in semper laoreet nibh leo. Vivamus malesuada ipsum
-              pulvinar non rutrum risus dui, risus. Purus massa velit iaculis
-              tincidunt tortor, risus, scelerisque risus...
-            </Text>
-            <TouchableOpacity>
-              <Text style={styles.seeMoreText}>See more</Text>
-            </TouchableOpacity>
-          </View>
+          <View style={styles.content}>
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Description</Text>
+              <Text style={styles.description}>{course.description}</Text>
+              <TouchableOpacity>
+                <Text style={styles.seeMoreText}>See more</Text>
+              </TouchableOpacity>
+            </View>
 
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Benefits</Text>
-            <View style={styles.benefitsList}>
-              <BenefitItem icon="videocam" text="14 hours on-demand video" />
-              <BenefitItem icon="globe" text="Native teacher" />
-              <BenefitItem icon="document-text" text="100% free document" />
-              <BenefitItem icon="time" text="Full lifetime access" />
-              <BenefitItem icon="ribbon" text="Certificate of complete" />
-              <BenefitItem icon="checkmark-circle" text="24/7 support" />
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Benefits</Text>
+              <View style={styles.benefitsList}>
+                <BenefitItem icon="videocam" text="14 hours on-demand video" />
+                <BenefitItem icon="globe" text="Native teacher" />
+                <BenefitItem icon="document-text" text="100% free document" />
+                <BenefitItem icon="time" text="Full lifetime access" />
+                <BenefitItem icon="ribbon" text="Certificate of complete" />
+                <BenefitItem icon="checkmark-circle" text="24/7 support" />
+              </View>
             </View>
           </View>
-        </View>
 
-        <ScrollView style={[styles.container, styles.containerPadding]}>
-          <Text style={styles.sectionTitle}>Similar courses</Text>
-          {courses.map((course) => (
-            <CourseCard key={course.id} {...course} />
-          ))}
-        </ScrollView>
-      </View>
+          <ScrollView style={[styles.container, styles.containerPadding]}>
+            <Text style={styles.sectionTitle}>Similar courses</Text>
+            {listSimilar.map((course) => (
+              <CourseCard key={course.id} {...course} />
+            ))}
+          </ScrollView>
+        </View>
       </ScrollView>
 
       <View style={styles.footer}>
@@ -277,8 +278,6 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     marginLeft: 1,
   },
-
- 
 
   courseHeader: {
     backgroundColor: "#7C4DFF",
@@ -346,7 +345,7 @@ const styles = StyleSheet.create({
   activeTabText: {
     color: "#00BCD4",
   },
-  
+
   content: {
     padding: 16,
   },
