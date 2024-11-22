@@ -24,6 +24,9 @@ import CourseDetailOverView from "../../page/user/cource/Course-Detail-OverView"
 import CourseDetailLesson from "../../page/user/cource/Course-Detail-Lesson";
 import CourseDetailReview from "../../page/user/cource/Course-Detail-Review";
 import UserProfile from "../../page/user/User_Profile";
+import Learning_Lesson from "../../page/lesson/Learning_Lesson";
+import Learning_Project from "../../page/lesson/Learning_Project";
+import Learning_QA from "../../page/lesson/Learning_QA";
 
 import {  useToast } from "../../component/customToast";
 import {logOutUser} from "../../service/userService";
@@ -97,6 +100,12 @@ const DrawerHeader = ({ navigation, route }) => {
     initialScreen = CourseDetailReview;
   } else if (route.params?.screenName === "UserProfile") {
     initialScreen = UserProfile;
+  } else if (route.params?.screenName === "Learning_Lesson") {
+    initialScreen = Learning_Lesson
+  } else if (route.params?.screenName === "Learning_Project") {
+    initialScreen = Learning_Project
+  } else if (route.params?.screenName === "Learning_QA") {
+    initialScreen = Learning_QA
   }
 
   return (

@@ -19,10 +19,6 @@ import ManageLesson from "./page/teacher/ManageLesson";
 import FormCourse from "./page/teacher/FormCourse";
 import FormLesson from "./page/teacher/FormLesson";
 
-import Learning_Lesson from "./page/lesson/Learning_Lesson";
-import Learning_Project from "./page/lesson/Learning_Project";
-import Learning_QA from "./page/lesson/Learning_QA";
-
 import Cart from "./page/user/cart/Cart";
 import HistoryCart from "./page/user/cart/History-cart";
 import DrawerHeader from "./header/drawerNavigatorHeader/DrawerHeader";
@@ -45,9 +41,21 @@ function LessonTabs() {
         tabBarStyle: { display: "none" },
       }}
     >
-      <Tab.Screen name="Learning_Lesson" component={Learning_Lesson} />
-      <Tab.Screen name="Learning_Project" component={Learning_Project} />
-      <Tab.Screen name="Learning_QA" component={Learning_QA} />
+      <Tab.Screen
+        name="Learning_Lesson"
+        component={DrawerHeader}
+        initialParams={{ screenName: "Learning_Lesson" }}
+      />
+      <Tab.Screen
+        name="Learning_Project"
+        component={DrawerHeader}
+        initialParams={{ screenName: "Learning_Project" }}
+      />
+      <Tab.Screen
+        name="Learning_QA"
+        component={DrawerHeader}
+        initialParams={{ screenName: "Learning_QA" }}
+      />
     </Tab.Navigator>
   );
 }
@@ -80,7 +88,7 @@ export default function App() {
 const Project = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="myCourse">
+      <Stack.Navigator initialRouteName="Lesson">
         <Stack.Screen
           name="Intro"
           component={Intro}
@@ -113,7 +121,7 @@ const Project = () => {
         <Stack.Screen
           name="courseDetailOverView"
           component={DrawerHeader}
-          initialParams={{ screenName: "CourseDetailOverView"}}
+          initialParams={{ screenName: "CourseDetailOverView" }}
           options={{ header: () => {} }}
         />
         <Stack.Screen

@@ -1,16 +1,12 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import {
-  useNavigation,
-  useRoute,
   useFocusEffect,
 } from "@react-navigation/native";
 
-export default function Nav_Lesson() {
-  const navigation = useNavigation();
-  const route = useRoute();
+export default function Nav_Lesson({navigation, route}) {
   const [activeTab, setActiveTab] = useState("Learning_Lesson");
-
+  
   useFocusEffect(
     React.useCallback(() => {
       setActiveTab(route.name);

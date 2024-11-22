@@ -4,12 +4,12 @@ import Header from "./Header_Lesson";
 import Nav from "./Nav_Lesson";
 import Footer from "../../component/Footer";
 
-export default function Layout({ children, navigation }) {
+export default function Layout({ children, navigation , route}) {
   return (
     <View style={styles.container}>
       <ScrollView>
-        <Header />
-        <Nav />
+        <Header navigation={navigation} route={route}/>
+        <Nav navigation={navigation} route={route}/>
         <View style={styles.content}>{children}</View>
       </ScrollView>
       <Footer navigation={navigation} />
