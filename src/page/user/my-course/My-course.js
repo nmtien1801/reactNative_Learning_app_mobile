@@ -63,7 +63,7 @@ export default function MyCourse({ navigation, route }) {
   const CourseCard = ({ course }) => (
     <TouchableOpacity
       style={styles.courseCard}
-      onPress={() => navigation.navigate("Lesson")}
+      onPress={() => navigation.navigate("Lesson", {courseID: course.id})}
     >
       <Image source={{ uri: course.image }} style={styles.courseImage} />
       <View style={styles.courseInfo}>

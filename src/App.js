@@ -33,7 +33,7 @@ import { CustomToast } from "./component/customToast";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-function LessonTabs() {
+function LessonTabs({navigation, route}) {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -44,7 +44,7 @@ function LessonTabs() {
       <Tab.Screen
         name="Learning_Lesson"
         component={DrawerHeader}
-        initialParams={{ screenName: "Learning_Lesson" }}
+        initialParams={{ screenName: "Learning_Lesson" , courseID: route.params.courseID}}
       />
       <Tab.Screen
         name="Learning_Project"
@@ -88,7 +88,7 @@ export default function App() {
 const Project = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator initialRouteName="homeUser">
         <Stack.Screen
           name="Intro"
           component={Intro}

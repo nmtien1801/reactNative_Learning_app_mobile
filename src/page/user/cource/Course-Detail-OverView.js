@@ -42,8 +42,8 @@ export default function CourseDetailOverView({ navigation, route }) {
   const courseID = route.params.params?.courseID; // lấy sẵn id để truyền vào cart
 
   useEffect(() => {
-    dispatch(findCourseByID(route.params.params?.courseID)); // Gửi action để lấy thông tin course
-    dispatch(findCourseSimilar(route.params.params?.courseID)); // Gửi action để lấy thông tin course tương tự
+    dispatch(findCourseByID(courseID)); // Gửi action để lấy thông tin course
+    dispatch(findCourseSimilar(courseID)); // Gửi action để lấy thông tin course tương tự
   }, []);
 
   // top-page detail course
@@ -155,9 +155,7 @@ export default function CourseDetailOverView({ navigation, route }) {
           <TouchableOpacity
             style={styles.tab}
             onPress={() =>
-              navigation.navigate("courseDetailLesson", {
-                courseID: route.params.params?.courseID,
-              })
+              navigation.navigate("courseDetailLesson", { courseID })
             }
           >
             <Text style={styles.tabText}>LESSONS</Text>
@@ -165,9 +163,7 @@ export default function CourseDetailOverView({ navigation, route }) {
           <TouchableOpacity
             style={styles.tab}
             onPress={() =>
-              navigation.navigate("courseDetailReview", {
-                courseID: route.params.params?.courseID,
-              })
+              navigation.navigate("courseDetailReview", { courseID })
             }
           >
             <Text style={styles.tabText}>REVIEW</Text>

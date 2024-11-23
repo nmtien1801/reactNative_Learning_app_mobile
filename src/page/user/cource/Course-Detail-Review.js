@@ -15,16 +15,17 @@ import { useToast } from "../../../component/customToast";
 
 import { useDispatch, useSelector } from "react-redux";
 import { findCourseByID } from "../../../redux/courseSlice";
-import {getReviewByCourse} from "../../../redux/reviewSlice";
+import { getReviewByCourse } from "../../../redux/reviewSlice";
 
 export default function CourseDetailReview({ navigation, route }) {
   const courseDetail = useSelector((state) => state.course.courseDetail); // lấy thông tin top teacher
   const listReview = useSelector((state) => state.review.listReview); // lấy thông tin top teacher
   const dispatch = useDispatch();
+  const courseID = route.params.params?.courseID; // lấy sẵn id để truyền vào cart
 
   useEffect(() => {
-    dispatch(findCourseByID(route.params.params?.courseID)); // Gửi action để lấy thông tin course
-    dispatch(getReviewByCourse(route.params.params?.courseID)); // Gửi action để lấy thông tin review
+    dispatch(findCourseByID(courseID)); // Gửi action để lấy thông tin course
+    dispatch(getReviewByCourse(courseID)); // Gửi action để lấy thông tin review
   }, []);
 
   const [course, setCourse] = useState({}); // khởi tạo state course
@@ -43,7 +44,7 @@ export default function CourseDetailReview({ navigation, route }) {
   }, [listReview]);
 
   console.log("reviews: ", reviews);
-  
+
   const StarRating = ({ rating }) => {
     return (
       <View style={styles.starContainer}>
@@ -99,13 +100,17 @@ export default function CourseDetailReview({ navigation, route }) {
         <View style={styles.tabContainer}>
           <TouchableOpacity
             style={styles.tab}
-            onPress={() => navigation.navigate("courseDetailOverView")}
+            onPress={() =>
+              navigation.navigate("courseDetailOverView", { courseID })
+            }
           >
             <Text style={styles.tabText}>OVERVIEW</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.tab}
-            onPress={() => navigation.navigate("courseDetailLesson")}
+            onPress={() =>
+              navigation.navigate("courseDetailLesson", { courseID })
+            }
           >
             <Text style={styles.tabText}>LESSONS</Text>
           </TouchableOpacity>
@@ -162,18 +167,17 @@ export default function CourseDetailReview({ navigation, route }) {
           review="Nostrud excepteur magna id est quis in aliqua consequat. Exercitation enim eiusmod elit sint laborum"
           imageUrl="https://v0.dev/placeholder.svg?height=50&width=50"
         /> */}
-        
-        {reviews.map((review, index) => (
-        <ReviewItem
-          key={index} // Sử dụng index làm key (hoặc dùng unique ID nếu có)
-          name={review.user?.userName}
-          time={review.time}
-          rating={review.rating}
-          review={review.review}
-          imageUrl={review.user?.image}
-        />
-      ))}
 
+        {reviews.map((review, index) => (
+          <ReviewItem
+            key={index} // Sử dụng index làm key (hoặc dùng unique ID nếu có)
+            name={review.user?.userName}
+            time={review.time}
+            rating={review.rating}
+            review={review.review}
+            imageUrl={review.user?.image}
+          />
+        ))}
       </ScrollView>
 
       <View style={styles.footer}>

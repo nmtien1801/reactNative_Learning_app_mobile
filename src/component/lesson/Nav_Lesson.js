@@ -1,23 +1,24 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import {
-  useFocusEffect,
-} from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native";
 
-export default function Nav_Lesson({navigation, route}) {
+export default function Nav_Lesson({ navigation, route }) {
   const [activeTab, setActiveTab] = useState("Learning_Lesson");
-  
+
   useFocusEffect(
     React.useCallback(() => {
-      setActiveTab(route.name);
-    }, [route.name])
+      setActiveTab(route.params.name); // Cập nhật tab hiện tại dựa vào route
+    }, [route.params.name])
   );
 
   return (
     <View style={styles.container}>
       <View style={styles.tabs}>
         <TouchableOpacity
-          style={styles.tabContainer}
+          style={[
+            styles.tabContainer,
+            activeTab === "Learning_Lesson" && styles.tabContainerActive,
+          ]}
           onPress={() => navigation.navigate("Learning_Lesson")}
         >
           <Text
@@ -30,7 +31,10 @@ export default function Nav_Lesson({navigation, route}) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.tabContainer}
+          style={[
+            styles.tabContainer,
+            activeTab === "Learning_Project" && styles.tabContainerActive,
+          ]}
           onPress={() => navigation.navigate("Learning_Project")}
         >
           <Text
@@ -43,11 +47,16 @@ export default function Nav_Lesson({navigation, route}) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.tabContainer}
+          style={[
+            styles.tabContainer,
+            activeTab === "Learning_QA" && styles.tabContainerActive,
+          ]}
           onPress={() => navigation.navigate("Learning_QA")}
         >
           <Text
-            style={activeTab === "Learning_QA" ? styles.tabActive : styles.tab}
+            style={
+              activeTab === "Learning_QA" ? styles.tabActive : styles.tab
+            }
           >
             Q&A
           </Text>
@@ -59,7 +68,7 @@ export default function Nav_Lesson({navigation, route}) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     backgroundColor: "#fff",
   },
   tabs: {
@@ -71,16 +80,20 @@ const styles = StyleSheet.create({
   },
   tabContainer: {
     paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderBottomWidth: 2,
+    borderBottomColor: "transparent", // Không hiển thị gạch chân khi không active
+  },
+  tabContainerActive: {
+    borderBottomColor: "#00BDD6", // Màu gạch chân khi active
   },
   tab: {
     fontSize: 16,
-    color: "#666",
+    color: "#666", // Màu chữ mặc định
   },
   tabActive: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#00BDD6",
-    borderBottomWidth: 2, // Adds bottom border for underline effect
-    borderBottomColor: "#00BDD6", // Blue color for the underline
+    color: "#00BDD6", // Màu chữ khi active
   },
 });
