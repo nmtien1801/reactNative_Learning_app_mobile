@@ -51,6 +51,10 @@ const getReviewByCourseService = (id) => {
   return axios.get(`${baseUrl}/findReviewByCourseID/${id}`);
 }
 
+const getCourseOfUserService = (id) => {
+  return axios.get(`${baseUrl}/getCourseOfUser/${id}`);
+}
+
 export {
   handleLoginApi,
   logOutUser,
@@ -62,5 +66,6 @@ export {
   findCourseSimilarService,
   findCourseByStateService,
   getAllLessonService,
-  getReviewByCourseService
+  getReviewByCourseService,
+  getCourseOfUserService
 };
