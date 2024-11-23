@@ -37,7 +37,7 @@ const findCourseByIDService = (id) => {
 
 const findCourseSimilarService = (id) => {
   return axios.get(`${baseUrl}/findCourseSimilar/${id}`);
-}
+};
 
 const findCourseByStateService = (state) => {
   return axios.get(`${baseUrl}/findCourseByState/${state}`);
@@ -49,7 +49,7 @@ const getAllLessonService = (state) => {
 
 const getReviewByCourseService = (id) => {
   return axios.get(`${baseUrl}/findReviewByCourseID/${id}`);
-}
+};
 
 const getCourseOfUserService = (id) => {
   return axios.get(`${baseUrl}/getCourseOfUser/${id}`);

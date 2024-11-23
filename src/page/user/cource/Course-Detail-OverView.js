@@ -39,6 +39,7 @@ export default function CourseDetailOverView({ navigation, route }) {
   const [course, setCourse] = useState({});
   const [listSimilar, setListSimilar] = useState([]); // Danh sách course tương tự
   const dispatch = useDispatch();
+  const courseID = route.params.params?.courseID; // lấy sẵn id để truyền vào cart
 
   useEffect(() => {
     dispatch(findCourseByID(route.params.params?.courseID)); // Gửi action để lấy thông tin course
@@ -232,7 +233,10 @@ export default function CourseDetailOverView({ navigation, route }) {
           </Text>
           <Text style={styles.originalPrice}>$1020</Text>
         </View>
-        <TouchableOpacity style={styles.addToCartButton}>
+        <TouchableOpacity
+          style={styles.addToCartButton}
+          onPress={() => navigation.navigate("cart", courseID)}
+        >
           <Text style={styles.addToCartText}>Add to cart</Text>
         </TouchableOpacity>
       </View>
