@@ -62,6 +62,14 @@ const findCourseUserState1Service = (userID) => {
 const findCourseUserState2Service = (userID) => {
   return axios.get(`${baseUrl}/findCourseUserState2/${userID}`);
 };
+
+const getProjectByUserService = (userID) => {
+  return axios.get(`${baseUrl}/getProjectByUser/${userID}`);
+};
+
+const createProjectService = (data) => {
+  return axios.post(`${baseUrl}/createProject`, data);
+};
 export {
   handleLoginApi,
   logOutUser,
@@ -77,4 +85,6 @@ export {
   getAllCourseUserService,
   findCourseUserState1Service,
   findCourseUserState2Service,
+  getProjectByUserService,
+  createProjectService,
 };

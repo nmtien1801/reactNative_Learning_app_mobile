@@ -5,6 +5,7 @@ import userReducer from './userSlice'
 import teacherReducer from "./teacherSlide";
 import lessonReducer from "./lessonSlice";
 import reviewReducer from "./reviewSlice";
+import projectReducer from "./projectSlice";
 
 export const store = configureStore({
   reducer: {
@@ -14,5 +15,6 @@ export const store = configureStore({
     teacher: teacherReducer,
     lesson: lessonReducer,
     review: reviewReducer,
+    project: projectReducer,
   },
 });

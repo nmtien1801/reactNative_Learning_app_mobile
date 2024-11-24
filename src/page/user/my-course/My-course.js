@@ -23,8 +23,6 @@ export default function MyCourse({ navigation, route }) {
   const user = useSelector((state) => state.auth.user); // lấy thông tin user login
   const listCourse = useSelector((state) => state.user.listCourse); // lấy danh sách khóa học của user
 
-  console.log("user: ", user);
-  
   useEffect(() => {
     if (activeTab === "ON GOING") {
       dispatch(findCourseUserState1(user._id)); // Fetch ON GOING courses

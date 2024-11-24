@@ -33,11 +33,6 @@ const lessonSlice = createSlice({
       .addCase(getAllLesson.fulfilled, (state, action) => {
         state.isLoading = false;
         state.listLesson = action.payload.DT || {};
-        state.isLogin = true;
-        
-
-        // state.token = action.payload.token;
-        // localStorage.setItem("learning_App", action.payload.DT.access_token); // Lưu token vào localStorage
       })
       .addCase(getAllLesson.rejected, (state, action) => {
         state.isLoading = false;
