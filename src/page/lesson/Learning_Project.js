@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,45 +9,32 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Layout from "../../component/lesson/Layout_Lesson";
+import { useDispatch, useSelector } from "react-redux";
+import { useToast } from "../../component/customToast";
 
-export default function ProjectComponent({ navigation , route}) {
-  const studentProjects = [
-    {
-      id: "1",
-      name: "Nhi Nhi",
-      institution: "Industrial University of Ho Chi Minh City",
-      image:
-        "https://cafedev.vn/wp-content/uploads/2019/11/cafedev_reactnt.png",
-    },
-    {
-      id: "2",
-      name: "ABC",
-      institution: "Ramona Wullschleger",
-      image:
-        "https://cafedev.vn/wp-content/uploads/2019/11/cafedev_reactnt.png",
-    },
-    {
-      id: "3",
-      name: "ABC",
-      institution: "Ramona Wullschleger",
-      image:
-        "https://cafedev.vn/wp-content/uploads/2019/11/cafedev_reactnt.png",
-    },
-    {
-      id: "4",
-      name: "ABC",
-      institution: "Ramona Wullschleger",
-      image:
-        "https://cafedev.vn/wp-content/uploads/2019/11/cafedev_reactnt.png",
-    },
-    {
-      id: "5",
-      name: "ABC",
-      institution: "Ramona Wullschleger",
-      image:
-        "https://cafedev.vn/wp-content/uploads/2019/11/cafedev_reactnt.png",
-    },
-  ];
+import { getProjectByUser, createProject } from "../../redux/projectSlice";
+import { findCourseByID } from "../../redux/courseSlice";
+import ModalProject from "../../page/lesson/modal/modalProject";
+
+export default function ProjectComponent({ navigation, route }) {
+  const listProjectUser = useSelector((state) => state.project.listProjectUser);
+  const user = useSelector((state) => state.auth.user);
+  const courseDetail = useSelector((state) => state.course.courseDetail);
+  const dispatch = useDispatch();
+  const toast = useToast();
+
+  const [project, setProject] = useState([]); // state lưu project
+  const [isModalVisible, setModalVisible] = useState(false); // trạng thái modal
+
+  useEffect(() => {
+    dispatch(getProjectByUser(user._id));
+    dispatch(findCourseByID(route.params?.params?.courseID));
+  }, []);
+
+  // project
+  useEffect(() => {
+    setProject(listProjectUser);
+  }, [listProjectUser]);
 
   const resources = [
     { id: "1", name: "Document 1.txt", size: "612 Kb", type: "txt" },
@@ -73,52 +60,83 @@ export default function ProjectComponent({ navigation , route}) {
 
   const renderProject = ({ item }) => (
     <View style={styles.projectCard}>
-      <Image source={{ uri: item.image }} style={styles.projectImage} />
+      <Image
+        source={{
+          uri: item.image,
+        }}
+        style={styles.projectImage}
+      />
       <Text style={styles.projectName}>{item.name}</Text>
-      <Text style={styles.projectInstitution}>{item.institution}</Text>
+      <Text style={styles.projectInstitution}>{item.description}</Text>
     </View>
   );
 
+  const handleOpenModal = () => setModalVisible(true);
+  const handleCloseModal = () => setModalVisible(false);
+
+  const handleSubmit = async (data) => {
+    let _data = { ...data, userID: user._id };
+    let res = await dispatch(createProject(_data));
+
+    if (res && +res.payload.EC === 0) {
+      await dispatch(getProjectByUser(user._id));
+      toast(res.payload.EM);
+    } else {
+      toast(res.payload.EM, "error");
+    }
+  };
+
   return (
     <Layout navigation={navigation} route={route}>
-      <TouchableOpacity style={styles.uploadButton}>
-        <Ionicons name="cloud-upload-outline" size={24} color="#00BDD6" />
-        <Text style={styles.uploadText}>Upload your project here</Text>
-      </TouchableOpacity>
-
-      <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>Student Projects</Text>
-        <TouchableOpacity>
-          <Text style={styles.viewMore}>View more</Text>
+      <View style={{ gap: 20 }}>
+        <TouchableOpacity
+          style={styles.uploadButton}
+          onPress={() => handleOpenModal()}
+        >
+          <Ionicons name="cloud-upload-outline" size={24} color="#00BDD6" />
+          <Text style={styles.uploadText}>Upload your project here</Text>
         </TouchableOpacity>
-      </View>
-
-      <FlatList
-        data={studentProjects}
-        renderItem={renderProject}
-        keyExtractor={(item) => item.id}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.projectList}
-      />
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Project Description</Text>
-        <Text style={styles.description}>
-          Deserunt minim incididunt ullamco nostrud so voluptate deserunt
-          reprehenderit ullamco est...
-          <Text style={styles.readMore}> see more</Text>
-        </Text>
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Resources ({resources.length})</Text>
-        <FlatList
-          data={resources}
-          renderItem={renderResource}
-          keyExtractor={(item) => item.id}
-          style={styles.resourceList}
+        <ModalProject
+          visible={isModalVisible}
+          onClose={handleCloseModal}
+          onSubmit={handleSubmit}
         />
+
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>Student Projects</Text>
+          <TouchableOpacity>
+            <Text style={styles.viewMore}>View more</Text>
+          </TouchableOpacity>
+        </View>
+
+        <FlatList
+          data={project}
+          renderItem={renderProject}
+          keyExtractor={(item) => item.id}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.projectList}
+        />
+
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Project Description</Text>
+          <Text style={styles.description}>
+            {courseDetail.descProject}
+            <Text style={styles.readMore}> see more</Text>
+          </Text>
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>
+            Resources ({resources.length})
+          </Text>
+          <FlatList
+            data={resources}
+            renderItem={renderResource}
+            keyExtractor={(item) => item.id}
+            style={styles.resourceList}
+          />
+        </View>
       </View>
     </Layout>
   );
@@ -156,12 +174,12 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   projectCard: {
-    width: 120,
+    width: 300,
     marginRight: 12,
   },
   projectImage: {
     width: "100%",
-    height: 80,
+    height: 180,
     borderRadius: 8,
   },
   projectName: {

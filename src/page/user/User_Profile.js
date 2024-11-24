@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -10,58 +10,10 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Footer from "../../component/Footer";
+import { useToast } from "../../component/customToast";
 
-// Mảng dữ liệu người dùng bao gồm thông tin cá nhân và hình ảnh
-const userData = {
-  name: "Nhi Nhi",
-  title: "UI/UX Designer",
-  bannerImage: require("../../../img/User_Profile/UserProfile1.jpg"),
-  profileImage: require("../../../img/User_Profile/User_Profile.jpg"),
-  stats: {
-    ongoing: 25,
-    completed: 24,
-    cancelled: 25,
-  },
-  courses: [
-    {
-      id: 1,
-      image: require("../../../img/User_Profile/ProductDesign.jpg"),
-      title: "Product Design",
-      author: "Dennis Sweeney",
-      price: 190,
-      rating: 4.5,
-      lessons: 12,
-    },
-    {
-      id: 2,
-      image: require("../../../img/User_Profile/ProductDesign.jpg"),
-      title: "Website Design",
-      author: "Ramono Wultschner",
-      price: 59,
-      rating: 4.5,
-      lessons: 12,
-    },
-    {
-      id: 3,
-      image: require("../../../img/User_Profile/ProductDesign.jpg"),
-      title: "Mobile UI Design",
-      author: "Ramono Wultschner",
-      price: 320,
-      rating: 4.5,
-      lessons: 12,
-    },
-
-    {
-      id: 4,
-      image: require("../../../img/User_Profile/ProductDesign.jpg"),
-      title: "Digital Portrait",
-      author: "Ramono Wultschner",
-      price: 67,
-      rating: 4.5,
-      lessons: 12,
-    },
-  ],
-};
+import { useDispatch, useSelector } from "react-redux";
+import { getCourseOfUser } from "../../redux/userSlice";
 
 const Item = ({ image, title, author, price, rating, lessons, navigation }) => (
   <TouchableOpacity onPress={() => navigation.navigate("Lesson")}>
@@ -84,7 +36,50 @@ const Item = ({ image, title, author, price, rating, lessons, navigation }) => (
   </TouchableOpacity>
 );
 
-export default function UserProfileScreen({ navigation , route}) {
+export default function UserProfileScreen({ navigation, route }) {
+  const user = useSelector((state) => state.auth.user); // lấy thông tin user login
+  const listCourse = useSelector((state) => state.user.listCourse); // lấy danh sách khóa học của user
+  const dispatch = useDispatch();
+
+  const [courseOfUser, setCourseOfUser] = useState([]); //state lưu danh sách khóa học của user
+  console.log("user", user);
+
+  useEffect(() => {
+    dispatch(getCourseOfUser(user._id)); // id user login
+  }, []);
+
+  // course của user
+  useEffect(() => {
+    if (listCourse) {
+      setCourseOfUser(listCourse);
+    }
+  }, [listCourse]);
+  console.log("listCourse", courseOfUser.courses);
+
+  // Mảng dữ liệu người dùng bao gồm thông tin cá nhân và hình ảnh
+  const userData = {
+    name: user.userName,
+    title: user.title,
+    bannerImage: require("../../../img/User_Profile/UserProfile1.jpg"),
+    profileImage: require("../../../img/User_Profile/User_Profile.jpg"), // chưa sửa
+    stats: {
+      save: courseOfUser.totalCourses,
+      ongoing: courseOfUser.totalCoursesState1,
+      completed: courseOfUser.totalCoursesState2,
+    },
+    courses: courseOfUser.courses?.map((course) => {
+      return {
+        id: course.courseID,
+        image: course.courseImage, // chưa sửa
+        title: course.courseName,
+        author: course.teacherName, 
+        price: course.price, 
+        rating: course.averageRating,
+        lessons: course.totalLessons,
+      };
+    }),
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -98,16 +93,16 @@ export default function UserProfileScreen({ navigation , route}) {
           <Text style={styles.userTitle}>{userData.title}</Text>
           <View style={styles.statsContainer}>
             <View style={styles.statItem}>
+              <Text style={styles.statNumber}>{userData.stats.save}</Text>
+              <Text style={styles.statLabel}>Save</Text>
+            </View>
+            <View style={styles.statItem}>
               <Text style={styles.statNumber}>{userData.stats.ongoing}</Text>
               <Text style={styles.statLabel}>On going</Text>
             </View>
             <View style={styles.statItem}>
               <Text style={styles.statNumber}>{userData.stats.completed}</Text>
               <Text style={styles.statLabel}>Completed</Text>
-            </View>
-            <View style={styles.statItem}>
-              <Text style={styles.statNumber}>{userData.stats.cancelled}</Text>
-              <Text style={styles.statLabel}>Cancelled</Text>
             </View>
           </View>
         </View>
@@ -131,7 +126,7 @@ export default function UserProfileScreen({ navigation , route}) {
           />
         </View>
       </ScrollView>
-      <Footer navigation={navigation} route={route} showActive="person"/>
+      <Footer navigation={navigation} route={route} showActive="person" />
     </View>
   );
 }

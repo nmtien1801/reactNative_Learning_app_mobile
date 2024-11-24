@@ -119,7 +119,7 @@ const DrawerHeader = ({ navigation, route }) => {
       <Drawer.Screen
         name="screenFromApp"
         component={initialScreen}
-        initialParams={route}
+        initialParams={route}   // lấy route
         options={({ navigation, route }) => ({
           header: () => <Header navigation={navigation} route={route} />,
         })}

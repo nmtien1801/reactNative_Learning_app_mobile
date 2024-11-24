@@ -39,10 +39,6 @@ const findCourseSimilarService = (id) => {
   return axios.get(`${baseUrl}/findCourseSimilar/${id}`);
 };
 
-const findCourseByStateService = (state) => {
-  return axios.get(`${baseUrl}/findCourseByState/${state}`);
-};
-
 const getAllLessonService = (state) => {
   return axios.get(`${baseUrl}/getAllLesson`);
 };
@@ -51,6 +47,29 @@ const getReviewByCourseService = (id) => {
   return axios.get(`${baseUrl}/findReviewByCourseID/${id}`);
 };
 
+const getCourseOfUserService = (id) => {
+  return axios.get(`${baseUrl}/getCourseOfUser/${id}`); // chỉ lấy người hướng dẫn
+};
+
+const getAllCourseUserService = (userID) => {
+  return axios.get(`${baseUrl}/getAllCourseUser/${userID}`); // lấy all
+};
+
+const findCourseUserState1Service = (userID) => {
+  return axios.get(`${baseUrl}/findCourseUserState1/${userID}`);
+};
+
+const findCourseUserState2Service = (userID) => {
+  return axios.get(`${baseUrl}/findCourseUserState2/${userID}`);
+};
+
+const getProjectByUserService = (userID) => {
+  return axios.get(`${baseUrl}/getProjectByUser/${userID}`);
+};
+
+const createProjectService = (data) => {
+  return axios.post(`${baseUrl}/createProject`, data);
+};
 export {
   handleLoginApi,
   logOutUser,
@@ -60,7 +79,12 @@ export {
   findPopularCourseService,
   findCourseByIDService,
   findCourseSimilarService,
-  findCourseByStateService,
   getAllLessonService,
   getReviewByCourseService,
+  getCourseOfUserService,
+  getAllCourseUserService,
+  findCourseUserState1Service,
+  findCourseUserState2Service,
+  getProjectByUserService,
+  createProjectService,
 };

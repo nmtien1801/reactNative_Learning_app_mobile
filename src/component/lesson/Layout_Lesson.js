@@ -12,7 +12,8 @@ export default function Layout({ children, navigation , route}) {
         <Nav navigation={navigation} route={route}/>
         <View style={styles.content}>{children}</View>
       </ScrollView>
-      <Footer navigation={navigation} />
+      <Footer navigation={navigation} route={route} showActive="book" />
+
     </View>
   );
 }
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   content: {
-    flex: 1,
+    // flex: 1,
     padding: 16,
   },
 });

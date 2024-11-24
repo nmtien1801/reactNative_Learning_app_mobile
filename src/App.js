@@ -29,11 +29,12 @@ import HeaderCart from "./header/Header-Cart";
 import { store } from "./redux/store";
 import { Provider } from "react-redux";
 import { CustomToast } from "./component/customToast";
+import { useSelector } from "react-redux";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-function LessonTabs() {
+function LessonTabs({ navigation, route }) {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -44,17 +45,26 @@ function LessonTabs() {
       <Tab.Screen
         name="Learning_Lesson"
         component={DrawerHeader}
-        initialParams={{ screenName: "Learning_Lesson" }}
+        initialParams={{
+          screenName: "Learning_Lesson",
+          courseID: 1,
+        }}
       />
       <Tab.Screen
         name="Learning_Project"
         component={DrawerHeader}
-        initialParams={{ screenName: "Learning_Project" }}
+        initialParams={{
+          screenName: "Learning_Project",
+          courseID: 1,
+        }}
       />
       <Tab.Screen
         name="Learning_QA"
         component={DrawerHeader}
-        initialParams={{ screenName: "Learning_QA" }}
+        initialParams={{
+          screenName: "Learning_QA",
+          courseID: 1,
+        }}
       />
     </Tab.Navigator>
   );
@@ -86,122 +96,126 @@ export default function App() {
 }
 
 const Project = () => {
+  const isLogin = useSelector((state) => state.auth.isLogin);
+  
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="homeUser">
-        <Stack.Screen
-          name="Intro"
-          component={Intro}
-          options={{ header: () => {} }}
-        />
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{ header: () => {} }}
-        />
-        <Stack.Screen
-          name="SignUp"
-          component={RegisterScreen}
-          options={{ header: () => {} }}
-        />
+      <Stack.Navigator initialRouteName="Login">
+            <Stack.Screen
+              name="Intro"
+              component={Intro}
+              options={{ header: () => {} }}
+            />
+            <Stack.Screen
+              name="Login"
+              component={Login}
+              options={{ header: () => {} }}
+            />
+            <Stack.Screen
+              name="SignUp"
+              component={RegisterScreen}
+              options={{ header: () => {} }}
+            />
 
-        {/* ================ search course */}
-        <Stack.Screen
-          name="courseSearch"
-          component={CourseSearch}
-          options={{ header: () => {} }}
-        />
-        <Stack.Screen
-          name="courseListing"
-          component={CourseListing}
-          options={{ header: () => {} }}
-        />
+            {/* ================ search course */}
+            <Stack.Screen
+              name="courseSearch"
+              component={CourseSearch}
+              options={{ header: () => {} }}
+            />
+            <Stack.Screen
+              name="courseListing"
+              component={CourseListing}
+              options={{ header: () => {} }}
+            />
 
-        {/* ===================== course */}
-        <Stack.Screen
-          name="courseDetailOverView"
-          component={DrawerHeader}
-          initialParams={{ screenName: "CourseDetailOverView" }}
-          options={{ header: () => {} }}
-        />
-        <Stack.Screen
-          name="courseDetailLesson"
-          component={DrawerHeader}
-          initialParams={{ screenName: "CourseDetailLesson" }}
-          options={{ header: () => {} }}
-        />
-        <Stack.Screen
-          name="courseDetailReview"
-          component={DrawerHeader}
-          initialParams={{ screenName: "CourseDetailReview" }}
-          options={{ header: () => {} }}
-        />
+            {/* ===================== course */}
+            <Stack.Screen
+              name="courseDetailOverView"
+              component={DrawerHeader}
+              initialParams={{ screenName: "CourseDetailOverView" }}
+              options={{ header: () => {} }}
+            />
+            <Stack.Screen
+              name="courseDetailLesson"
+              component={DrawerHeader}
+              initialParams={{ screenName: "CourseDetailLesson" }}
+              options={{ header: () => {} }}
+            />
+            <Stack.Screen
+              name="courseDetailReview"
+              component={DrawerHeader}
+              initialParams={{ screenName: "CourseDetailReview" }}
+              options={{ header: () => {} }}
+            />
 
-        {/* ===================== my course */}
-        <Stack.Screen
-          name="myCourse"
-          component={MyCourse}
-          options={{ header: () => {} }}
-        />
+            {/* ===================== my course */}
+            <Stack.Screen
+              name="myCourse"
+              component={MyCourse}
+              options={{ header: () => {} }}
+            />
 
-        {/* ===================== user - student */}
-        <Stack.Screen
-          name="userProfile"
-          component={User_Profile}
-          options={{ header: () => {} }}
-        />
+            {/* ===================== user - student */}
+            <Stack.Screen
+              name="userProfile"
+              component={User_Profile}
+              options={{ header: () => {} }}
+            />
 
-        <Stack.Screen
-          name="cart"
-          component={Cart}
-          options={({ navigation, route }) => ({
-            header: () => <HeaderCart navigation={navigation} route={route} />,
-          })}
-        />
-        {/* ===================== user - home */}
-        <Stack.Screen
-          name="homeUser"
-          component={HomeUser}
-          options={{ header: () => {} }}
-        />
+            <Stack.Screen
+              name="cart"
+              component={Cart}
+              options={({ navigation, route }) => ({
+                header: () => (
+                  <HeaderCart navigation={navigation} route={route} />
+                ),
+              })}
+            />
+            {/* ===================== user - home */}
+            <Stack.Screen
+              name="homeUser"
+              component={HomeUser}
+              options={{ header: () => {} }}
+            />
 
-        {/* ===================== teacher */}
-        <Stack.Screen
-          name="FormCourse"
-          component={FormCourse}
-          options={{ header: () => {} }}
-        />
-        <Stack.Screen
-          name="FormLesson"
-          component={FormLesson}
-          options={{ header: () => {} }}
-        />
-        <Stack.Screen
-          name="Lesson"
-          component={LessonTabs}
-          options={{ header: () => {} }}
-        />
-        <Stack.Screen
-          name="Teacher"
-          component={TeacherTabs}
-          options={{ header: () => {} }}
-        />
-        <Stack.Screen
-          name="ManageCourse"
-          component={ManageCourse}
-          options={{ header: () => {} }}
-        />
-        <Stack.Screen
-          name="ManageLesson"
-          component={ManageLesson}
-          options={{ header: () => {} }}
-        />
+            {/* ===================== teacher */}
+            <Stack.Screen
+              name="FormCourse"
+              component={FormCourse}
+              options={{ header: () => {} }}
+            />
+            <Stack.Screen
+              name="FormLesson"
+              component={FormLesson}
+              options={{ header: () => {} }}
+            />
+            <Stack.Screen
+              name="Lesson"
+              component={LessonTabs}
+              options={{ header: () => {} }}
+            />
+            <Stack.Screen
+              name="Teacher"
+              component={TeacherTabs}
+              options={{ header: () => {} }}
+            />
+            <Stack.Screen
+              name="ManageCourse"
+              component={ManageCourse}
+              options={{ header: () => {} }}
+            />
+            <Stack.Screen
+              name="ManageLesson"
+              component={ManageLesson}
+              options={{ header: () => {} }}
+            />
 
-        <Stack.Screen
-          name="ManageProject"
-          component={ManageProject}
-          options={{ header: () => {} }}
-        />
+            <Stack.Screen
+              name="ManageProject"
+              component={ManageProject}
+              options={{ header: () => {} }}
+            />
       </Stack.Navigator>
     </NavigationContainer>
   );

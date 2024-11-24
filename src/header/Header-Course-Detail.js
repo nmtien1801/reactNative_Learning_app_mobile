@@ -20,7 +20,7 @@ const HeaderCourseDetail = ({ navigation, route }) => {
       >
         <Ionicons name="chevron-back" size={24} color="black" />
       </TouchableOpacity>
-      <Text style={styles.titleBar}>Course details</Text>
+      <Text style={styles.titleBar}>{route.params.name}</Text>
       <View style={styles.rightIcons}>
         <TouchableOpacity style={styles.iconButton}>
           <Ionicons name="bookmark-outline" size={24} color="black" />

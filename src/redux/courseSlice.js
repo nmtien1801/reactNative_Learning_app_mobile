@@ -4,7 +4,6 @@ import {
   findPopularCourseService,
   findCourseByIDService,
   findCourseSimilarService,
-  findCourseByStateService,
 } from "../service/userService";
 
 const initialState = {
@@ -46,14 +45,6 @@ export const findCourseByID = createAsyncThunk(
   }
 );
 
-export const findCourseByState = createAsyncThunk(
-  "course/findCourseByState",
-  async (state, thunkAPI) => {
-    const response = await findCourseByStateService(state);
-    return response.data;
-  }
-);
-
 export const findCourseSimilar = createAsyncThunk(
   "course/findCourseSimilar",
   async (id, thunkAPI) => {
@@ -88,6 +79,7 @@ const courseSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    // findAllCourses
     builder
       .addCase(findAllCourses.pending, (state) => {
         state.isLoading = true;
@@ -105,6 +97,7 @@ const courseSlice = createSlice({
         state.errorMessage = action.error.message; // Store error message
       });
 
+    // findPopularCourses
     builder
       .addCase(findPopularCourses.pending, (state) => {
         state.isLoading = true;
@@ -122,6 +115,7 @@ const courseSlice = createSlice({
         state.errorMessage = action.error.message;
       });
 
+    // findCourseByID
     builder
       .addCase(findCourseByID.pending, (state) => {
         state.isLoading = true;
@@ -139,6 +133,7 @@ const courseSlice = createSlice({
         state.errorMessage = action.error.message;
       });
 
+    // findCourseSimilar
     builder
       .addCase(findCourseSimilar.pending, (state) => {
         state.isLoading = true;
@@ -156,22 +151,6 @@ const courseSlice = createSlice({
         state.errorMessage = action.error.message;
       });
 
-    builder
-      .addCase(findCourseByState.pending, (state) => {
-        state.isLoading = true;
-        state.isError = false;
-        state.errorMessage = "";
-      })
-      .addCase(findCourseByState.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.listCourse = action.payload.DT || [];
-        state.isLogin = true;
-      })
-      .addCase(findCourseByState.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.errorMessage = action.error.message;
-      });
   },
 });
 
