@@ -12,7 +12,6 @@ const initialState = {
   listCoursePopular: [],
   listCart: [], // Giỏ hàng sẽ lưu trữ các khóa học đã thêm
   courseDetail: {},
-
   listCourseSimilar: [],
   isLogin: false, // Kiểm tra xem người dùng đã đăng nhập chưa
   isLoading: false,
@@ -150,7 +149,6 @@ const courseSlice = createSlice({
         state.isError = true;
         state.errorMessage = action.error.message;
       });
-
   },
 });
 

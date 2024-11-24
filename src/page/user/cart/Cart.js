@@ -1,124 +1,154 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
-  Image,
-  StyleSheet,
   FlatList,
+  ActivityIndicator,
   TouchableOpacity,
-  SafeAreaView,
+  StyleSheet,
 } from "react-native";
-import { Checkbox } from "react-native-paper";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
+  getCartByUser,
+  addCart,
   removeFromCart,
-  findCourseByID,
+  clearCart,
+} from "../../../redux/cartSlice";
+import {
   addToCart,
+  removeFromCart as removeCourseFromCart,
 } from "../../../redux/courseSlice";
 
-export default function Cart({ navigation, route }) {
-  const cartCourses = useSelector((state) => state.course.listCart);
-  const courseDetail = useSelector((state) => state.course.courseDetail);
+const Cart = () => {
   const dispatch = useDispatch();
+  const { listCart, isLoading, isError, errorMessage } = useSelector(
+    (state) => state.cart
+  );
+  const { listCourse } = useSelector((state) => state.course);
 
-  const [selectedCourses, setSelectedCourses] = useState([]);
-
-  // Lấy courseID từ route nếu có
-  const courseID = route.params;
+  const userID = 1; // Giả sử bạn đã có userID (có thể lấy từ state hoặc props)
 
   useEffect(() => {
-    if (courseID) {
-      dispatch(findCourseByID(courseID));
-    }
-  }, [courseID, dispatch]);
+    dispatch(getCartByUser(userID)); // Lấy giỏ hàng của người dùng
+  }, [dispatch, userID]);
 
-  useEffect(() => {
-    if (courseDetail && courseDetail.id) {
-      const existingCourse = cartCourses.find(
-        (course) => course.id === courseDetail.id
-      );
-      if (!existingCourse) {
-        dispatch(addToCart(courseDetail));
-      }
-    }
-  }, [courseDetail, cartCourses, dispatch]);
-
-  const toggleSelection = (id) => {
-    setSelectedCourses((prevSelected) => {
-      if (prevSelected.includes(id)) {
-        return prevSelected.filter((courseId) => courseId !== id);
-      } else {
-        return [...prevSelected, id];
-      }
-    });
+  const handleAddToCart = (course) => {
+    dispatch(addToCart(course));
+    dispatch(addCart(course)); // Thêm vào giỏ hàng API
   };
 
-  const deleteSelectedCourses = () => {
-    selectedCourses.forEach((id) => {
-      dispatch(removeFromCart({ id }));
-    });
-    setSelectedCourses([]);
+  const handleRemoveFromCart = (course) => {
+    dispatch(removeCourseFromCart(course));
+    dispatch(removeFromCart(course)); // Xóa khỏi giỏ hàng API
   };
 
-  const total = cartCourses.reduce(
-    (sum, course) => sum + (course.price || 0),
-    0
-  );
+  const handleClearCart = () => {
+    dispatch(clearCart()); // Xóa tất cả khóa học trong giỏ
+  };
 
-  const CourseItem = ({ course }) => (
-    <View style={styles.courseCard}>
-      {course.image && (
-        <Image source={{ uri: course.image }} style={styles.courseImage} />
-      )}
-      <View style={styles.courseDetails}>
-        <Text style={styles.courseTitle}>{course.title}</Text>
-        <Text style={styles.courseInstructor}>{course.instructor}</Text>
-        <Text style={styles.coursePrice}>${course.price}</Text>
-        <Text style={styles.courseLessons}>{course.lessons} lessons</Text>
-      </View>
-      <Checkbox
-        status={selectedCourses.includes(course.id) ? "checked" : "unchecked"}
-        onPress={() => toggleSelection(course.id)}
-      />
-    </View>
-  );
+  if (isLoading) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
+
+  if (isError) {
+    return <Text>Error: {errorMessage}</Text>;
+  }
+
+  // Kiểm tra  data không
+  if (!listCart) {
+    return <Text>No data</Text>;
+  } else {
+    console.log("listCart", listCart);
+  }
+
+  // Đảm bảo listCart là mảng trước khi sử dụng .map()
+  const cartItems = Array.isArray(listCart) ? listCart : [];
+
+  // Destructure dữ liệu
 
   return (
-    <SafeAreaView style={styles.container}>
-      {cartCourses.length > 0 ? (
-        <FlatList
-          data={cartCourses}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => <CourseItem course={item} />}
-        />
+    <View style={{ padding: 20 }}>
+      <Text style={{ fontSize: 24, marginBottom: 20 }}>Your Cart</Text>
+      {cartItems.length === 0 ? (
+        <Text>Your cart is empty!</Text>
       ) : (
-        <Text>No courses in cart.</Text>
+        <View>
+          <FlatList
+            data={cartItems}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
+              <View style={{ marginVertical: 10 }}>
+                <Text>{item.name}</Text>
+                <Text>{item.description}</Text>
+
+                <TouchableOpacity
+                  style={{
+                    padding: 10,
+                    backgroundColor: "#ff6347",
+                    borderRadius: 5,
+                    marginTop: 5,
+                  }}
+                  onPress={() => handleRemoveFromCart(item)}
+                >
+                  <Text style={{ color: "white", textAlign: "center" }}>
+                    Remove from Cart
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          />
+
+          <TouchableOpacity
+            style={{
+              padding: 10,
+              backgroundColor: "#ff6347",
+              borderRadius: 5,
+              marginTop: 20,
+            }}
+            onPress={handleClearCart}
+          >
+            <Text style={{ color: "white", textAlign: "center" }}>
+              Clear Cart
+            </Text>
+          </TouchableOpacity>
+        </View>
       )}
 
-      <View style={styles.footer}>
-        <Text style={styles.totalPrice}>Total: ${total}</Text>
-
-        <TouchableOpacity
-          style={[
-            styles.deleteButton,
-            { opacity: selectedCourses.length > 0 ? 1 : 0.5 },
-          ]}
-          onPress={deleteSelectedCourses}
-          disabled={selectedCourses.length === 0}
-        >
-          <Text style={styles.deleteText}>Delete</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.checkoutButton}
-          onPress={() => navigation.navigate("homeUser")}
-        >
-          <Text style={styles.checkoutText}>Proceed to checkout</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+      <Text style={{ fontSize: 20, marginTop: 30 }}>Available Courses</Text>
+      {listCourse.length === 0 ? (
+        <Text>No courses available!</Text>
+      ) : (
+        <FlatList
+          data={listCourse}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <View style={{ marginVertical: 10 }}>
+              <Text>{item.name}</Text>
+              <Text>{item.description}</Text>
+              {/* TouchableOpacity thay cho Button */}
+              <TouchableOpacity
+                style={{
+                  padding: 10,
+                  backgroundColor: "#32CD32",
+                  borderRadius: 5,
+                  marginTop: 5,
+                }}
+                onPress={() => handleAddToCart(item)}
+              >
+                <Text style={{ color: "white", textAlign: "center" }}>
+                  Add to Cart
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        />
+      )}
+    </View>
   );
-}
+};
+
+export default Cart;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

@@ -70,6 +70,16 @@ const getProjectByUserService = (userID) => {
 const createProjectService = (data) => {
   return axios.post(`${baseUrl}/createProject`, data);
 };
+
+//get cart by user
+const getCartByUserService = (userID) => {
+  return axios.get(`${baseUrl}/getCartByUser/${userID}`);
+};
+
+//add to cart
+const addToCartService = (data) => {
+  return axios.post(`${baseUrl}/addToCart`, data);
+};
 export {
   handleLoginApi,
   logOutUser,
@@ -87,4 +97,6 @@ export {
   findCourseUserState2Service,
   getProjectByUserService,
   createProjectService,
+  getCartByUserService,
+  addToCartService,
 };
