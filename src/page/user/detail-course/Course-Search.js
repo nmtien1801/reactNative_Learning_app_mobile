@@ -12,7 +12,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { findAllCourses } from "../../../redux/courseSlice"; // Ensure correct action import
 import { Ionicons } from "@expo/vector-icons";
-import Footer from "../../../component/Footer";
+import Footer from "../../../component/footer/FooterUser";
 
 // HotTopic Component
 const HotTopic = ({ title, onPress }) => (

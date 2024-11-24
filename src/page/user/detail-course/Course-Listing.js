@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Bookmark, Star } from "lucide-react-native";
-import Footer from "../../../component/Footer";
+import Footer from "../../../component/footer/FooterUser";
 
 export default function CourseListing({ navigation, route }) {
   const CourseListItem = ({ item }) => (

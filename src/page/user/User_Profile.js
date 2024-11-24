@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import Footer from "../../component/Footer";
+import Footer from "../../component/footer/FooterUser";
 import { useToast } from "../../component/customToast";
 
 import { useDispatch, useSelector } from "react-redux";

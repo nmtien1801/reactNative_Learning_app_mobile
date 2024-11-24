@@ -14,7 +14,7 @@ import {
   findCourseUserState1,
   findCourseUserState2,
 } from "../../../redux/userSlice";
-import Footer from "../../../component/Footer";
+import Footer from "../../../component/footer/FooterUser";
 
 export default function MyCourse({ navigation, route }) {
   const [activeTab, setActiveTab] = useState("All");

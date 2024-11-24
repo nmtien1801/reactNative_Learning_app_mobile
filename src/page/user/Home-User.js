@@ -20,7 +20,7 @@ import {
   Bookmark,
   Star,
 } from "lucide-react-native";
-import Footer from "../../component/Footer";
+import Footer from "../../component/footer/FooterUser";
 import { useEffect, useState } from "react";
 import { useToast } from "../../component/customToast";
 

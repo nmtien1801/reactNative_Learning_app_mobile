@@ -2,7 +2,7 @@ import React from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 import Header from "./Header_Teacher";
 import Nav from "./Nav_Teacher";
-import Footer from "../../component/Footer";
+import Footer from "../footer/FooterUser";
 
 export default function Layout({ children, navigation }) {
   return (

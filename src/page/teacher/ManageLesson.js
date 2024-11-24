@@ -9,7 +9,7 @@ import {
   SafeAreaView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import Footer from "../../component/Footer";
+import Footer from "../../component/footer/FooterUser";
 // Sample data structure
 const lessons = [
   {
