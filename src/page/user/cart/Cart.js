@@ -15,10 +15,6 @@ import {
   removeFromCart,
   clearCart,
 } from "../../../redux/cartSlice";
-import {
-  addToCart,
-  removeFromCart as removeCourseFromCart,
-} from "../../../redux/courseSlice";
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -27,24 +23,22 @@ const Cart = () => {
   const { listCart, isLoading, isError, errorMessage } = useSelector(
     (state) => state.cart
   );
-  const { listCourse } = useSelector((state) => state.course);
 
   const userID = 1; // Simulate userID (could come from props or state)
 
   // Fetch cart data when the component mounts
   useEffect(() => {
+    console.log("Dispatching getCartByUser for userID:", userID);
     dispatch(getCartByUser(userID)); // Fetch user's cart data
   }, [dispatch, userID]);
 
   // Add course to cart
   const handleAddToCart = (course) => {
-    dispatch(addToCart(course));
     dispatch(addCart(course)); // Add to cart API
   };
 
   // Remove course from cart
   const handleRemoveFromCart = (course) => {
-    dispatch(removeCourseFromCart(course));
     dispatch(removeFromCart(course)); // Remove from cart API
   };
 
@@ -63,76 +57,58 @@ const Cart = () => {
     return <Text style={styles.errorMessage}>Error: {errorMessage}</Text>;
   }
 
+  // Safeguard for empty cart
+  const cartItems = listCart.DT || []; // Safe fallback to empty array if listCart.DT is undefined or null
+  console.log("listCart:", listCart);
+  console.log("cartItems:", cartItems);
+
   // If cart is empty, show message
-  if (!listCart?.DT || listCart.DT.length === 0) {
+  if (cartItems.length === 0) {
     return <Text style={styles.emptyCart}>Your cart is empty!</Text>;
   }
-
-  const cartItems = listCart.DT || []; // Safe fallback to empty array if no cart data
-  console.log(cartItems);
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Your Cart</Text>
-
-      <FlatList
-        data={cartItems}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.cartItem}>
-            <Image
-              source={{ uri: item.course.image }}
-              style={styles.courseImage}
-            />
-            <Text style={styles.itemName}>{item.course.name}</Text>
-            <Text style={styles.itemDescription}>
-              {item.course.description}
-            </Text>
-            <Text style={styles.itemRating}>
-              Average Rating: {item.course.averageRating || "N/A"} (Total
-              Reviews: {item.course.totalRating})
-            </Text>
-            <Text style={styles.itemLessons}>
-              Total Lessons: {item.course.totalLessons}
-            </Text>
-            <TouchableOpacity
-              style={styles.removeButton}
-              onPress={() => handleRemoveFromCart(item)}
-            >
-              <Text style={styles.buttonText}>Remove from Cart</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-      />
-
-      <TouchableOpacity style={styles.clearButton} onPress={handleClearCart}>
-        <Text style={styles.buttonText}>Clear Cart</Text>
-      </TouchableOpacity>
-
-      <Text style={styles.title}>Available Courses</Text>
-
-      {listCourse.length === 0 ? (
-        <Text style={styles.emptyCart}>No courses available!</Text>
-      ) : (
+      {cartItems.length > 0 ? (
         <FlatList
-          data={listCourse}
+          data={cartItems}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <View style={styles.courseItem}>
-              <Text style={styles.courseName}>{item.course.name}</Text>
-              <Text style={styles.courseDescription}>
-                {item.course.description}
-              </Text>
-              <TouchableOpacity
-                style={styles.addButton}
-                onPress={() => handleAddToCart(item)}
-              >
-                <Text style={styles.buttonText}>Add to Cart</Text>
-              </TouchableOpacity>
+            <View style={styles.cartItem}>
+              <View style={styles.courseDetails}>
+                <Image
+                  source={{ uri: item.image }}
+                  style={{ width: 100, height: 100 }}
+                />
+                <Text style={styles.itemName}>{item.name}</Text>
+                <Text style={styles.itemDescription}>{item.description}</Text>
+                <Text style={styles.itemRating}>
+                  Average Rating: {item.averageRating || "N/A"} (Total Reviews:{" "}
+                  {item.totalRating})
+                </Text>
+                <Text style={styles.itemLessons}>
+                  Total Lessons: {item.totalLessons || 0}
+                </Text>
+
+                <TouchableOpacity
+                  style={styles.removeButton}
+                  onPress={() => handleRemoveFromCart(item)}
+                >
+                  <Text style={styles.buttonText}>Remove from Cart</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           )}
         />
+      ) : (
+        <Text style={styles.emptyCart}>Your cart is empty!</Text>
       )}
+
+      {/* Clear Cart Button */}
+      <TouchableOpacity style={styles.clearButton} onPress={handleClearCart}>
+        <Text style={styles.buttonText}>Clear Cart</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -158,22 +134,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
-  courseImage: {
-    width: 100,
-    height: 100,
-    marginRight: 15,
-    borderRadius: 8,
+  courseDetails: {
+    flex: 1,
   },
   itemName: {
     fontSize: 18,
     fontWeight: "600",
-    flex: 1,
   },
   itemDescription: {
     fontSize: 14,
     color: "#555",
     marginBottom: 5,
-    flex: 2,
   },
   itemRating: {
     fontSize: 12,
@@ -189,27 +160,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     padding: 10,
     backgroundColor: "#ff6347",
-    borderRadius: 5,
-    alignItems: "center",
-  },
-  courseItem: {
-    marginVertical: 10,
-    padding: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
-  },
-  courseName: {
-    fontSize: 18,
-    fontWeight: "600",
-  },
-  courseDescription: {
-    fontSize: 14,
-    color: "#555",
-  },
-  addButton: {
-    marginTop: 10,
-    padding: 10,
-    backgroundColor: "#32CD32",
     borderRadius: 5,
     alignItems: "center",
   },
