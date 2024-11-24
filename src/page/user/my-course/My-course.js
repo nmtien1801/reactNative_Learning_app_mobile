@@ -9,63 +9,41 @@ import {
   Image,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { findCourseByState } from "../../../redux/courseSlice";
+import {
+  getAllCourseUser,
+  findCourseUserState1,
+  findCourseUserState2,
+} from "../../../redux/userSlice";
 import Footer from "../../../component/Footer";
 
 export default function MyCourse({ navigation, route }) {
   const [activeTab, setActiveTab] = useState("All");
   const tabs = ["All", "ON GOING", "COMPLETED"];
   const dispatch = useDispatch();
-  const { listCourse, isLoading, isError } = useSelector(
-    (state) => state.course
-  ); // Getting courses by state from Redux
+  const user = useSelector((state) => state.auth.user); // lấy thông tin user login
+  const listCourse = useSelector((state) => state.user.listCourse); // lấy danh sách khóa học của user
 
+  console.log("user: ", user);
+  
   useEffect(() => {
     if (activeTab === "ON GOING") {
-      dispatch(findCourseByState(2)); // Fetch ON GOING courses
+      dispatch(findCourseUserState1(user._id)); // Fetch ON GOING courses
     } else if (activeTab === "COMPLETED") {
-      dispatch(findCourseByState(1)); // Fetch COMPLETED courses
+      dispatch(findCourseUserState2(user._id)); // Fetch COMPLETED courses
     } else {
-      dispatch(findCourseByState(0)); // Fetch all courses if "All" is selected
+      dispatch(getAllCourseUser(user._id)); // Fetch all courses if "All" is selected -> chưa sửa
     }
   }, [activeTab, dispatch]);
-
-  // Loading state
-  if (isLoading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <Text style={styles.loadingText}>Loading...</Text>
-      </View>
-    );
-  }
-
-  // Error state
-  if (isError) {
-    console.log("error", isError);
-    return (
-      <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>Failed to load data</Text>
-      </View>
-    );
-  }
-
-  // No data state
-  if (!listCourse || Object.keys(listCourse).length === 0) {
-    return (
-      <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>No data available</Text>
-      </View>
-    );
-  } else {
-    console.log("listCourse", listCourse);
-  }
 
   const CourseCard = ({ course }) => (
     <TouchableOpacity
       style={styles.courseCard}
-      onPress={() => navigation.navigate("Lesson", {courseID: course.id})}
+      onPress={() => navigation.navigate("Lesson", { courseID: course.id })}
     >
-      <Image source={{ uri: course.image }} style={styles.courseImage} />
+      <Image
+        source={{ uri: "https://v0.dev/placeholder.svg?height=200&width=200" }}
+        style={styles.courseImage}
+      />
       <View style={styles.courseInfo}>
         <Text style={styles.courseTitle}>{course.title}</Text>
         <Text style={styles.description}>{course.description} description</Text>

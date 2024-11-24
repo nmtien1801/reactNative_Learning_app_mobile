@@ -5,6 +5,8 @@ import { useFocusEffect } from "@react-navigation/native";
 export default function Nav_Lesson({ navigation, route }) {
   const [activeTab, setActiveTab] = useState("Learning_Lesson");
 
+  
+
   useFocusEffect(
     React.useCallback(() => {
       setActiveTab(route.params.name); // Cập nhật tab hiện tại dựa vào route

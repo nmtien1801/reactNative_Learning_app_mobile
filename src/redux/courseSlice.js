@@ -4,7 +4,6 @@ import {
   findPopularCourseService,
   findCourseByIDService,
   findCourseSimilarService,
-  findCourseByStateService,
 } from "../service/userService";
 
 const initialState = {
@@ -42,14 +41,6 @@ export const findCourseByID = createAsyncThunk(
   "course/findCourseByID",
   async (id, thunkAPI) => {
     const response = await findCourseByIDService(id);
-    return response.data;
-  }
-);
-
-export const findCourseByState = createAsyncThunk(
-  "course/findCourseByState",
-  async (state, thunkAPI) => {
-    const response = await findCourseByStateService(state);
     return response.data;
   }
 );
@@ -160,23 +151,6 @@ const courseSlice = createSlice({
         state.errorMessage = action.error.message;
       });
 
-    // findCourseByState
-    builder
-      .addCase(findCourseByState.pending, (state) => {
-        state.isLoading = true;
-        state.isError = false;
-        state.errorMessage = "";
-      })
-      .addCase(findCourseByState.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.listCourse = action.payload.DT || [];
-        state.isLogin = true;
-      })
-      .addCase(findCourseByState.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.errorMessage = action.error.message;
-      });
   },
 });
 

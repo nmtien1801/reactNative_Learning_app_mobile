@@ -39,10 +39,6 @@ const findCourseSimilarService = (id) => {
   return axios.get(`${baseUrl}/findCourseSimilar/${id}`);
 };
 
-const findCourseByStateService = (state) => {
-  return axios.get(`${baseUrl}/findCourseByState/${state}`);
-};
-
 const getAllLessonService = (state) => {
   return axios.get(`${baseUrl}/getAllLesson`);
 };
@@ -52,9 +48,20 @@ const getReviewByCourseService = (id) => {
 };
 
 const getCourseOfUserService = (id) => {
-  return axios.get(`${baseUrl}/getCourseOfUser/${id}`);
-}
+  return axios.get(`${baseUrl}/getCourseOfUser/${id}`); // chỉ lấy người hướng dẫn
+};
 
+const getAllCourseUserService = (userID) => {
+  return axios.get(`${baseUrl}/getAllCourseUser/${userID}`); // lấy all
+};
+
+const findCourseUserState1Service = (userID) => {
+  return axios.get(`${baseUrl}/findCourseUserState1/${userID}`);
+};
+
+const findCourseUserState2Service = (userID) => {
+  return axios.get(`${baseUrl}/findCourseUserState2/${userID}`);
+};
 export {
   handleLoginApi,
   logOutUser,
@@ -64,8 +71,10 @@ export {
   findPopularCourseService,
   findCourseByIDService,
   findCourseSimilarService,
-  findCourseByStateService,
   getAllLessonService,
   getReviewByCourseService,
-  getCourseOfUserService
+  getCourseOfUserService,
+  getAllCourseUserService,
+  findCourseUserState1Service,
+  findCourseUserState2Service,
 };

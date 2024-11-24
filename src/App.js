@@ -44,17 +44,17 @@ function LessonTabs({navigation, route}) {
       <Tab.Screen
         name="Learning_Lesson"
         component={DrawerHeader}
-        initialParams={{ screenName: "Learning_Lesson" , courseID: route.params.courseID}}
+        initialParams={{ screenName: "Learning_Lesson" , courseID: route.params?.courseID}}
       />
       <Tab.Screen
         name="Learning_Project"
         component={DrawerHeader}
-        initialParams={{ screenName: "Learning_Project" }}
+        initialParams={{ screenName: "Learning_Project", courseID: route.params?.courseID }}
       />
       <Tab.Screen
         name="Learning_QA"
         component={DrawerHeader}
-        initialParams={{ screenName: "Learning_QA" }}
+        initialParams={{ screenName: "Learning_QA", courseID: route.params?.courseID }}
       />
     </Tab.Navigator>
   );
@@ -88,7 +88,7 @@ export default function App() {
 const Project = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="homeUser">
+      <Stack.Navigator initialRouteName="Login">
         <Stack.Screen
           name="Intro"
           component={Intro}

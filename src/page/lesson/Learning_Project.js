@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,8 +9,11 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Layout from "../../component/lesson/Layout_Lesson";
+import * as DocumentPicker from "expo-document-picker";
 
-export default function ProjectComponent({ navigation , route}) {
+export default function ProjectComponent({ navigation, route }) {
+  const [file, setFile] = useState(null); // lưu ảnh
+  
   const studentProjects = [
     {
       id: "1",
@@ -79,12 +82,35 @@ export default function ProjectComponent({ navigation , route}) {
     </View>
   );
 
+  const pickImage = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: "image/*",
+        copyToCacheDirectory: true,
+      });
+
+      if (result.canceled === false) {
+        setFile({
+          uri: result.assets[0].uri,
+          name: result.assets[0].name,
+          size: result.assets[0].size ?? 0,
+          type: result.assets[0].mimeType ?? "unknown",
+        });
+        // setIsEdit(true);
+      }
+    } catch (error) {
+      console.error("Error picking document:", error);
+    }
+  };
+
   return (
     <Layout navigation={navigation} route={route}>
-      <TouchableOpacity style={styles.uploadButton}>
+      {/* image: thêm 1 file */}
+      <TouchableOpacity style={styles.uploadButton} onPress={() => pickImage()}>
         <Ionicons name="cloud-upload-outline" size={24} color="#00BDD6" />
         <Text style={styles.uploadText}>Upload your project here</Text>
       </TouchableOpacity>
+      {file && <Image source={{ uri: file.uri }} style={styles.image} />}
 
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>Student Projects</Text>
@@ -222,5 +248,9 @@ const styles = StyleSheet.create({
   },
   downloadButton: {
     padding: 8,
+  },
+  image: {
+    width: 200,
+    height: 200,
   },
 });
