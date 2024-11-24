@@ -42,7 +42,6 @@ export default function UserProfileScreen({ navigation, route }) {
   const dispatch = useDispatch();
 
   const [courseOfUser, setCourseOfUser] = useState([]); //state lưu danh sách khóa học của user
-  console.log("user", user);
 
   useEffect(() => {
     dispatch(getCourseOfUser(user._id)); // id user login

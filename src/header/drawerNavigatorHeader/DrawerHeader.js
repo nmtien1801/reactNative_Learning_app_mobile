@@ -34,6 +34,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import {handleLogout} from "../../redux/authSlice";
 
 const DrawerHeader = ({ navigation, route }) => {
+  const user = useSelector((state) => state.auth.user); // lấy thông tin user login
   const dispatch = useDispatch(); 
   const toast = useToast();
 
@@ -61,7 +62,7 @@ const DrawerHeader = ({ navigation, route }) => {
             }}
             style={styles.logo}
           />
-          <Text style={styles.logoText}>Nguyen Minh Tien</Text>
+          <Text style={styles.logoText}>{user.userName}</Text>
         </View>
 
         <DrawerItem
