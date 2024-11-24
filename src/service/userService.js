@@ -77,8 +77,8 @@ const getCartByUserService = (userID) => {
 };
 
 //add to cart
-const addToCartService = (data) => {
-  return axios.post(`${baseUrl}/addToCart`, data);
+const addCourseToCart = (courseID, userID) => {
+  return axios.post(`${baseUrl}/addCourseToCart`, { courseID, userID });
 };
 export {
   handleLoginApi,
@@ -98,5 +98,5 @@ export {
   getProjectByUserService,
   createProjectService,
   getCartByUserService,
-  addToCartService,
+  addCourseToCart,
 };

@@ -81,14 +81,16 @@ const Cart = () => {
                   source={{ uri: item.image }}
                   style={{ width: 100, height: 100 }}
                 />
-                <Text style={styles.itemName}>{item.name}</Text>
-                <Text style={styles.itemDescription}>{item.description}</Text>
+                <Text style={styles.itemName}>{item.course.name}</Text>
+                <Text style={styles.itemDescription}>
+                  {item.course.description}
+                </Text>
                 <Text style={styles.itemRating}>
-                  Average Rating: {item.averageRating || "N/A"} (Total Reviews:{" "}
-                  {item.totalRating})
+                  Average Rating: {item.course.averageRating || "N/A"} (Total
+                  Reviews: {item.totalRating})
                 </Text>
                 <Text style={styles.itemLessons}>
-                  Total Lessons: {item.totalLessons || 0}
+                  Total Lessons: {item.course.totalLessons || 0}
                 </Text>
 
                 <TouchableOpacity
