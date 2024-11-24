@@ -64,7 +64,7 @@ const courses = [
   },
 ];
 
-export default function Component({ navigation }) {
+export default function Component({ navigation, route }) {
   const renderCourseItem = ({ item }) => (
     <TouchableOpacity onPress={() => navigation.navigate("ManageLesson")}>
       <View style={styles.courseCard}>

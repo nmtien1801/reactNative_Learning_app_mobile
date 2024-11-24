@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchTeacherCourses } from "../../redux/teacherSlide";
 import { useToast } from "../../component/customToast";
 
-export default function TeacherCourses() {
+export default function TeacherCourses({ navigation, route }) {
   const dispatch = useDispatch();
   const { TeacherCourses, isLoading, isError } = useSelector(
     (state) => state.teacher
@@ -30,7 +30,7 @@ export default function TeacherCourses() {
   // Trạng thái loading
   if (isLoading) {
     return (
-      <Layout>
+      <Layout navigation={navigation} route={route}>
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#4A90E2" />
           <Text style={styles.loadingText}>Loading...</Text>
@@ -43,7 +43,7 @@ export default function TeacherCourses() {
   if (isError) {
     showToast("Failed to load teacher data");
     return (
-      <Layout>
+      <Layout navigation={navigation} route={route}>
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>Failed to load data</Text>
         </View>
@@ -54,7 +54,7 @@ export default function TeacherCourses() {
   // Kiểm tra dữ liệu TeacherCourses.DT
   if (!TeacherCourses || !TeacherCourses.DT) {
     return (
-      <Layout>
+      <Layout navigation={navigation} route={route}>
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>No data available</Text>
         </View>
@@ -119,7 +119,7 @@ export default function TeacherCourses() {
   const categoryNames = Object.keys(groupedByCategory);
 
   return (
-    <Layout>
+    <Layout navigation={navigation} route={route}>
       {categoryNames.map((categoryName) => {
         return (
           <View key={categoryName}>

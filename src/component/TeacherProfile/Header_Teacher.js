@@ -10,7 +10,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTeacherOverview } from "../../redux/teacherSlide"; // Import action
 
-export default function TeacherProfileScreen() {
+export default function TeacherProfileScreen({navigation, route}) {
   const dispatch = useDispatch();
 
   // Dữ liệu từ Redux store
@@ -60,9 +60,8 @@ export default function TeacherProfileScreen() {
   }
 
   // Destructure dữ liệu giáo viên
-  const { userName, image, description, email, phone, address } =
+  const { userName, image, description, email, phone, address, title } =
     teacherOverview.DT;
-  console.log("img", image);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -88,40 +87,26 @@ export default function TeacherProfileScreen() {
         <View style={styles.profileInfo}>
           <Text style={styles.teacherName}>{userName}</Text>
           <View style={styles.jobTitleContainer}>
-            <Text style={styles.jobTitle}>UX/UI Designer</Text>
+            <Text style={styles.jobTitle}>{title}</Text>
             <View style={styles.teacherTag}>
               <Text style={styles.teacherTagText}>Teacher</Text>
             </View>
           </View>
-          <Text style={styles.timeZone}>Korea • 9:30 AM</Text>
+          <Text style={styles.timeZone}>{address}</Text>
         </View>
       </View>
-
-      {/* Contact Information */}
-      {/* <View style={styles.contactContainer}>
-        <Text style={styles.contactTitle}>Contact</Text>
-        <View style={styles.contactItem}>
-          <Text style={styles.contactText}>{phone}</Text>
-        </View>
-        <View style={styles.contactItem}>
-          <Text style={styles.contactText}>{address}</Text>
-        </View>
-        <View style={styles.contactItem}>
-          <Text style={styles.contactText}>{email}</Text>
-        </View>
-      </View> */}
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: "#F5F5F5",
   },
   header: {
     padding: 16,
     backgroundColor: "#FFF",
+    alignItems: "center",
   },
   headerTitle: {
     fontSize: 18,
@@ -180,26 +165,7 @@ const styles = StyleSheet.create({
     color: "#666",
     marginTop: 4,
   },
-  contactContainer: {
-    marginTop: 20,
-    paddingHorizontal: 16,
-  },
-  contactTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 12,
-  },
-  contactItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  contactText: {
-    fontSize: 14,
-    color: "#333",
-    marginLeft: 8,
-    flex: 1,
-  },
+
   loadingContainer: {
     justifyContent: "center",
     alignItems: "center",

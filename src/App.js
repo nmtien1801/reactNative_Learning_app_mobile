@@ -69,7 +69,7 @@ function LessonTabs({ navigation, route }) {
   );
 }
 
-function TeacherTabs() {
+function TeacherTabs({ navigation, route }) {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -77,9 +77,27 @@ function TeacherTabs() {
         tabBarStyle: { display: "none" },
       }}
     >
-      <Tab.Screen name="TeacherOverview" component={TeacherOverview} />
-      <Tab.Screen name="TeacherCourses" component={TeacherCourses} />
-      <Tab.Screen name="TeacherReviews" component={TeacherReviews} />
+      <Tab.Screen
+        name="TeacherOverview"
+        component={TeacherOverview}
+        initialParams={{
+          params: route.params,
+        }}
+      />
+      <Tab.Screen
+        name="TeacherCourses"
+        component={TeacherCourses}
+        initialParams={{
+          params: route.params,
+        }}
+      />
+      <Tab.Screen
+        name="TeacherReviews"
+        component={TeacherReviews}
+        initialParams={{
+          params: route.params,
+        }}
+      />
     </Tab.Navigator>
   );
 }
@@ -99,7 +117,7 @@ const Project = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator initialRouteName="Teacher">
         <Stack.Screen
           name="Intro"
           component={Intro}
@@ -198,6 +216,7 @@ const Project = () => {
         <Stack.Screen
           name="Teacher"
           component={TeacherTabs}
+          initialParams={{ screenName: "TeacherOverView" }}
           options={{ header: () => {} }}
         />
         <Stack.Screen

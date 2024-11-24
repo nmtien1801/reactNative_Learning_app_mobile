@@ -35,7 +35,7 @@ const reviews = [
   },
 ];
 
-export default function TeacherReviews() {
+export default function TeacherReviews({ navigation, route }) {
   const renderStars = (count) => (
     <View style={styles.starsContainer}>
       {[...Array(5)].map((_, index) => (
@@ -66,7 +66,7 @@ export default function TeacherReviews() {
   );
 
   return (
-    <Layout>
+    <Layout navigation={navigation} route={route}>
       <View style={styles.ratingOverview}>
         <View style={styles.ratingHeader}>
           <View style={styles.ratingLeft}>

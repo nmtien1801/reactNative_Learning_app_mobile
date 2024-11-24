@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchTeacherOverview } from "../../redux/teacherSlide";
 import { useToast } from "../../component/customToast";
 
-export default function TeacherOverview() {
+export default function TeacherOverview({ navigation, route }) {
   const dispatch = useDispatch();
   const { teacherOverview, isLoading, isError } = useSelector(
     (state) => state.teacher
@@ -30,7 +30,7 @@ export default function TeacherOverview() {
   // Trạng thái loading
   if (isLoading) {
     return (
-      <Layout>
+      <Layout navigation={navigation} route={route}>
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#4A90E2" />
           <Text style={styles.loadingText}>Loading...</Text>
@@ -43,7 +43,7 @@ export default function TeacherOverview() {
   if (isError) {
     showToast("Failed to load teacher data");
     return (
-      <Layout>
+      <Layout navigation={navigation} route={route}>
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>Failed to load data</Text>
         </View>
@@ -54,7 +54,7 @@ export default function TeacherOverview() {
   // Không có dữ liệu
   if (!teacherOverview || Object.keys(teacherOverview).length === 0) {
     return (
-      <Layout>
+      <Layout navigation={navigation} route={route}>
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>No data available</Text>
         </View>
@@ -62,17 +62,14 @@ export default function TeacherOverview() {
     );
   } else {
     // showToast("Data loaded successfully");
-    console.log("Data loaded successfully:", teacherOverview);
   }
 
   // Destructure dữ liệu giáo viên và cung cấp giá trị mặc định
-  const { userName, image, description, email, phone, address } =
+  const { userName, image, description, email, phone, address, title } =
     teacherOverview.DT || {};
-
-  console.log("userName: ", userName); // Kiểm tra giá trị userName
-
+    
   return (
-    <Layout>
+    <Layout navigation={navigation} route={route}>
       <View style={styles.infoCard}>
         <View style={styles.infoCardHeader}>
           <Image
@@ -85,7 +82,7 @@ export default function TeacherOverview() {
           />
           <View style={styles.infoCardText}>
             <Text style={styles.infoCardName}>{userName}</Text>
-            <Text style={styles.infoCardJob}>UX/UI Design</Text>
+            <Text style={styles.infoCardJob}>{title}</Text>
           </View>
           <TouchableOpacity style={styles.followButton}>
             <Text style={styles.followButtonText}>Follow</Text>

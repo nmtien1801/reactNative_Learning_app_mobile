@@ -12,7 +12,8 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Footer from "../../component/footer/FooterUser";
-export default function Component() {
+
+export default function Component({ navigation, route }) {
   const [projects, setProjects] = useState([
     { id: "1", name: "Nguyen Van A", checked: false },
     { id: "2", name: "Nguyen Van B", checked: false },

@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-export default function Component({ navigation }) {
+export default function Component({ navigation, route }) {
   const [options, setOptions] = useState({
     design: false,
     code: false,
