@@ -9,7 +9,7 @@ import {
   SafeAreaView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import Footer from "../../component/footer/FooterUser";
+import Footer from "../../component/footer/FooterTeacher";
 // Sample data structure
 const lessons = [
   {
@@ -88,7 +88,7 @@ export default function LessonList({ navigation, route }) {
         keyExtractor={(item) => item.lessonID}
         contentContainerStyle={styles.listContent}
       />
-      <Footer navigation={navigation} />
+      <Footer navigation={navigation} route={route} showActive="book" />
     </SafeAreaView>
   );
 }

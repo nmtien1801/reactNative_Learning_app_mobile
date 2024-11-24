@@ -11,7 +11,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import Footer from "../../component/footer/FooterUser";
+import Footer from "../../component/footer/FooterTeacher";
 
 export default function Component({ navigation, route }) {
   const [projects, setProjects] = useState([
@@ -103,7 +103,7 @@ export default function Component({ navigation, route }) {
           keyExtractor={(item) => item.id}
         />
       </View>
-      <Footer navigation={navigation} /> 
+      <Footer navigation={navigation} route={route} showActive="book" />
     </SafeAreaView>
   );
 }

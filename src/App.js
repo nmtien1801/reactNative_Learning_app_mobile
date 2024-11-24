@@ -17,6 +17,7 @@ import ManageProject from "./page/teacher/ManageProject";
 import ManageLesson from "./page/teacher/ManageLesson";
 import FormCourse from "./page/teacher/FormCourse";
 import FormLesson from "./page/teacher/FormLesson";
+import Setting from "./component/setting/Setting";
 
 import Cart from "./page/user/cart/Cart";
 import HistoryCart from "./page/user/cart/History-cart";
@@ -29,6 +30,7 @@ import { store } from "./redux/store";
 import { Provider } from "react-redux";
 import { CustomToast } from "./component/customToast";
 import { useSelector } from "react-redux";
+import HeaderSetting from "./header/Header_Setting";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -234,6 +236,14 @@ const Project = () => {
           name="ManageProject"
           component={ManageProject}
           options={{ header: () => {} }}
+        />
+
+        <Stack.Screen
+          name="setting"
+          component={Setting}
+          options={({ navigation, route }) => ({
+            header: () => <HeaderSetting navigation={navigation} route={route} />,
+          })}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -20,7 +20,7 @@ export default function FooterTeacher({ navigation , route, showActive}) {
 
   return (
     <View style={styles.tabBar}>
-      <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('homeUser')}>
+      <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('Teacher')}>
         <Ionicons name="home" size={24} color={(active === 'home') ? "#00BCD4" : "#666"} />
         <Text style={[styles.tabLabel, active === 'home' && styles.activeTabLabel]}>Home</Text>
       </TouchableOpacity>
@@ -28,11 +28,11 @@ export default function FooterTeacher({ navigation , route, showActive}) {
         <Ionicons name="search" size={24} color={(active === 'search') ? "#00BCD4" : "#666"} />
         <Text style={[styles.tabLabel,active === 'search' && styles.activeTabLabel]}>Search</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.tabItem} onPress={() =>  navigation.navigate('myCourse')}>
+      <TouchableOpacity style={styles.tabItem} onPress={() =>  navigation.navigate('ManageCourse')}>
         <Ionicons name="book" size={24} color={(active === 'book') ? "#00BCD4" : "#666"} />
         <Text style={[styles.tabLabel, active === 'book' && styles.activeTabLabel]}>My Courses</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('userProfile')}>
+      <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('setting')}>
         <Ionicons name="person" size={24} color={(active === 'person') ? "#00BCD4" : "#666"}/>
         <Text style={[styles.tabLabel, active === 'person' && styles.activeTabLabel]}>Profile</Text>
       </TouchableOpacity>

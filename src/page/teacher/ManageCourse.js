@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import Footer from "../../component/footer/FooterUser";
+import Footer from "../../component/footer/FooterTeacher";
 
 const courses = [
   {
@@ -128,7 +128,7 @@ export default function Component({ navigation, route }) {
         contentContainerStyle={styles.listContainer} // style cho cái view bao bọc FlatList
       />
 
-      <Footer navigation={navigation} />
+      <Footer navigation={navigation} route={route} showActive="book" />
     </View>
   );
 }
