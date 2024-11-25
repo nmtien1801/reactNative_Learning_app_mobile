@@ -14,41 +14,90 @@ import { ArrowLeft, Search, Star } from "lucide-react-native";
 
 // Thành phần hiển thị sao đánh giá
 const StarRating = ({ rating }) => {
+  const fullStars = Math.floor(rating); // Lấy số sao đầy đủ
+  const hasHalfStar = rating % 1 !== 0; // Kiểm tra xem có sao phân nửa không
+
   return (
     <View style={styles.starContainer}>
-      {[1, 2, 3, 4, 5].map((index) => (
-        <Star
-          key={index}
-          size={20}
-          color={index <= rating ? "#FFD700" : "#E0E0E0"}
-          fill={index <= rating ? "#FFD700" : "transparent"}
-        />
-      ))}
+      {[1, 2, 3, 4, 5].map((index) => {
+        if (index <= fullStars) {
+          return (
+            <Star
+              key={index}
+              size={20}
+              color="#FFD700" // Màu vàng cho sao đầy đủ
+              fill="#FFD700"
+            />
+          );
+        } else if (index === fullStars + 1 && hasHalfStar) {
+          return (
+            <Star
+              key={index}
+              size={20}
+              color="#FFD700" // Màu vàng cho sao nửa
+              fill="transparent"
+              stroke="#FFD700"
+              strokeWidth={2}
+            />
+          );
+        } else {
+          return (
+            <Star
+              key={index}
+              size={20}
+              color="#E0E0E0" // Màu xám cho sao trống
+              fill="transparent"
+            />
+          );
+        }
+      })}
     </View>
   );
 };
 
 // Thành phần hiển thị thông tin đơn hàng
-const CourseItem = ({ course }) => (
-  <View style={styles.courseItem}>
-    <Image source={{ uri: course.image }} style={styles.courseImage} />
-    <View style={styles.courseInfo}>
-      <View style={styles.titleContainer}>
-        <Text style={styles.courseTitle}>{course.title}</Text>
-        <Text style={styles.instructorName}>{course.instructor}</Text>
-      </View>
+const CourseItem = ({ order }) => {
+  const course = order.OrderDetails[0].Course;
+  const rating = course.averageRating || 1; // Nếu averageRating là undefined, sử dụng giá trị mặc định là 0
+  console.log(rating);
+
+  return (
+    <View style={styles.courseItem}>
+      {/* Hiển thị tên khóa học */}
+      <Text style={styles.courseTitle}>{course.name}</Text>
+
+      {/* Hiển thị tên giảng viên (hoặc người tạo khóa học) */}
+      <Text style={styles.courseInstructor}>
+        {course.UserFollow[0]?.user.userName}
+      </Text>
+
+      {/* Nếu có hình ảnh khóa học */}
+      {course.image && (
+        <Image
+          source={
+            /* placeholder image hoặc URL hình ảnh thật */ {
+              uri: "https://v0.dev/placeholder.svg?height=200&width=200",
+            }
+          }
+          style={styles.courseImage}
+        />
+      )}
+
       <View style={styles.detailsContainer}>
         <View style={styles.priceContainer}>
           <Text style={styles.priceLabel}>Thành tiền:</Text>
-          <Text style={styles.price}>${course.price}</Text>
+          <Text style={styles.price}>${order.total}</Text>
         </View>
+
+        {/* Hiển thị sao đánh giá */}
         <View style={styles.ratingRow}>
-          <StarRating rating={course.rating} />
+          <StarRating rating={4.5} />
+          {/* <Text style={styles.price}>${averageRating}</Text> */}
         </View>
       </View>
     </View>
-  </View>
-);
+  );
+};
 
 export default function HistoryCart({ navigation }) {
   const dispatch = useDispatch();
@@ -59,7 +108,7 @@ export default function HistoryCart({ navigation }) {
   useEffect(() => {
     dispatch(fetchOrdersByUserId(userId));
   }, [dispatch, userId]);
-  console.log("order", orders);
+  console.log(orders);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -87,7 +136,7 @@ export default function HistoryCart({ navigation }) {
       ) : (
         <FlatList
           data={orders}
-          renderItem={({ item }) => <CourseItem course={item.courses} />}
+          renderItem={({ item }) => <CourseItem order={item} />} // Render thông tin đơn hàng
           keyExtractor={(item) => item.id.toString()}
           contentContainerStyle={styles.listContainer}
           showsVerticalScrollIndicator={false}
@@ -130,7 +179,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   courseItem: {
-    flexDirection: "row",
+    flexDirection: "column",
     marginBottom: 16,
     backgroundColor: "#fff",
     borderRadius: 8,
@@ -145,23 +194,17 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 8,
-    marginRight: 12,
-  },
-  courseInfo: {
-    flex: 1,
-    justifyContent: "space-between",
-  },
-  titleContainer: {
-    marginBottom: 8,
+    marginBottom: 12,
   },
   courseTitle: {
     fontSize: 16,
     fontWeight: "bold",
     marginBottom: 4,
   },
-  instructorName: {
+  courseInstructor: {
     fontSize: 14,
     color: "#666",
+    marginBottom: 8,
   },
   detailsContainer: {
     justifyContent: "space-between",

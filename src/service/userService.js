@@ -4,7 +4,7 @@ import { Platform } from "react-native";
 
 const baseUrl =
   Platform.OS === "android"
-    ? "http://192.168.1.5:8080/api" // URL cho Android và iOS
+    ? "http:// 172.16.0.159:8080/api" // URL cho Android và iOS
     : "http://localhost:8080/api"; // URL cho web hoặc môi trường khác
 
 const handleLoginApi = (email, password) => {
@@ -108,6 +108,22 @@ const getOrdersByUserId = (userID) => {
 const searchCourseService = (keyword) => {
   return axios.get(`${baseUrl}/searchCourse/${keyword}`);
 };
+const buyCourseService = async (courseIDs, userID) => {
+  return axios.post(`${baseUrl}/buyCourses`, {
+    userID,
+    courseIDs,
+  });
+  // try {
+  //   const response = await axios.post(`${baseUrl}/buyCourses`, {
+  //     userID,
+  //     courseIDs,
+  //   });
+  //   return response.data;
+  // } catch (error) {
+  //   console.log("loci", error);
+  //   throw new Error("Failed to buy courses: " + error.message);
+  // }
+};
 
 export {
   handleLoginApi,
@@ -131,4 +147,5 @@ export {
   searchCourseService,
   deleteCartSelected,
   getOrdersByUserId,
+  buyCourseService,
 };
