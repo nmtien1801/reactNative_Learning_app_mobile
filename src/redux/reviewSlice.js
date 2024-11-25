@@ -1,30 +1,43 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getReviewByCourseService } from "../service/userService";
+import { getReviewByCourseService, createReview } from "../service/userService"; // Thêm service submit review
 
+// Initial state
 const initialState = {
-  listReview: [],
+  listReview: [], // Danh sách reviews cho khóa học
   isLoading: false,
   isError: false,
 };
 
-// action -> export
+// Action để lấy danh sách reviews
 export const getReviewByCourse = createAsyncThunk(
   "review/getReviewByCourse",
-  async ( courseId, thunkAPI) => {
-    const response = await getReviewByCourseService(courseId); 
+  async (courseId, thunkAPI) => {
+    const response = await getReviewByCourseService(courseId);
     return response.data;
   }
 );
 
-// đây là reducer
+// Action để gửi review
+export const submitCourseReview = createAsyncThunk(
+  "review/createReview",
+  async ({ courseID, userID, rating }, thunkAPI) => {
+    try {
+      const response = await createReview(courseID, userID, rating);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response?.data || "Submit failed");
+    }
+  }
+);
+
+// Reducer
 const reviewSlice = createSlice({
   name: "review",
   initialState,
 
-  // dùng api mới sử dụng extraReducers
-  // 3 trạng thái của api: pending, fulfilled, rejected
+  // Xử lý các trạng thái của API trong extraReducers
   extraReducers: (builder) => {
-    // getAllLesson
+    // Xử lý getReviewByCourse
     builder
       .addCase(getReviewByCourse.pending, (state) => {
         state.isLoading = true;
@@ -34,17 +47,38 @@ const reviewSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.listReview = action.payload.DT || [];
-        console.log("action: ", action);
       })
       .addCase(getReviewByCourse.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
       });
 
-    
+    // Xử lý submitCourseReview
+    builder
+      .addCase(submitCourseReview.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+      })
+      .addCase(submitCourseReview.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        const { courseID, rating } = action.meta.arg; // Lấy thông tin từ payload
+        // Nếu cần lưu danh sách đánh giá, cập nhật state tại đây
+        const course = state.listReview.find(
+          (item) => item.courseID === courseID
+        );
+        if (course) {
+          course.rating = rating; // Cập nhật rating mới
+        }
+      })
+
+      .addCase(submitCourseReview.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+      });
   },
 });
 
-export const {} = reviewSlice.actions; // đây là action -> chỉ dùng khi trong reducer có reducers:{}
+export const {} = reviewSlice.actions; // Không có action nào trong reducer, chỉ dùng extraReducers
 
 export default reviewSlice.reducer;

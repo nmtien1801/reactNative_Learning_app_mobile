@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,47 +7,44 @@ import {
   TouchableOpacity,
   FlatList,
   SafeAreaView,
+  Modal,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchOrdersByUserId } from "../../../redux/orderSlide";
-import { ArrowLeft, Search, Star } from "lucide-react-native";
+import { fetchOrdersByUserId } from "../../../redux/orderSlide"; // Lấy đơn hàng của người dùng
+import { submitCourseReview } from "../../../redux/reviewSlice"; // Action gửi review
+import { ArrowLeft, Search, Star } from "lucide-react-native"; // Các icon
+import { useToast } from "../../../component/customToast"; // Thông báo Toast
 
-// Thành phần hiển thị sao đánh giá
-const StarRating = ({ rating }) => {
-  const fullStars = Math.floor(rating); // Lấy số sao đầy đủ
-  const hasHalfStar = rating % 1 !== 0; // Kiểm tra xem có sao phân nửa không
+const StarRating = ({ rating, onPress }) => {
+  const fullStars = Math.floor(rating);
+  const hasHalfStar = rating % 1 !== 0;
 
   return (
     <View style={styles.starContainer}>
       {[1, 2, 3, 4, 5].map((index) => {
         if (index <= fullStars) {
           return (
-            <Star
-              key={index}
-              size={20}
-              color="#FFD700" // Màu vàng cho sao đầy đủ
-              fill="#FFD700"
-            />
+            <TouchableOpacity key={index} onPress={() => onPress(index)}>
+              <Star size={20} color="#FFD700" fill="#FFD700" />
+            </TouchableOpacity>
           );
         } else if (index === fullStars + 1 && hasHalfStar) {
           return (
-            <Star
-              key={index}
-              size={20}
-              color="#FFD700" // Màu vàng cho sao nửa
-              fill="transparent"
-              stroke="#FFD700"
-              strokeWidth={2}
-            />
+            <TouchableOpacity key={index} onPress={() => onPress(index)}>
+              <Star
+                size={20}
+                color="#FFD700"
+                fill="transparent"
+                stroke="#FFD700"
+                strokeWidth={2}
+              />
+            </TouchableOpacity>
           );
         } else {
           return (
-            <Star
-              key={index}
-              size={20}
-              color="#E0E0E0" // Màu xám cho sao trống
-              fill="transparent"
-            />
+            <TouchableOpacity key={index} onPress={() => onPress(index)}>
+              <Star size={20} color="#E0E0E0" fill="transparent" />
+            </TouchableOpacity>
           );
         }
       })}
@@ -55,30 +52,53 @@ const StarRating = ({ rating }) => {
   );
 };
 
-// Thành phần hiển thị thông tin đơn hàng
 const CourseItem = ({ order }) => {
+  const toast = useToast();
+  const dispatch = useDispatch();
+  const [rating, setRating] = useState(
+    order.OrderDetails[0].Course.averageRating || 0
+  );
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const course = order.OrderDetails[0].Course;
-  const rating = course.averageRating || 1; // Nếu averageRating là undefined, sử dụng giá trị mặc định là 0
-  console.log(rating);
+
+  const handleStarPress = async (value) => {
+    try {
+      const result = await dispatch(
+        submitCourseReview({
+          courseID: order.OrderDetails[0].courseID,
+          rating: value,
+          userID: 1, // ID người dùng (có thể lấy từ Redux hoặc props)
+        })
+      );
+
+      if (result.meta.requestStatus === "fulfilled") {
+        setRating(value); // Cập nhật giao diện ngay lập tức
+        toast("Đánh giá thành công!");
+      } else {
+        console.error("Lỗi khi gửi đánh giá:", result.error);
+        toast("Có lỗi xảy ra. Vui lòng thử lại!");
+      }
+    } catch (error) {
+      console.error("Lỗi khi gửi đánh giá:", error);
+      toast("Có lỗi xảy ra. Vui lòng thử lại!");
+    } finally {
+      setIsModalVisible(false);
+    }
+  };
 
   return (
     <View style={styles.courseItem}>
-      {/* Hiển thị tên khóa học */}
       <Text style={styles.courseTitle}>{course.name}</Text>
-
-      {/* Hiển thị tên giảng viên (hoặc người tạo khóa học) */}
       <Text style={styles.courseInstructor}>
         {course.UserFollow[0]?.user.userName}
       </Text>
-
-      {/* Nếu có hình ảnh khóa học */}
       {course.image && (
         <Image
-          source={
-            /* placeholder image hoặc URL hình ảnh thật */ {
-              uri: "https://v0.dev/placeholder.svg?height=200&width=200",
-            }
-          }
+          source={{
+            uri:
+              course.image ||
+              "https://v0.dev/placeholder.svg?height=200&width=200",
+          }}
           style={styles.courseImage}
         />
       )}
@@ -89,26 +109,50 @@ const CourseItem = ({ order }) => {
           <Text style={styles.price}>${order.total}</Text>
         </View>
 
-        {/* Hiển thị sao đánh giá */}
         <View style={styles.ratingRow}>
-          <StarRating rating={4.5} />
-          {/* <Text style={styles.price}>${averageRating}</Text> */}
+          {/* <StarRating rating={rating} onPress={handleStarPress} /> */}
+          <TouchableOpacity
+            style={styles.ratingButton}
+            onPress={() => setIsModalVisible(true)}
+          >
+            <Text style={styles.ratingButtonText}>Đánh giá</Text>
+          </TouchableOpacity>
         </View>
       </View>
+
+      <Modal
+        visible={isModalVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setIsModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Chọn sao đánh giá</Text>
+            <StarRating rating={rating} onPress={handleStarPress} />
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setIsModalVisible(false)}
+            >
+              <Text style={styles.closeButtonText}>Đóng</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
 
+// Main component HistoryCart
 export default function HistoryCart({ navigation }) {
   const dispatch = useDispatch();
-  const { orders, loading, error } = useSelector((state) => state.orders); // Lấy trạng thái từ Redux
-  const userId = 1; // ID người dùng (có thể được truyền từ màn hình khác hoặc lấy từ Redux)
+  const { orders, loading, error } = useSelector((state) => state.orders);
+  const userId = 1; // ID người dùng (có thể lấy từ Redux hoặc props)
 
   // Lấy dữ liệu đơn hàng khi component được mount
   useEffect(() => {
     dispatch(fetchOrdersByUserId(userId));
   }, [dispatch, userId]);
-  console.log(orders);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -146,6 +190,7 @@ export default function HistoryCart({ navigation }) {
   );
 }
 
+// Styles cho các thành phần
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -226,6 +271,48 @@ const styles = StyleSheet.create({
   ratingRow: {
     flexDirection: "row",
     alignItems: "center",
+  },
+  ratingButton: {
+    marginLeft: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    backgroundColor: "#FF6347", // Màu đỏ
+    borderRadius: 5,
+  },
+  ratingButtonText: {
+    color: "#fff",
+    fontSize: 14,
+    fontWeight: "bold",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 8,
+    alignItems: "center",
+    width: "80%",
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  closeButton: {
+    marginTop: 20,
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    backgroundColor: "#FF6347",
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    color: "#fff",
+    fontSize: 14,
+    fontWeight: "bold",
   },
   starContainer: {
     flexDirection: "row",

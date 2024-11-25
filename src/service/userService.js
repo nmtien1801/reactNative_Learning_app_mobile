@@ -113,16 +113,19 @@ const buyCourseService = async (courseIDs, userID) => {
     userID,
     courseIDs,
   });
-  // try {
-  //   const response = await axios.post(`${baseUrl}/buyCourses`, {
-  //     userID,
-  //     courseIDs,
-  //   });
-  //   return response.data;
-  // } catch (error) {
-  //   console.log("loci", error);
-  //   throw new Error("Failed to buy courses: " + error.message);
-  // }
+};
+const createReview = async (courseID, userID, rating) => {
+  try {
+    const response = await axios.post(`${baseUrl}/createReview`, {
+      courseID,
+      userID,
+      rating,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Lỗi khi tạo review:", error.response || error.message);
+    throw error;
+  }
 };
 
 export {
@@ -148,4 +151,5 @@ export {
   deleteCartSelected,
   getOrdersByUserId,
   buyCourseService,
+  createReview,
 };
