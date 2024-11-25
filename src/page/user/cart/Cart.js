@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,121 +7,123 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
+  CheckBox,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getCartByUser,
-  addCart,
-  removeFromCart,
-  clearCart,
-} from "../../../redux/cartSlice";
+import { getCartByUser, deleteCart } from "../../../redux/cartSlice";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native"; // Add navigation
+import { useNavigation } from "@react-navigation/native";
 
 const Cart = () => {
   const dispatch = useDispatch();
-  const navigation = useNavigation(); // Get navigation prop
+  const navigation = useNavigation();
 
-  // Redux states
+  // Lấy dữ liệu giỏ hàng từ Redux
   const { listCart, isLoading, isError, errorMessage } = useSelector(
     (state) => state.cart
   );
 
-  const userID = 1; // Simulate userID (could come from props or state)
+  const [selectedItems, setSelectedItems] = useState([]); // Dùng để lưu các courseID được chọn
 
-  // Fetch cart data when the component mounts
+  const userID = 1; // User cụ thể (tùy chỉnh nếu cần)
+
+  // Lấy danh sách giỏ hàng khi trang được tải
   useEffect(() => {
-    console.log("Dispatching getCartByUser for userID:", userID);
-    dispatch(getCartByUser(userID)); // Fetch user's cart data
+    dispatch(getCartByUser(userID));
   }, [dispatch, userID]);
 
-  // Add course to cart
-  const handleAddToCart = (course) => {
-    dispatch(addCart(course)); // Add to cart API
+  // Xử lý chọn/deselect một khóa học
+  const handleSelectItem = (courseID) => {
+    if (selectedItems.includes(courseID)) {
+      setSelectedItems(selectedItems.filter((id) => id !== courseID));
+    } else {
+      setSelectedItems([...selectedItems, courseID]);
+    }
   };
 
-  // Remove course from cart
-  const handleRemoveFromCart = (course) => {
-    dispatch(removeFromCart(course)); // Remove from cart API
+  // Xóa các khóa học được chọn khỏi giỏ hàng
+  const handleRemoveSelected = () => {
+    if (selectedItems.length > 0) {
+      dispatch(deleteCart(selectedItems)) // Gọi action xóa với danh sách courseID
+        .then(() => {
+          setSelectedItems([]); // Xóa lựa chọn sau khi xóa thành công
+          dispatch(getCartByUser(userID)); // Tải lại danh sách giỏ hàng
+        })
+        .catch((error) => {
+          alert("Failed to remove selected courses: " + error.message);
+        });
+    } else {
+      alert("No courses selected for removal.");
+    }
   };
 
-  // Clear all items from cart
-  const handleClearCart = () => {
-    dispatch(clearCart()); // Clear all items from the cart
-  };
-
-  // Show loading indicator when data is fetching
+  // Hiển thị trạng thái tải dữ liệu
   if (isLoading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
   }
 
-  // Show error message if data fetching fails
+  // Hiển thị lỗi nếu có
   if (isError) {
     return <Text style={styles.errorMessage}>Error: {errorMessage}</Text>;
   }
 
-  // Safeguard for empty cart
-  const cartItems = listCart?.DT || []; // Safe fallback to empty array if listCart.DT is undefined or null
-  console.log("listCart:", listCart);
-  console.log("cartItems:", cartItems);
-
-  // If cart is empty, show message
+  const cartItems = listCart?.DT || []; // Danh sách các khóa học trong giỏ hàng
   if (cartItems.length === 0) {
     return <Text style={styles.emptyCart}>Your cart is empty!</Text>;
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Your Cart</Text>
-      {cartItems.length > 0 ? (
-        <FlatList
-          data={cartItems}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <View style={styles.courseItem}>
+      {/* Hiển thị danh sách các khóa học */}
+      <FlatList
+        data={cartItems}
+        keyExtractor={(item) =>
+          item.courseID ? item.courseID.toString() : item.id.toString()
+        } // Kiểm tra courseID và fallback sang id
+        renderItem={({ item }) => (
+          <View style={styles.courseItem}>
+            <CheckBox
+              value={selectedItems.includes(item.courseID || item.id)} // Kiểm tra xem item.courseID hay item.id có tồn tại không
+              onValueChange={() => handleSelectItem(item.courseID || item.id)} // Xử lý lựa chọn khóa học
+            />
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("courseDetailOverView", {
+                  courseId: item.courseId,
+                })
+              }
+            >
+              <Image source={{ uri: item.image }} style={styles.courseImage} />
+            </TouchableOpacity>
+            <View style={styles.courseDetails}>
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate("courseDetailOverView", {
-                    courseId: item.id,
+                    courseId: item.courseId,
                   })
                 }
               >
-                <Image
-                  source={{ uri: item.image }}
-                  style={styles.courseImage}
-                />
+                <Text style={styles.courseName}>{item.name}</Text>
               </TouchableOpacity>
-              <View style={styles.courseDetails}>
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate("courseDetailOverView", {
-                      courseId: item.id,
-                    })
-                  }
-                >
-                  <Text style={styles.courseName}>{item.name}</Text>
-                </TouchableOpacity>
-                <Text style={styles.instructorName}>{item.userName}</Text>
-                <Text style={styles.price}>${item.price}</Text>
-                <View style={styles.ratingContainer}>
-                  <Ionicons name="star" size={16} color="#FFD700" />
-                  <Text style={styles.rating}>{item.averageRating}</Text>
-                  <Text style={styles.reviews}>
-                    ({item.totalRating} reviews)
-                  </Text>
-                </View>
-                <Text style={styles.lessons}>{item.totalLessons} lessons</Text>
+              <Text style={styles.instructorName}>{item.userName}</Text>
+              <Text style={styles.price}>${item.price}</Text>
+              <View style={styles.ratingContainer}>
+                <Ionicons name="star" size={16} color="#FFD700" />
+                <Text style={styles.rating}>{item.averageRating}</Text>
+                <Text style={styles.reviews}>({item.totalRating} reviews)</Text>
               </View>
+              <Text style={styles.lessons}>{item.totalLessons} lessons</Text>
             </View>
-          )}
-        />
-      ) : (
-        <Text style={styles.emptyCart}>Your cart is empty!</Text>
-      )}
+          </View>
+        )}
+      />
 
-      {/* Clear Cart Button */}
-      <TouchableOpacity style={styles.clearButton} onPress={handleClearCart}>
-        <Text style={styles.buttonText}>Clear Cart</Text>
+      {/* Nút xóa các khóa học đã chọn */}
+      <TouchableOpacity
+        style={styles.clearButton}
+        onPress={handleRemoveSelected}
+      >
+        <Text style={styles.buttonText}>Remove Selected</Text>
       </TouchableOpacity>
     </View>
   );
@@ -134,11 +136,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    marginBottom: 20,
-    fontWeight: "bold",
   },
   courseItem: {
     marginVertical: 10,
@@ -206,7 +203,7 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: "#ff6347",
     borderRadius: 5,
-    marginTop: 20,
+    marginTop: 10,
     alignItems: "center",
   },
   buttonText: {

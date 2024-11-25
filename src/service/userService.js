@@ -86,11 +86,24 @@ const addCourseToCart = (courseID, userID) => {
   );
   return axios.post(`${baseUrl}/addCourseToCart`, { courseID, userID });
 };
+const deleteCartSelected = async (courseID) => {
+  console.log("courseID", courseID);
+  try {
+    const response = await axios.post(`${baseUrl}/cart/deleteSelectedCourse`, {
+      courseID,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Lỗi khi xóa sản phẩm:", error.response || error.message);
+    throw error;
+  }
+};
 
 //search course
 const searchCourseService = (keyword) => {
   return axios.get(`${baseUrl}/searchCourse/${keyword}`);
 };
+
 export {
   handleLoginApi,
   logOutUser,
@@ -111,4 +124,5 @@ export {
   getCartByUserService,
   addCourseToCart,
   searchCourseService,
+  deleteCartSelected,
 };
