@@ -18,6 +18,8 @@ export default function TeacherOverview({ navigation, route }) {
   const { teacherOverview, isLoading, isError } = useSelector(
     (state) => state.teacher
   );
+  const user = useSelector((state) => state.auth.user);
+
   const { showToast } = useToast();
 
   const teacherID = 1; // ID của giáo viên
@@ -66,7 +68,7 @@ export default function TeacherOverview({ navigation, route }) {
 
   // Destructure dữ liệu giáo viên và cung cấp giá trị mặc định
   const { userName, image, description, email, phone, address, title } =
-    teacherOverview.DT || {};
+    teacherOverview?.DT || {};
     
   return (
     <Layout navigation={navigation} route={route}>

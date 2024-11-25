@@ -29,7 +29,7 @@ export default function MyCourse({ navigation, route }) {
     } else if (activeTab === "COMPLETED") {
       dispatch(findCourseUserState2(user._id)); // Fetch COMPLETED courses
     } else {
-      dispatch(getAllCourseUser(user._id)); // Fetch all courses if "All" is selected -> chưa sửa
+      dispatch(getAllCourseUser(user._id)); // Fetch all courses if "All" is selected 
     }
   }, [activeTab, dispatch]);
 

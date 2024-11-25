@@ -17,8 +17,9 @@ export default function TeacherProfileScreen({navigation, route}) {
   const { teacherOverview, isLoading, isError } = useSelector(
     (state) => state.teacher
   );
+  const user = useSelector((state) => state.auth.user);
 
-  const teacherID = 1; // ID của giáo viên, thay đổi nếu cần
+  const teacherID = 1; // ID của giáo viên
 
   // Gửi yêu cầu lấy dữ liệu khi component được mount
   useEffect(() => {
@@ -61,7 +62,7 @@ export default function TeacherProfileScreen({navigation, route}) {
 
   // Destructure dữ liệu giáo viên
   const { userName, image, description, email, phone, address, title } =
-    teacherOverview.DT;
+    teacherOverview?.DT || {};
 
   return (
     <SafeAreaView style={styles.container}>

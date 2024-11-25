@@ -19,6 +19,8 @@ export default function TeacherCourses({ navigation, route }) {
   const { TeacherCourses, isLoading, isError } = useSelector(
     (state) => state.teacher
   );
+  const user = useSelector((state) => state.auth.user);
+
   const { showToast } = useToast();
   const teacherID = 1; // ID của giáo viên
 
@@ -171,7 +173,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginBottom: 16,
     padding: 12,
-    width: 150,
+    width: 300,
     height: 150,
     flexDirection: "column",
     justifyContent: "center",
