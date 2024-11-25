@@ -27,7 +27,7 @@ export default function Component({ navigation, route }) {
     dataUpdate && dataUpdate.name ? dataUpdate.name : "" // tên khóa học
   );
   const [title, setTitle] = useState(
-    dataUpdate ? dataUpdate.title : "" // tiêu đề
+    dataUpdate && dataUpdate.title ? dataUpdate.title : "" // tiêu đề
   );
   const [urlVideo, setUrlVideo] = useState(
     dataUpdate && dataUpdate.urlVideo? dataUpdate.urlVideo : "" // url video
@@ -35,7 +35,7 @@ export default function Component({ navigation, route }) {
 
   const handleSubmit = async () => {
     dataNewLesson = {
-      lessonID: dataUpdate.lessonID,
+      lessonID: dataUpdate.lessonID ? dataUpdate.lessonID : 0,
       videoID: dataUpdate.videoID,
       title: title,
       name: name,

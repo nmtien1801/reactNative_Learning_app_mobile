@@ -129,13 +129,16 @@ export default function LessonList({ navigation, route }) {
       <View style={styles.header}>
         <TouchableOpacity
           style={[styles.actionButton, styles.addButton]}
-          onPress={() => navigation.navigate("FormLesson")}
+          onPress={() => navigation.navigate("FormLesson", {
+            courseID: courseID,
+            active: "ADD",
+          })}
         >
           <Ionicons name="add" size={20} color="#fff" />
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.actionButton, styles.projectButton]}
-          onPress={() => navigation.navigate("ManageProject")}
+          // onPress={() => navigation.navigate("ManageProject")}
         >
           <Ionicons name="copy-outline" size={20} color="#fff" />
         </TouchableOpacity>
