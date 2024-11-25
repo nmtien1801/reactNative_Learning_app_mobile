@@ -10,19 +10,6 @@ const initialState = {
 };
 
 // Action async để lấy giỏ hàng của người dùng
-// export const getCartByUser = createAsyncThunk(
-//   "cart/getCartByUser",
-//   async (userID, thunkAPI) => {
-//     try {
-//       const response = await getCartByUserService(userID);
-//       return response.data; // Trả về dữ liệu giỏ hàng
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(error.message);
-//     }
-//   }
-// );
-
-// Action async để lấy giỏ hàng của người dùng
 export const getCartByUser = createAsyncThunk(
   "cart/getCartByUser",
   async (userID, thunkAPI) => {
@@ -31,15 +18,17 @@ export const getCartByUser = createAsyncThunk(
   }
 );
 
-// Action async để thêm khóa học vào giỏ hàng
 export const addCart = createAsyncThunk(
   "cart/addCourseToCart",
   async ({ courseID, userID }, thunkAPI) => {
     try {
-      const response = await addCourseToCart(courseID, userID); // Gọi đúng hàm
-      return response.data; // Trả về dữ liệu giỏ hàng sau khi thêm khóa học
+      const response = await addCourseToCart(courseID, userID);
+      return response.data; // Dữ liệu giỏ hàng cập nhật
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+      console.error("Lỗi khi thêm vào giỏ:", error.response || error.message);
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || error.message
+      );
     }
   }
 );

@@ -15,9 +15,12 @@ import {
   removeFromCart,
   clearCart,
 } from "../../../redux/cartSlice";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native"; // Add navigation
 
 const Cart = () => {
   const dispatch = useDispatch();
+  const navigation = useNavigation(); // Get navigation prop
 
   // Redux states
   const { listCart, isLoading, isError, errorMessage } = useSelector(
@@ -58,7 +61,7 @@ const Cart = () => {
   }
 
   // Safeguard for empty cart
-  const cartItems = listCart.DT || []; // Safe fallback to empty array if listCart.DT is undefined or null
+  const cartItems = listCart?.DT || []; // Safe fallback to empty array if listCart.DT is undefined or null
   console.log("listCart:", listCart);
   console.log("cartItems:", cartItems);
 
@@ -75,30 +78,39 @@ const Cart = () => {
           data={cartItems}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <View style={styles.cartItem}>
-              <View style={styles.courseDetails}>
+            <View style={styles.courseItem}>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("courseDetailOverView", {
+                    courseId: item.id,
+                  })
+                }
+              >
                 <Image
                   source={{ uri: item.image }}
-                  style={{ width: 100, height: 100 }}
+                  style={styles.courseImage}
                 />
-                <Text style={styles.itemName}>{item.course.name}</Text>
-                <Text style={styles.itemDescription}>
-                  {item.course.description}
-                </Text>
-                <Text style={styles.itemRating}>
-                  Average Rating: {item.course.averageRating || "N/A"} (Total
-                  Reviews: {item.totalRating})
-                </Text>
-                <Text style={styles.itemLessons}>
-                  Total Lessons: {item.course.totalLessons || 0}
-                </Text>
-
+              </TouchableOpacity>
+              <View style={styles.courseDetails}>
                 <TouchableOpacity
-                  style={styles.removeButton}
-                  onPress={() => handleRemoveFromCart(item)}
+                  onPress={() =>
+                    navigation.navigate("courseDetailOverView", {
+                      courseId: item.id,
+                    })
+                  }
                 >
-                  <Text style={styles.buttonText}>Remove from Cart</Text>
+                  <Text style={styles.courseName}>{item.name}</Text>
                 </TouchableOpacity>
+                <Text style={styles.instructorName}>{item.userName}</Text>
+                <Text style={styles.price}>${item.price}</Text>
+                <View style={styles.ratingContainer}>
+                  <Ionicons name="star" size={16} color="#FFD700" />
+                  <Text style={styles.rating}>{item.averageRating}</Text>
+                  <Text style={styles.reviews}>
+                    ({item.totalRating} reviews)
+                  </Text>
+                </View>
+                <Text style={styles.lessons}>{item.totalLessons} lessons</Text>
               </View>
             </View>
           )}
@@ -128,7 +140,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     fontWeight: "bold",
   },
-  cartItem: {
+  courseItem: {
     marginVertical: 10,
     padding: 15,
     borderBottomWidth: 1,
@@ -136,45 +148,47 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
+  courseImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 5,
+    marginRight: 15,
+  },
   courseDetails: {
     flex: 1,
   },
-  itemName: {
+  courseName: {
     fontSize: 18,
     fontWeight: "600",
   },
-  itemDescription: {
+  instructorName: {
     fontSize: 14,
     color: "#555",
     marginBottom: 5,
   },
-  itemRating: {
-    fontSize: 12,
-    color: "#777",
+  price: {
+    fontSize: 16,
+    fontWeight: "bold",
     marginBottom: 5,
   },
-  itemLessons: {
-    fontSize: 12,
-    color: "#777",
+  ratingContainer: {
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 5,
   },
-  removeButton: {
-    marginTop: 10,
-    padding: 10,
-    backgroundColor: "#ff6347",
-    borderRadius: 5,
-    alignItems: "center",
+  rating: {
+    fontSize: 14,
+    color: "#FFD700",
+    marginLeft: 5,
   },
-  buttonText: {
-    color: "white",
-    textAlign: "center",
+  reviews: {
+    fontSize: 12,
+    color: "#777",
   },
-  clearButton: {
-    padding: 10,
-    backgroundColor: "#ff6347",
-    borderRadius: 5,
-    marginTop: 20,
-    alignItems: "center",
+  lessons: {
+    fontSize: 12,
+    color: "#777",
+    marginTop: 5,
   },
   emptyCart: {
     fontSize: 18,
@@ -187,5 +201,16 @@ const styles = StyleSheet.create({
     color: "red",
     textAlign: "center",
     marginTop: 20,
+  },
+  clearButton: {
+    padding: 10,
+    backgroundColor: "#ff6347",
+    borderRadius: 5,
+    marginTop: 20,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "white",
+    textAlign: "center",
   },
 });

@@ -76,8 +76,14 @@ const getCartByUserService = (userID) => {
   return axios.get(`${baseUrl}/getCartByUser/${userID}`);
 };
 
-//add to cart
 const addCourseToCart = (courseID, userID) => {
+  // Kiểm tra trước khi gửi request
+  console.log(
+    "Adding course to cart with courseID:",
+    courseID,
+    "and userID:",
+    userID
+  );
   return axios.post(`${baseUrl}/addCourseToCart`, { courseID, userID });
 };
 

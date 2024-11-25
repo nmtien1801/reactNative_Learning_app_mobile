@@ -100,7 +100,7 @@ const Project = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="courseSearch">
+      <Stack.Navigator initialRouteName="cart">
         <Stack.Screen
           name="Intro"
           component={Intro}
