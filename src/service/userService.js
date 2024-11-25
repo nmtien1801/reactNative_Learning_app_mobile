@@ -80,6 +80,11 @@ const getCartByUserService = (userID) => {
 const addCourseToCart = (courseID, userID) => {
   return axios.post(`${baseUrl}/addCourseToCart`, { courseID, userID });
 };
+
+//search course
+const searchCourseService = (keyword) => {
+  return axios.get(`${baseUrl}/searchCourse/${keyword}`);
+};
 export {
   handleLoginApi,
   logOutUser,
@@ -99,4 +104,5 @@ export {
   createProjectService,
   getCartByUserService,
   addCourseToCart,
+  searchCourseService,
 };

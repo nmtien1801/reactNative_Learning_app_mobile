@@ -10,7 +10,7 @@ import {
   Image,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { findAllCourses } from "../../../redux/courseSlice"; // Ensure correct action import
+import { findAllCourses, searchCourse } from "../../../redux/courseSlice"; // Import hành động searchCourse
 import { Ionicons } from "@expo/vector-icons";
 import Footer from "../../../component/Footer";
 
@@ -77,6 +77,7 @@ export default function CourseSearch({ navigation, route }) {
   } = useSelector((state) => state.course);
 
   const [courses, setCourses] = useState([]);
+  const [keyword, setKeyword] = useState(""); // Để lưu từ khóa tìm kiếm
 
   // Fetch courses and update state
   useEffect(() => {
@@ -100,6 +101,14 @@ export default function CourseSearch({ navigation, route }) {
     }
   }, [listCourse]);
 
+  // Tìm kiếm khóa học
+  const handleSearch = () => {
+    if (keyword.trim()) {
+      dispatch(searchCourse(keyword)); // Gửi yêu cầu tìm kiếm
+      navigation.navigate("courseListing", { keyword }); // Chuyển đến trang danh sách khóa học
+    }
+  };
+
   // Render loading state
   if (isLoading) {
     return (
@@ -120,7 +129,7 @@ export default function CourseSearch({ navigation, route }) {
     );
   }
 
-  // If no courses are found
+  // Nếu không có khóa học nào
   if (!courses.length) {
     return (
       <View style={styles.errorContainer}>
@@ -143,6 +152,9 @@ export default function CourseSearch({ navigation, route }) {
           <TextInput
             style={styles.searchInput}
             placeholder="Search for courses"
+            value={keyword}
+            onChangeText={setKeyword}
+            onSubmitEditing={handleSearch} // Gọi khi người dùng nhấn enter
           />
         </View>
 
@@ -154,7 +166,10 @@ export default function CourseSearch({ navigation, route }) {
               <HotTopic
                 key={index}
                 title={topic}
-                onPress={() => navigation.navigate("courseListing")}
+                onPress={() => {
+                  setKeyword(topic); // Đặt từ khóa tìm kiếm
+                  handleSearch(); // Gọi tìm kiếm
+                }}
               />
             )
           )}

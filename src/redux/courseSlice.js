@@ -4,6 +4,7 @@ import {
   findPopularCourseService,
   findCourseByIDService,
   findCourseSimilarService,
+  searchCourseService,
 } from "../service/userService";
 
 const initialState = {
@@ -48,6 +49,14 @@ export const findCourseSimilar = createAsyncThunk(
   "course/findCourseSimilar",
   async (id, thunkAPI) => {
     const response = await findCourseSimilarService(id);
+    return response.data;
+  }
+);
+
+export const searchCourse = createAsyncThunk(
+  "course/searchCourse",
+  async (keyword, thunkAPI) => {
+    const response = await searchCourseService(keyword);
     return response.data;
   }
 );
@@ -145,6 +154,24 @@ const courseSlice = createSlice({
         state.isLogin = true;
       })
       .addCase(findCourseSimilar.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.errorMessage = action.error.message;
+      });
+
+    // searchCourse
+    builder
+      .addCase(searchCourse.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.errorMessage = "";
+      })
+      .addCase(searchCourse.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.listCourse = action.payload.DT || [];
+        state.isLogin = true;
+      })
+      .addCase(searchCourse.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.errorMessage = action.error.message;
