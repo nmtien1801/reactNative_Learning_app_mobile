@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -11,70 +11,43 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Footer from "../../component/footer/FooterTeacher";
+import { getAllCourseUser } from "../../redux/userSlice";
+import { useDispatch, useSelector } from "react-redux";
 
-const courses = [
-  {
-    id: "1",
-    title: "UX Foundation",
-    duration: "2h 30 mins",
-    category: "Design",
-    image: require("../../../img/User_Profile/Digital.jpg"),
-  },
-  {
-    id: "2",
-    title: "Design Basics",
-    duration: "1h 25 mins",
-    category: "Design",
-    image: require("../../../img/User_Profile/ProductDesign.jpg"),
-  },
-  {
-    id: "3",
-    title: "Digital Sketching",
-    duration: "3h 45 mins",
-    category: "Business",
-    image: require("../../../img/User_Profile/ProductDesign.jpg"),
-  },
-  {
-    id: "4",
-    title: "Digital Portrait",
-    duration: "2h 15 mins",
-    category: "Business",
-    image: require("../../../img/User_Profile/ProductDesign.jpg"),
-  },
-  {
-    id: "5",
-    title: "Web Design",
-    duration: "2h 35 mins",
-    category: "Code",
-    image: require("../../../img/User_Profile/ProductDesign.jpg"),
-  },
-  {
-    id: "6",
-    title: "Web Design",
-    duration: "2h 35 mins",
-    category: "Code",
-    image: require("../../../img/User_Profile/ProductDesign.jpg"),
-  },
-  {
-    id: "7",
-    title: "Web Design",
-    duration: "2h 35 mins",
-    category: "Code",
-    image: require("../../../img/User_Profile/ProductDesign.jpg"),
-  },
-];
+export default function ManageCourse({ navigation, route }) {
+  const user = useSelector((state) => state.auth.user); // lấy thông tin user login
+  const listCourse = useSelector((state) => state.user.listCourse); // lấy danh sách khóa học của user
+  const dispatch = useDispatch();
 
-export default function Component({ navigation, route }) {
+  const [courses, setCourses] = useState([]); // state lưu danh sách khoá học của user
+
+  useEffect(() => {
+    // dispatch(getAllCourseUser(user._id)); // lấy danh sách khoá học của user
+    dispatch(getAllCourseUser(1)); // lấy danh sách khoá học của user
+  }, []);
+
+  useEffect(() => {
+    setCourses(listCourse);
+  }, [listCourse]);
+
   const renderCourseItem = ({ item }) => (
     <TouchableOpacity onPress={() => navigation.navigate("ManageLesson")}>
       <View style={styles.courseCard}>
-        <Image source={item.image} style={styles.courseImage} />
+        <Image
+          source={{uri: item.image}}
+          style={styles.courseImage}
+        />
         <View style={styles.courseInfo}>
           <Text style={styles.courseTitle} numberOfLines={1}>
-            {item.title}
+            {item.name}
           </Text>
-          <Text style={styles.courseDuration}>{item.duration}</Text>
-          <Text style={styles.courseCategory}>Categories: {item.category}</Text>
+          <Text style={styles.courseDuration}>{item.title}</Text>
+          <Text style={styles.courseCategory}>
+            <Text style={{ fontSize: 15, fontWeight: "Medium", color: "#000" }}>
+              Categories:
+            </Text>{" "}
+            {item.Category?.name}
+          </Text>
         </View>
         <View style={styles.actionButtons}>
           <TouchableOpacity onPress={() => navigation.navigate("FormCourse")}>
@@ -98,26 +71,11 @@ export default function Component({ navigation, route }) {
       <View style={styles.header}>
         <Text style={styles.title}>My course</Text>
 
-        <View style={styles.header1}>
-          <View style={styles.searchContainer}>
-            <TextInput
-              style={styles.searchInput}
-              placeholder="Search course"
-              placeholderTextColor="#666"
-              underlineColorAndroid="transparent"
-            />
-            <TouchableOpacity>
-              <View style={styles.searchButton}>
-                <Ionicons name="arrow-forward" size={18} color="#fff" />
-              </View>
-            </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("FormCourse")}>
+          <View style={[styles.iconButton, styles.addButton]}>
+            <Ionicons name="add" size={18} color="#FFf" />
           </View>
-          <TouchableOpacity onPress={() => navigation.navigate("FormCourse")}>
-            <View style={[styles.iconButton, styles.addButton]}>
-              <Ionicons name="add" size={18} color="#FFf" />
-            </View>
-          </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
       </View>
 
       <FlatList
@@ -140,6 +98,7 @@ const styles = StyleSheet.create({
   },
   header: {
     padding: 16,
+    alignItems: "center",
     backgroundColor: "#fff",
     elevation: 4,
   },
@@ -149,32 +108,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     color: "#000",
   },
-  header1: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 18,
-  },
-  searchContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#f5f5f5",
-    borderRadius: 4,
-    elevation: 2,
-  },
-  searchInput: {
-    flex: 1,
-    fontSize: 16,
-    color: "#000",
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-  },
-  searchButton: {
-    padding: 8,
-    backgroundColor: "#4CAF50",
-    borderRadius: 4,
-    margin: 4,
-  },
+
   listContainer: {
     padding: 16,
   },
@@ -206,7 +140,7 @@ const styles = StyleSheet.create({
   courseDuration: {
     fontSize: 14,
     color: "#666",
-    marginBottom: 4,
+    marginBottom: 10,
   },
   courseCategory: {
     fontSize: 14,
@@ -237,5 +171,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#69E41D",
     marginLeft: 20,
     justifyContent: "center",
+    borderRadius: "50%",
+    padding: 25,
   },
 });

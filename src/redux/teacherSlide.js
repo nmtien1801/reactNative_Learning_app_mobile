@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   handleTeacherOverview,
   handleFindCourseByTeacherID_Categories,
+  addNewCourseService,
 } from "../service/teacherService";
 
 const initialState = {
@@ -27,6 +28,18 @@ export const fetchTeacherCourses = createAsyncThunk(
   async (teacherID, thunkAPI) => {
     try {
       const response = await handleFindCourseByTeacherID_Categories(teacherID);
+      return response.data; // Trả về dữ liệu từ API
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message); // Trả về lỗi nếu có
+    }
+  }
+);
+
+export const addNewCourse = createAsyncThunk(
+  "teacher/addNewCourse",
+  async (course, thunkAPI) => {
+    try {
+      const response = await addNewCourseService(course);
       return response.data; // Trả về dữ liệu từ API
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message); // Trả về lỗi nếu có
@@ -67,6 +80,24 @@ const teacherSlice = createSlice({
         state.isError = true;
         console.error("Error fetching teacher courses:", action.payload); // Log lỗi khi fetch bị lỗi
       });
+
+      // addNewCourse
+      builder
+      .addCase(addNewCourse.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+      })
+      .addCase(addNewCourse.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+      })
+      .addCase(addNewCourse.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        console.error("Error adding new course:", action.payload); // Log lỗi khi fetch b
+      });
+
   },
 });
 

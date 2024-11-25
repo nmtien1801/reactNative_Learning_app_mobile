@@ -15,4 +15,7 @@ const handleFindCourseByTeacherID_Categories = (teacherID) => {
   return axios.get(`${baseUrl}/findCourseByTeacherID_Categories/${teacherID}`);
 };
 
-export { handleTeacherOverview, handleFindCourseByTeacherID_Categories };
+const addNewCourseService = (course) => {
+  return axios.post(`${baseUrl}/addNewCourse`, course);
+};
+export { handleTeacherOverview, handleFindCourseByTeacherID_Categories , addNewCourseService};

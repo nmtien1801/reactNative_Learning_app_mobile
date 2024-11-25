@@ -63,21 +63,18 @@ export default function LessonList({ navigation, route }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Lesson</Text>
-        <View style={styles.headerButtons}>
-          <TouchableOpacity
-            style={[styles.actionButton, styles.addButton]}
-            onPress={() => navigation.navigate("FormLesson")}
-          >
-            <Ionicons name="add" size={20} color="#fff" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.actionButton, styles.projectButton]}
-            onPress={() => navigation.navigate("ManageProject")}
-          >
-            <Ionicons name="copy-outline" size={20} color="#fff" />
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity
+          style={[styles.actionButton, styles.addButton]}
+          onPress={() => navigation.navigate("FormLesson")}
+        >
+          <Ionicons name="add" size={20} color="#fff" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.actionButton, styles.projectButton]}
+          onPress={() => navigation.navigate("ManageProject")}
+        >
+          <Ionicons name="copy-outline" size={20} color="#fff" />
+        </TouchableOpacity>
       </View>
 
       <Text style={styles.chapterTitle}>Chapter 1</Text>
@@ -101,19 +98,13 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "center",
+    gap: 16,
     padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: "#eee",
   },
-  headerButtons: {
-    flexDirection: "row",
-    gap: 8,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
+
   chapterTitle: {
     fontSize: 16,
     fontWeight: "500",

@@ -18,7 +18,6 @@ export default function TeacherReviews({ navigation, route }) {
   const user = useSelector((state) => state.auth.user); // lấy thông tin user login
   const listCourse = useSelector((state) => state.user.listCourse); // lấy danh sách khóa học của user
   const dispatch = useDispatch();
-  console.log(">>>>listCourse: ", listCourse);
 
   useEffect(() => {
     // dispatch(getAllCourseUser(user._id)); // lấy danh sách khoá học của user

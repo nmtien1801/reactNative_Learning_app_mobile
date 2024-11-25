@@ -52,8 +52,6 @@ export default function Component({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Lesson</Text>
-
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Title</Text>
         <TextInput style={styles.input} placeholder="Enter title" />
@@ -123,13 +121,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     padding: 20,
   },
-  header: {
-    fontSize: 24,
-    fontWeight: "bold",
 
-    marginTop: 20,
-    textAlign: "center",
-  },
   inputContainer: {
     marginBottom: 20,
   },

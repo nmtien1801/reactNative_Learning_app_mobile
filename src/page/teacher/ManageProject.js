@@ -69,8 +69,6 @@ export default function Component({ navigation, route }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>Project</Text>
-
         <View style={styles.searchBar}>
           <Ionicons
             name="search-outline"
@@ -117,11 +115,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
   },
-  title: {
-    fontSize: 20,
-    fontWeight: "600",
-    marginBottom: 16,
-  },
+
   searchBar: {
     flexDirection: "row",
     alignItems: "center",

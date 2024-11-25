@@ -119,7 +119,7 @@ const Project = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Teacher">
+      <Stack.Navigator initialRouteName="ManageCourse">
         <Stack.Screen
           name="Intro"
           component={Intro}
@@ -203,12 +203,10 @@ const Project = () => {
         <Stack.Screen
           name="FormCourse"
           component={FormCourse}
-          options={{ header: () => {} }}
         />
         <Stack.Screen
           name="FormLesson"
           component={FormLesson}
-          options={{ header: () => {} }}
         />
         <Stack.Screen
           name="Lesson"
@@ -229,13 +227,11 @@ const Project = () => {
         <Stack.Screen
           name="ManageLesson"
           component={ManageLesson}
-          options={{ header: () => {} }}
         />
 
         <Stack.Screen
           name="ManageProject"
           component={ManageProject}
-          options={{ header: () => {} }}
         />
 
         <Stack.Screen
