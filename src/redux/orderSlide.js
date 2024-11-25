@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { buyCourseService } from "../service/userService"; // Đảm bảo buyCourseService đã được định nghĩa
+import { buyCourseService, getOrdersByUserId } from "../service/userService"; // Đảm bảo buyCourseService đã được định nghĩa
 import { deleteCart } from "./cartSlice";
 
 // Mua khóa học
@@ -33,6 +33,13 @@ export const buyCourse = createAsyncThunk(
   }
 );
 
+export const fetchOrdersByUserId = createAsyncThunk(
+  "orders/getOrdersByUserId",
+  async (userID) => {
+    const response = await getOrdersByUserId(userID);
+    return response.data; // Trả về dữ liệu nhận được
+  }
+);
 // Slice quản lý đơn hàng
 const orderSlice = createSlice({
   name: "orders",
@@ -60,6 +67,25 @@ const orderSlice = createSlice({
       .addCase(buyCourse.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Failed to buy courses.";
+      });
+
+    builder
+      .addCase(fetchOrdersByUserId.pending, (state) => {
+        state.loading = true; // Bắt đầu tải
+        state.error = null; // Reset lỗi
+      })
+      .addCase(fetchOrdersByUserId.fulfilled, (state, action) => {
+        state.loading = false; // Kết thúc tải
+        if (action.payload && action.payload.DT) {
+          state.orders = action.payload.DT; // Lưu danh sách đơn hàng
+        } else {
+          state.orders = [];
+          state.error = "Dữ liệu không hợp lệ từ API.";
+        }
+      })
+      .addCase(fetchOrdersByUserId.rejected, (state, action) => {
+        state.loading = false; // Kết thúc tải
+        state.error = action.error.message || "Không thể tải dữ liệu từ API.";
       });
   },
 });

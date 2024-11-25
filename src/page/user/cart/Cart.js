@@ -147,7 +147,7 @@ const Cart = () => {
 
         // Sau khi mua thành công, xóa các khóa học đã mua khỏi giỏ hàng
         await dispatch(deleteCart(selectedItems)).unwrap();
-        toast("Đã xóa các khóa học đã mua khỏi giỏ hàng", "success");
+        toast("Mua khóa học thành công", "success");
 
         // Làm mới giỏ hàng và xóa các khóa học đã chọn
         setSelectedItems([]); // Xóa các khóa học đã chọn trong UI
