@@ -4,7 +4,7 @@ import { Platform } from "react-native";
 
 const baseUrl =
   Platform.OS === "android"
-    ? "http://172.20.33.189:8080/api" // URL cho Android và iOS
+    ? "http:// 172.16.0.159:8080/api" // URL cho Android và iOS
     : "http://localhost:8080/api"; // URL cho web hoặc môi trường khác
 
 const handleLoginApi = (email, password) => {
@@ -76,21 +76,57 @@ const getCartByUserService = (userID) => {
   return axios.get(`${baseUrl}/getCartByUser/${userID}`);
 };
 
-//add to cart
 const addCourseToCart = (courseID, userID) => {
+  // Kiểm tra trước khi gửi request
+  console.log(
+    "Adding course to cart with courseID:",
+    courseID,
+    "and userID:",
+    userID
+  );
   return axios.post(`${baseUrl}/addCourseToCart`, { courseID, userID });
+};
+const deleteCartSelected = async (courseID) => {
+  console.log("courseID", courseID);
+  try {
+    const response = await axios.post(`${baseUrl}/cart/deleteSelectedCourse`, {
+      courseID,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Lỗi khi xóa sản phẩm:", error.response || error.message);
+    throw error;
+  }
+};
+
+// history cart getOrdersByUserId
+const getOrdersByUserId = (userID) => {
+  return axios.get(`${baseUrl}/getOrderByUserID/${userID}`);
 };
 
 //search course
 const searchCourseService = (keyword) => {
   return axios.get(`${baseUrl}/searchCourse/${keyword}`);
 };
-
-const getLessonByCourseService = (courseID) => {
-  return axios.get(`${baseUrl}/getLessonByCourse/${courseID}`);
+const buyCourseService = async (courseIDs, userID) => {
+  return axios.post(`${baseUrl}/buyCourses`, {
+    userID,
+    courseIDs,
+  });
 };
-
-
+const createReview = async (courseID, userID, rating) => {
+  try {
+    const response = await axios.post(`${baseUrl}/createReview`, {
+      courseID,
+      userID,
+      rating,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Lỗi khi tạo review:", error.response || error.message);
+    throw error;
+  }
+};
 
 export {
   handleLoginApi,
@@ -112,5 +148,8 @@ export {
   getCartByUserService,
   addCourseToCart,
   searchCourseService,
-  getLessonByCourseService,
+  deleteCartSelected,
+  getOrdersByUserId,
+  buyCourseService,
+  createReview,
 };

@@ -192,6 +192,14 @@ const Project = () => {
             header: () => <HeaderCart navigation={navigation} route={route} />,
           })}
         />
+
+        <Stack.Screen
+          name="historyCart"
+          component={HistoryCart}
+          options={({ navigation, route }) => ({
+            header: () => <HeaderCart navigation={navigation} route={route} />,
+          })}
+        />
         {/* ===================== user - home */}
         <Stack.Screen
           name="homeUser"

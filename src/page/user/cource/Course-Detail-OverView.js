@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -6,16 +7,13 @@ import {
   ScrollView,
   TouchableOpacity,
   StyleSheet,
-  SafeAreaView,
-  StatusBar,
   Platform,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { WebView } from "react-native-webview";
-import { useToast } from "../../../component/customToast";
-
 import { useDispatch, useSelector } from "react-redux";
 import { findCourseByID, findCourseSimilar } from "../../../redux/courseSlice";
+import { addCart } from "../../../redux/cartSlice"; // Import action addCart
 
 function BenefitItem({ icon, text }) {
   return (
@@ -39,37 +37,79 @@ export default function CourseDetailOverView({ navigation, route }) {
   const [course, setCourse] = useState({});
   const [listSimilar, setListSimilar] = useState([]); // Danh sách course tương tự
   const dispatch = useDispatch();
-  const courseID = route.params.params?.courseID; // lấy sẵn id để truyền vào cart
+
+  const [isAdding, setIsAdding] = useState(false); // Lưu trạng thái khi thêm vào giỏ hàng
+  const [addError, setAddError] = useState("");
+
+  const courseID = 5; // Hardcoded courseID, replace it with dynamic value if needed
+  const userID = 1; // Giả sử userID = 1, bạn có thể thay bằng ID người dùng thực tế
 
   useEffect(() => {
     dispatch(findCourseByID(courseID)); // Gửi action để lấy thông tin course
     dispatch(findCourseSimilar(courseID)); // Gửi action để lấy thông tin course tương tự
   }, []);
 
-  // top-page detail course
   useEffect(() => {
     setCourse(courseDetail);
   }, [courseDetail]);
 
-  // similar course
   useEffect(() => {
     if (listCourseSimilar.length !== 0) {
       setListSimilar([
         ...listSimilar,
-        ...listCourseSimilar.map((course, index) => ({
+        ...listCourseSimilar.map((course) => ({
           id: course.id, // Sử dụng kết hợp giữa id và index để đảm bảo tính duy nhất
           title: course.name,
-          instructor: course.UserFollow[0]?.user.userName, // người tạo khóa học
+          instructor: course.UserFollow[0]?.user.userName,
           price: course.Orders[0]?.OrderDetail?.price,
           rating: course.averageRating,
           reviews: course.totalRating,
           lessons: course.totalLessons,
           image: "https://v0.dev/placeholder.svg?height=200&width=200",
-          bookmarked: false, // css màu xanh cho icon bookmark
+          bookmarked: false,
         })),
       ]);
     }
   }, [listCourseSimilar]);
+  const handleAddToCart = async () => {
+    try {
+      setIsAdding(true);
+
+      const userID = 1; // Thay thế bằng userID thực tế
+      const courseID = 5; // Thay thế bằng courseID thực tế
+
+      console.log(
+        "Adding course to cart with courseID:",
+        courseID,
+        "and userID:",
+        userID
+      );
+
+      // Gửi yêu cầu GET hoặc POST với query parameters (Tùy API yêu cầu POST hay GET)
+      const response = await axios.post(
+        `http://localhost:8080/api/addCourseToCart?userID=${userID}&courseID=${courseID}`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json", // Bạn có thể bỏ qua phần body nếu API không yêu cầu nó
+          },
+        }
+      );
+
+      console.log("Response:", response.data); // In ra kết quả trả về từ API
+
+      // Nếu thành công
+      setIsAdding(false);
+      console.log("Course added to cart successfully!");
+    } catch (error) {
+      setIsAdding(false);
+      setAddError(error.message || "Failed to add course to cart");
+      console.error(
+        "Error adding course to cart:",
+        error.response ? error.response.data : error.message
+      );
+    }
+  };
 
   const CourseCard = ({
     id,
@@ -84,10 +124,9 @@ export default function CourseDetailOverView({ navigation, route }) {
   }) => (
     <TouchableOpacity
       style={styles.card}
-      // reset lại trang với thông tin khóa học mới
       onPress={() =>
         navigation.replace("courseDetailOverView", { courseID: id })
-      } // chuyển sang trang chi tiết khóa học
+      }
     >
       <Image source={{ uri: image }} style={styles.thumbnail} />
       <View style={styles.cardContent}>
@@ -116,8 +155,8 @@ export default function CourseDetailOverView({ navigation, route }) {
   return (
     <View style={styles.container}>
       <ScrollView>
+        {/* YouTube embed or WebView */}
         {Platform.OS === "web" ? (
-          // Dùng iframe cho nền web
           <iframe
             src="https://www.youtube.com/embed/147SkAVXEqM"
             width="100%"
@@ -126,9 +165,8 @@ export default function CourseDetailOverView({ navigation, route }) {
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             style={{ border: "none" }}
-          ></iframe>
+          />
         ) : (
-          // Dùng WebView cho Android/iOS
           <WebView
             source={{ uri: "https://www.youtube.com/embed/147SkAVXEqM" }}
             style={{ flex: 1, width: "100%", height: 300 }}
@@ -171,49 +209,7 @@ export default function CourseDetailOverView({ navigation, route }) {
         </View>
 
         <View style={styles.content}>
-          <View style={styles.instructorContainer}>
-            <Image
-              source={{ uri: "https://v0.dev/placeholder.svg" }}
-              style={styles.instructorImage}
-            />
-            <View style={styles.instructorInfo}>
-              <Text style={styles.instructorName}>
-                {course?.UserFollow?.length > 0 &&
-                  course.UserFollow[0]?.user.userName}
-              </Text>
-              <Text style={styles.instructorTitle}>
-                {course?.UserFollow?.length > 0 &&
-                  course.UserFollow[0]?.user.title}
-              </Text>
-            </View>
-            <TouchableOpacity style={styles.followButton}>
-              <Text style={styles.followButtonText}>Follow</Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.content}>
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Description</Text>
-              <Text style={styles.description}>{course.description}</Text>
-              <TouchableOpacity>
-                <Text style={styles.seeMoreText}>See more</Text>
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Benefits</Text>
-              <View style={styles.benefitsList}>
-                <BenefitItem icon="videocam" text="14 hours on-demand video" />
-                <BenefitItem icon="globe" text="Native teacher" />
-                <BenefitItem icon="document-text" text="100% free document" />
-                <BenefitItem icon="time" text="Full lifetime access" />
-                <BenefitItem icon="ribbon" text="Certificate of complete" />
-                <BenefitItem icon="checkmark-circle" text="24/7 support" />
-              </View>
-            </View>
-          </View>
-
-          <ScrollView style={[styles.container, styles.containerPadding]}>
+          <ScrollView style={styles.container}>
             <Text style={styles.sectionTitle}>Similar courses</Text>
             {listSimilar.map((course) => (
               <CourseCard key={course.id} {...course} />
@@ -231,15 +227,17 @@ export default function CourseDetailOverView({ navigation, route }) {
         </View>
         <TouchableOpacity
           style={styles.addToCartButton}
-          onPress={() => navigation.navigate("cart", courseID)}
+          onPress={handleAddToCart} // Thêm khóa học vào giỏ
+          disabled={isAdding} // Disable khi đang thêm khóa học
         >
-          <Text style={styles.addToCartText}>Add to cart</Text>
+          <Text style={styles.addToCartText}>
+            {isAdding ? "Adding..." : "Add to cart"}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

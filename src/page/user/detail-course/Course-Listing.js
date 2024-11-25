@@ -51,8 +51,8 @@ export default function CourseListing({ navigation, route }) {
         <Text style={styles.price}>${item.Orders[0]?.OrderDetail?.price}</Text>
         <View style={styles.ratingContainer}>
           <Ionicons name="star" size={16} color="#FFD700" />
-          <Text style={styles.rating}>{item.totalRating}</Text>
-          <Text style={styles.reviews}>({item.reviews} reviews)</Text>
+          <Text style={styles.rating}>{item.averageRating}</Text>
+          <Text style={styles.reviews}>({item.totalRating} reviews)</Text>
         </View>
         <Text style={styles.lessons}>{item.totalLessons} lessons</Text>
       </View>
