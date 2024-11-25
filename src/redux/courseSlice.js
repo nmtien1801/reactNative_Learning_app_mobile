@@ -4,6 +4,7 @@ import {
   findPopularCourseService,
   findCourseByIDService,
   findCourseSimilarService,
+  searchCourseService,
 } from "../service/userService";
 
 const initialState = {
@@ -12,7 +13,6 @@ const initialState = {
   listCoursePopular: [],
   listCart: [], // Giỏ hàng sẽ lưu trữ các khóa học đã thêm
   courseDetail: {},
-
   listCourseSimilar: [],
   isLogin: false, // Kiểm tra xem người dùng đã đăng nhập chưa
   isLoading: false,
@@ -49,6 +49,14 @@ export const findCourseSimilar = createAsyncThunk(
   "course/findCourseSimilar",
   async (id, thunkAPI) => {
     const response = await findCourseSimilarService(id);
+    return response.data;
+  }
+);
+
+export const searchCourse = createAsyncThunk(
+  "course/searchCourse",
+  async (keyword, thunkAPI) => {
+    const response = await searchCourseService(keyword);
     return response.data;
   }
 );
@@ -151,6 +159,23 @@ const courseSlice = createSlice({
         state.errorMessage = action.error.message;
       });
 
+    // searchCourse
+    builder
+      .addCase(searchCourse.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.errorMessage = "";
+      })
+      .addCase(searchCourse.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.listCourse = action.payload.DT || [];
+        state.isLogin = true;
+      })
+      .addCase(searchCourse.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.errorMessage = action.error.message;
+      });
   },
 });
 

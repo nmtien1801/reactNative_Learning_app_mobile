@@ -1,115 +1,68 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
   TextInput,
   ScrollView,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
   FlatList,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  ActivityIndicator,
 } from "react-native";
+import { useSelector } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import { Bookmark, Star } from "lucide-react-native";
 import Footer from "../../../component/footer/FooterUser";
 
+
 export default function CourseListing({ navigation, route }) {
+  const { keyword } = route.params || {}; // Lấy từ khóa tìm kiếm từ route
+  const { listCourse, isLoading, isError } = useSelector(
+    (state) => state.course
+  );
+
+  useEffect(() => {
+    if (keyword) {
+      console.log(`Searching for courses with keyword: ${keyword}`);
+    }
+  }, [keyword]);
+
   const CourseListItem = ({ item }) => (
     <View style={styles.courseItem}>
       <TouchableOpacity
-        onPress={() => navigation.navigate("courseDetailOverView")}
+        onPress={() =>
+          navigation.navigate("courseDetailOverView", { courseId: item.id })
+        }
       >
         <Image source={{ uri: item.image }} style={styles.courseImage} />
       </TouchableOpacity>
       <View style={styles.courseDetails}>
-        <View style={styles.courseHeader}>
-          <View style={styles.titleContainer}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("courseDetailOverView")}
-            >
-              <Text style={styles.courseTitle}>{item.title}</Text>
-            </TouchableOpacity>
-            {item.isBestSeller && (
-              <View style={styles.bestSellerBadge}>
-                <Text style={styles.bestSellerText}>Best-seller</Text>
-              </View>
-            )}
-          </View>
-          <TouchableOpacity>
-            <Bookmark size={24} color="#00BCD4" />
-          </TouchableOpacity>
-        </View>
-        <Text style={styles.instructorName}>{item.instructor}</Text>
-        <Text style={styles.price}>${item.price}</Text>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("courseDetailOverView", { courseId: item.id })
+          }
+        >
+          <Text style={styles.courseName}>{item.name}</Text>
+        </TouchableOpacity>
+        <Text style={styles.instructorName}>
+          {item.UserFollow[0]?.user.userName}
+        </Text>
+        <Text style={styles.price}>${item.Orders[0]?.OrderDetail?.price}</Text>
         <View style={styles.ratingContainer}>
-          <Star size={16} color="#FFD700" fill="#FFD700" />
-          <Text style={styles.rating}>{item.rating}</Text>
-          <Text style={styles.reviews}>({item.reviews})</Text>
-          <Text style={styles.lessons}>{item.lessons} lessons</Text>
+          <Ionicons name="star" size={16} color="#FFD700" />
+          <Text style={styles.rating}>{item.totalRating}</Text>
+          <Text style={styles.reviews}>({item.reviews} reviews)</Text>
         </View>
+        <Text style={styles.lessons}>{item.totalLessons} lessons</Text>
       </View>
     </View>
   );
 
-  const courses = [
-    {
-      id: "1",
-      title: "UX Foundation",
-      instructor: "Sara Weise",
-      price: 51,
-      rating: 4.5,
-      reviews: 1233,
-      lessons: 13,
-      image: "https://v0.dev/placeholder.svg?height=100&width=100",
-      isBestSeller: true,
-    },
-    {
-      id: "2",
-      title: "Design Basics",
-      instructor: "Kelly Hamilton",
-      price: 89,
-      rating: 4.5,
-      reviews: 1233,
-      lessons: 12,
-      image: "https://v0.dev/placeholder.svg?height=100&width=100",
-    },
-    {
-      id: "3",
-      title: "Digital Sketching",
-      instructor: "Ramono Wultschner",
-      price: 49,
-      rating: 4.5,
-      reviews: 1233,
-      lessons: 8,
-      image: "https://v0.dev/placeholder.svg?height=100&width=100",
-    },
-    {
-      id: "4",
-      title: "Digital Portrait",
-      instructor: "Ramono Wultschner",
-      price: 67,
-      rating: 4.5,
-      reviews: 1233,
-      lessons: 11,
-      image: "https://v0.dev/placeholder.svg?height=100&width=100",
-    },
-    {
-      id: "5",
-      title: "Web Design",
-      instructor: "Ryan Meyers",
-      price: 29,
-      rating: 4.5,
-      reviews: 1233,
-      lessons: 12,
-      image: "https://v0.dev/placeholder.svg?height=100&width=100",
-    },
-  ];
-
   return (
     <View style={styles.container}>
-      
-
       <ScrollView style={styles.content}>
+        {/* Search Bar */}
         <View style={styles.searchContainer}>
           <Ionicons
             name="search"
@@ -118,26 +71,37 @@ export default function CourseListing({ navigation, route }) {
             style={styles.searchIcon}
           />
           <TextInput
+            placeholder={keyword || "Search for courses"}
             style={styles.searchInput}
-            placeholder="Design"
-            placeholderTextColor="#666"
           />
           <TouchableOpacity style={styles.filterButton}>
             <Text style={styles.filterButtonText}>Filter</Text>
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.sectionTitle}>120 Results</Text>
+        {/* Results */}
+        <Text style={styles.resultsText}>{listCourse.length} Results</Text>
 
-        <FlatList
-          data={courses}
-          renderItem={({ item }) => <CourseListItem item={item} />}
-          keyExtractor={(item) => item.id}
-          style={styles.container}
-        />
+        {isLoading ? (
+          <ActivityIndicator
+            size="large"
+            color="#00BCD4"
+            style={styles.loadingIndicator}
+          />
+        ) : isError ? (
+          <Text style={styles.errorText}>
+            Error occurred while fetching courses
+          </Text>
+        ) : (
+          <FlatList
+            data={listCourse}
+            renderItem={({ item }) => <CourseListItem item={item} />}
+            keyExtractor={(item) => item.id.toString()}
+          />
+        )}
       </ScrollView>
 
-      <Footer navigation={navigation} route={route} showActive="search"/>
+      <Footer navigation={navigation} showActive="search" />
     </View>
   );
 }
@@ -145,102 +109,105 @@ export default function CourseListing({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#f9f9f9", // Màu nền sáng
   },
- 
   content: {
     flex: 1,
+    paddingHorizontal: 15,
   },
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 15,
-    marginBottom: 20,
+    backgroundColor: "#fff",
+    padding: 10,
     marginTop: 20,
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
   },
   searchIcon: {
     position: "absolute",
-    left: 25,
+    left: 20,
     zIndex: 1,
   },
   searchInput: {
     flex: 1,
     height: 40,
-    backgroundColor: "#F0F0F0",
+    backgroundColor: "#f1f1f1",
     borderRadius: 20,
-    paddingLeft: 40,
+    paddingLeft: 45,
     paddingRight: 10,
+    fontSize: 16,
   },
   filterButton: {
-    marginLeft: 10,
     backgroundColor: "#00BCD4",
-    paddingHorizontal: 15,
     paddingVertical: 10,
+    paddingHorizontal: 20,
     borderRadius: 20,
+    marginLeft: 10,
+    justifyContent: "center",
   },
   filterButtonText: {
     color: "#fff",
     fontWeight: "bold",
   },
-  sectionTitle: {
-    fontSize: 18,
+  resultsText: {
+    fontSize: 16,
     fontWeight: "bold",
-    marginLeft: 15,
-    marginBottom: 10,
+    color: "#333",
+    marginVertical: 15,
+  },
+  loadingIndicator: {
+    marginTop: 30,
+  },
+  errorText: {
+    color: "red",
+    fontSize: 16,
+    textAlign: "center",
+    marginTop: 20,
   },
 
   courseItem: {
     flexDirection: "row",
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: "#f0f0f0",
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 15,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
   },
   courseImage: {
     width: 100,
     height: 100,
     borderRadius: 8,
-    marginRight: 16,
+    marginRight: 15,
   },
   courseDetails: {
     flex: 1,
-  },
-  courseHeader: {
-    flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "flex-start",
   },
-  titleContainer: {
-    flex: 1,
-    marginRight: 8,
-  },
-  courseTitle: {
-    fontSize: 16,
+  courseName: {
+    fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 4,
-  },
-  bestSellerBadge: {
-    backgroundColor: "#00BCD4",
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 4,
-    alignSelf: "flex-start",
-    marginBottom: 4,
-  },
-  bestSellerText: {
-    color: "#fff",
-    fontSize: 12,
-    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 5,
   },
   instructorName: {
     fontSize: 14,
     color: "#666",
-    marginBottom: 4,
+    marginBottom: 5,
   },
   price: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
     color: "#00BCD4",
-    marginBottom: 4,
+    marginBottom: 5,
   },
   ratingContainer: {
     flexDirection: "row",
@@ -249,18 +216,16 @@ const styles = StyleSheet.create({
   rating: {
     fontSize: 14,
     fontWeight: "bold",
-    marginLeft: 4,
-    marginRight: 4,
+    color: "#FFD700",
+    marginLeft: 5,
   },
   reviews: {
-    fontSize: 14,
+    fontSize: 12,
     color: "#666",
-    marginRight: 8,
+    marginLeft: 5,
   },
   lessons: {
     fontSize: 14,
     color: "#666",
   },
-
-  
 });

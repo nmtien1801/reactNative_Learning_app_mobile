@@ -70,6 +70,21 @@ const getProjectByUserService = (userID) => {
 const createProjectService = (data) => {
   return axios.post(`${baseUrl}/createProject`, data);
 };
+
+//get cart by user
+const getCartByUserService = (userID) => {
+  return axios.get(`${baseUrl}/getCartByUser/${userID}`);
+};
+
+//add to cart
+const addCourseToCart = (courseID, userID) => {
+  return axios.post(`${baseUrl}/addCourseToCart`, { courseID, userID });
+};
+
+//search course
+const searchCourseService = (keyword) => {
+  return axios.get(`${baseUrl}/searchCourse/${keyword}`);
+};
 export {
   handleLoginApi,
   logOutUser,
@@ -87,4 +102,7 @@ export {
   findCourseUserState2Service,
   getProjectByUserService,
   createProjectService,
+  getCartByUserService,
+  addCourseToCart,
+  searchCourseService,
 };

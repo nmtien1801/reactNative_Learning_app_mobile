@@ -1,169 +1,191 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
-  Image,
-  StyleSheet,
   FlatList,
+  ActivityIndicator,
   TouchableOpacity,
-  SafeAreaView,
+  StyleSheet,
+  Image,
 } from "react-native";
-import { Checkbox } from "react-native-paper";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
+  getCartByUser,
+  addCart,
   removeFromCart,
-  findCourseByID,
-  addToCart,
-} from "../../../redux/courseSlice"; // Import actions from redux
+  clearCart,
+} from "../../../redux/cartSlice";
 
-export default function Cart({ navigation, route }) {
-  // Get cart courses and course details from Redux state
-  const cartCourses = useSelector((state) => state.course.listCart);
-  const courseDetail = useSelector((state) => state.course.courseDetail);
+const Cart = () => {
   const dispatch = useDispatch();
 
-  // Extract courseID from route params if available
-  const courseID = route.params; // Make sure `courseID` is passed properly
+  // Redux states
+  const { listCart, isLoading, isError, errorMessage } = useSelector(
+    (state) => state.cart
+  );
 
-  // Fetch course details when courseID is provided
+  const userID = 1; // Simulate userID (could come from props or state)
+
+  // Fetch cart data when the component mounts
   useEffect(() => {
-    if (courseID) {
-      console.log("Fetching course details for ID:", courseID);
-      dispatch(findCourseByID(courseID)); // Dispatch action to fetch course details by ID
-    }
-  }, [courseID, dispatch]);
+    console.log("Dispatching getCartByUser for userID:", userID);
+    dispatch(getCartByUser(userID)); // Fetch user's cart data
+  }, [dispatch, userID]);
 
-  // Add the fetched course to the cart if available
-  useEffect(() => {
-    if (courseDetail && courseDetail.id) {
-      // Add course to cart only if it's not already in the cart
-      const existingCourse = cartCourses.find(
-        (course) => course.id === courseDetail.id
-      );
-      if (!existingCourse) {
-        dispatch(addToCart(courseDetail)); // Dispatch action to add course to cart
-      }
-    }
-  }, [courseDetail, cartCourses, dispatch]);
-
-  // Handle removing course from the cart
-  const toggleSelection = (id) => {
-    dispatch(removeFromCart({ id })); // Dispatch action to remove course by ID
+  // Add course to cart
+  const handleAddToCart = (course) => {
+    dispatch(addCart(course)); // Add to cart API
   };
 
-  // Calculate the total price of the courses in the cart
-  const total = cartCourses.reduce(
-    (sum, course) => sum + (course.price || 0), // Sum up all the course prices
-    0
-  );
+  // Remove course from cart
+  const handleRemoveFromCart = (course) => {
+    dispatch(removeFromCart(course)); // Remove from cart API
+  };
 
-  // Course Item component to render each course in the cart
-  const CourseItem = ({ course }) => (
-    <View style={styles.courseCard}>
-      {/* You can display the course image if available */}
-      {course.image && (
-        <Image source={{ uri: course.image }} style={styles.courseImage} />
-      )}
-      <View style={styles.courseDetails}>
-        <Text style={styles.courseTitle}>{course.title}</Text>
-        <Text style={styles.courseInstructor}>{course.instructor}</Text>
-        <Text style={styles.coursePrice}>${course.price}</Text>
-        <Text style={styles.courseLessons}>{course.lessons} lessons</Text>
-      </View>
-      <Checkbox
-        status={course.selected ? "checked" : "unchecked"} // Checkbox to toggle selection
-        onPress={() => toggleSelection(course.id)} // Toggle selection when clicked
-      />
-    </View>
-  );
+  // Clear all items from cart
+  const handleClearCart = () => {
+    dispatch(clearCart()); // Clear all items from the cart
+  };
 
-  // Render cart page
+  // Show loading indicator when data is fetching
+  if (isLoading) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
+
+  // Show error message if data fetching fails
+  if (isError) {
+    return <Text style={styles.errorMessage}>Error: {errorMessage}</Text>;
+  }
+
+  // Safeguard for empty cart
+  const cartItems = listCart.DT || []; // Safe fallback to empty array if listCart.DT is undefined or null
+  console.log("listCart:", listCart);
+  console.log("cartItems:", cartItems);
+
+  // If cart is empty, show message
+  if (cartItems.length === 0) {
+    return <Text style={styles.emptyCart}>Your cart is empty!</Text>;
+  }
+
   return (
-    <SafeAreaView style={styles.container}>
-      {/* If courseDetail exists and is not empty, render the cart list */}
-      {cartCourses.length > 0 ? (
+    <View style={styles.container}>
+      <Text style={styles.title}>Your Cart</Text>
+      {cartItems.length > 0 ? (
         <FlatList
-          data={cartCourses} // Use the cartCourses state for the list
-          keyExtractor={(item) => item.id.toString()} // Use the course ID as the key
-          renderItem={({ item }) => <CourseItem course={item} />} // Render each course item
+          data={cartItems}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <View style={styles.cartItem}>
+              <View style={styles.courseDetails}>
+                <Image
+                  source={{ uri: item.image }}
+                  style={{ width: 100, height: 100 }}
+                />
+                <Text style={styles.itemName}>{item.course.name}</Text>
+                <Text style={styles.itemDescription}>
+                  {item.course.description}
+                </Text>
+                <Text style={styles.itemRating}>
+                  Average Rating: {item.course.averageRating || "N/A"} (Total
+                  Reviews: {item.totalRating})
+                </Text>
+                <Text style={styles.itemLessons}>
+                  Total Lessons: {item.course.totalLessons || 0}
+                </Text>
+
+                <TouchableOpacity
+                  style={styles.removeButton}
+                  onPress={() => handleRemoveFromCart(item)}
+                >
+                  <Text style={styles.buttonText}>Remove from Cart</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
         />
       ) : (
-        <Text>Loading course details...</Text> // Show loading text if courseDetail is not available
+        <Text style={styles.emptyCart}>Your cart is empty!</Text>
       )}
 
-      {/* Footer displaying total price and checkout button */}
-      <View style={styles.footer}>
-        <Text style={styles.totalPrice}>Total: ${total}</Text>
-        <TouchableOpacity
-          style={styles.checkoutButton}
-          onPress={() => navigation.navigate("Checkout")} // Navigate to checkout screen
-        >
-          <Text style={styles.checkoutText}>Proceed to checkout</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+      {/* Clear Cart Button */}
+      <TouchableOpacity style={styles.clearButton} onPress={handleClearCart}>
+        <Text style={styles.buttonText}>Clear Cart</Text>
+      </TouchableOpacity>
+    </View>
   );
-}
+};
+
+export default Cart;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+    padding: 20,
   },
-  courseCard: {
-    flexDirection: "row",
-    padding: 16,
+  title: {
+    fontSize: 24,
+    marginBottom: 20,
+    fontWeight: "bold",
+  },
+  cartItem: {
+    marginVertical: 10,
+    padding: 15,
     borderBottomWidth: 1,
-    borderBottomColor: "#e5e7eb",
-  },
-  courseImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 4,
+    borderBottomColor: "#ddd",
+    flexDirection: "row",
+    alignItems: "center",
   },
   courseDetails: {
     flex: 1,
-    marginLeft: 12,
   },
-  courseTitle: {
-    fontSize: 16,
+  itemName: {
+    fontSize: 18,
     fontWeight: "600",
-    marginBottom: 4,
   },
-  courseInstructor: {
+  itemDescription: {
     fontSize: 14,
-    color: "#6b7280",
-    marginBottom: 4,
+    color: "#555",
+    marginBottom: 5,
   },
-  coursePrice: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#6366f1",
-    marginBottom: 4,
+  itemRating: {
+    fontSize: 12,
+    color: "#777",
+    marginBottom: 5,
   },
-  courseLessons: {
-    fontSize: 14,
-    color: "#6b7280",
+  itemLessons: {
+    fontSize: 12,
+    color: "#777",
+    marginBottom: 5,
   },
-  footer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+  removeButton: {
+    marginTop: 10,
+    padding: 10,
+    backgroundColor: "#ff6347",
+    borderRadius: 5,
     alignItems: "center",
-    padding: 16,
-    backgroundColor: "#f3f4f6",
   },
-  totalPrice: {
-    fontSize: 16,
-    fontWeight: "600",
+  buttonText: {
+    color: "white",
+    textAlign: "center",
   },
-  checkoutButton: {
-    backgroundColor: "#6366f1",
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
+  clearButton: {
+    padding: 10,
+    backgroundColor: "#ff6347",
+    borderRadius: 5,
+    marginTop: 20,
+    alignItems: "center",
   },
-  checkoutText: {
-    color: "#fff",
-    fontSize: 16,
+  emptyCart: {
+    fontSize: 18,
+    color: "#888",
+    textAlign: "center",
+    marginTop: 20,
+  },
+  errorMessage: {
+    fontSize: 18,
+    color: "red",
+    textAlign: "center",
+    marginTop: 20,
   },
 });
