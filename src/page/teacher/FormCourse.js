@@ -14,18 +14,29 @@ import * as DocumentPicker from "expo-document-picker";
 import { useDispatch, useSelector } from "react-redux";
 import { useToast } from "../../component/customToast";
 
-import { addNewCourse } from "../../redux/teacherSlide";
+import { addNewCourse , updateCourse} from "../../redux/teacherSlide";
 import { getAllCourseUser } from "../../redux/userSlice";
 
 export default function Component({ navigation, route }) {
+  const dataUpdate = route.params?.course;
+
   const dispatch = useDispatch();
   const toast = useToast();
 
-  const [name, setName] = useState(""); // tên khóa học
-  const [title, setTitle] = useState(""); // tiêu đề
-  const [description, setDescription] = useState(""); // mô tả
-  const [descriptionProject, setDescriptionProject] = useState(""); // mô tả project
-  const [file, setFile] = useState(null); // lưu ảnh
+  const active = route.params?.active;
+  const [name, setName] = useState(
+    dataUpdate ? dataUpdate.name : "" // tên khóa học
+  );
+  const [title, setTitle] = useState(
+    dataUpdate ? dataUpdate.title : "" // tiêu đề
+  );
+  const [description, setDescription] = useState(
+    dataUpdate ? dataUpdate.description : "" // mô tả
+  );
+  const [descriptionProject, setDescriptionProject] = useState(
+    dataUpdate ? dataUpdate.descProject : "" // mô tả project
+  );
+  const [file, setFile] = useState(dataUpdate ? dataUpdate.image : null); // lưu ảnh
 
   // category set cứng
   const [categories, setCategories] = useState({
@@ -76,20 +87,53 @@ export default function Component({ navigation, route }) {
     return 0; // Trả về 0 nếu không có category nào được chọn
   };
 
-  const renderCategory = ({ item: [key, value] }) => (
-    <View style={styles.categoryRow}>
-      <TouchableOpacity
-        style={[styles.checkbox, value && styles.checkboxChecked]}
-        onPress={() => toggleCategory(key)}
-      >
-        {value && <Text style={styles.checkboxText}>✓</Text>}
-      </TouchableOpacity>
-      <Text style={styles.categoryText}>
-        {/* // Viết hoa chữ cái đầu tiên */}
-        {key.charAt(0).toUpperCase() + key.slice(1)}
-      </Text>
-    </View>
-  );
+  // chuyển category từ số sang chữ
+  const getCategoryName = (categoryID) => {
+    switch (categoryID) {
+      case 1:
+        return "design";
+      case 2:
+        return "code";
+      case 3:
+        return "business";
+      case 4:
+        return "video";
+      case 5:
+        return "language";
+      default:
+        return "";
+    }
+  };
+
+  const renderCategory = ({ item: [key, value] }) => {
+    return (
+      <View style={styles.categoryRow}>
+        <TouchableOpacity
+          style={[styles.checkbox, value && styles.checkboxChecked]}
+          onPress={() => toggleCategory(key)} // sử dụng key trực tiếp
+        >
+          {value && <Text style={styles.checkboxText}>✓</Text>}
+        </TouchableOpacity>
+        <Text style={styles.categoryText}>
+          {key.charAt(0).toUpperCase() + key.slice(1)}{" "}
+          {/* Viết hoa chữ cái đầu */}
+        </Text>
+      </View>
+    );
+  };
+
+  // Thiết lập trạng thái mặc định khi có dataUpdate
+  useEffect(() => {
+    if (dataUpdate) {
+      const categoryName = getCategoryName(dataUpdate.categoryID);
+      if (categoryName) {
+        setCategories((prev) => ({
+          ...prev,
+          [categoryName]: true,
+        }));
+      }
+    }
+  }, [dataUpdate]);
 
   const pickImage = async () => {
     try {
@@ -99,12 +143,7 @@ export default function Component({ navigation, route }) {
       });
 
       if (result.canceled === false) {
-        setFile({
-          uri: result.assets[0].uri,
-          name: result.assets[0].name,
-          size: result.assets[0].size ?? 0,
-          type: result.assets[0].mimeType ?? "unknown",
-        });
+        setFile(result.assets[0].uri);
       }
     } catch (error) {
       console.error("Error picking document:", error);
@@ -119,11 +158,17 @@ export default function Component({ navigation, route }) {
       description: description,
       descriptionProject: descriptionProject,
       categoryID: getSelectedCategory(),
-      image: file?.uri,
+      image: file,
+      id: dataUpdate ? dataUpdate.id : null,
     };
 
-    let res = await dispatch(addNewCourse(dataNewCourse));
-
+    let res;
+    if (active === "ADD") {
+      res = await dispatch(addNewCourse(dataNewCourse));
+    } else if (active === "UPDATE") {
+      res = await dispatch(updateCourse(dataNewCourse));
+      
+    }
     if (res && +res.payload.EC === 0) {
       // dispatch(getAllCourseUser(user._id)); // lấy danh sách khoá học của user
       dispatch(getAllCourseUser(1)); // lấy danh sách khoá học của user
@@ -142,6 +187,7 @@ export default function Component({ navigation, route }) {
           style={styles.input}
           placeholder="Enter name"
           onChangeText={setName}
+          value={name} // Dùng biến trạng thái đã định nghĩa
         />
       </View>
 
@@ -151,6 +197,7 @@ export default function Component({ navigation, route }) {
           style={styles.input}
           placeholder="Enter title"
           onChangeText={setTitle}
+          value={title}
         />
       </View>
 
@@ -161,6 +208,7 @@ export default function Component({ navigation, route }) {
           placeholder="Enter description"
           multiline // Cho phép nhập nhiều dòng
           onChangeText={setDescription}
+          value={description}
         />
       </View>
 
@@ -170,6 +218,7 @@ export default function Component({ navigation, route }) {
           style={styles.input}
           placeholder="Enter description project"
           onChangeText={setDescriptionProject}
+          value={descriptionProject}
         />
       </View>
 
@@ -190,11 +239,13 @@ export default function Component({ navigation, route }) {
           <Ionicons name="cloud-upload-outline" size={24} color="#00BDD6" />
           <Text style={styles.uploadText}>Import image png</Text>
         </TouchableOpacity>
-        {file && <Image source={{ uri: file.uri }} style={styles.image} />}
+        {file && <Image source={{ uri: file }} style={styles.image} />}
       </View>
 
       <TouchableOpacity style={styles.doneButton} onPress={handleSubmit}>
-        <Text style={styles.doneButtonText}>Add</Text>
+        <Text style={styles.doneButtonText}>
+          {active == "ADD" ? "ADD" : "UPDATE"}
+        </Text>
       </TouchableOpacity>
     </ScrollView>
   );

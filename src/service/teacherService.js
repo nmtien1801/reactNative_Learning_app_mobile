@@ -18,4 +18,13 @@ const handleFindCourseByTeacherID_Categories = (teacherID) => {
 const addNewCourseService = (course) => {
   return axios.post(`${baseUrl}/addNewCourse`, course);
 };
-export { handleTeacherOverview, handleFindCourseByTeacherID_Categories , addNewCourseService};
+
+const updateCourseService = (course) => {
+  return axios.put(`${baseUrl}/updateCourse`, course);
+};
+
+const deleteCourseService = (courseID) => {
+  return axios.delete(`${baseUrl}/deleteCourse/${courseID}`);
+}
+
+export { handleTeacherOverview, handleFindCourseByTeacherID_Categories , addNewCourseService, updateCourseService, deleteCourseService };

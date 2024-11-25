@@ -119,7 +119,7 @@ const Project = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator initialRouteName="ManageCourse">
         <Stack.Screen
           name="Intro"
           component={Intro}

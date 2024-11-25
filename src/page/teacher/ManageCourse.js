@@ -13,11 +13,14 @@ import { Ionicons } from "@expo/vector-icons";
 import Footer from "../../component/footer/FooterTeacher";
 import { getAllCourseUser } from "../../redux/userSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { useToast } from "../../component/customToast";
+import { deleteCourse } from "../../redux/teacherSlide";
 
 export default function ManageCourse({ navigation, route }) {
   const user = useSelector((state) => state.auth.user); // lấy thông tin user login
   const listCourse = useSelector((state) => state.user.listCourse); // lấy danh sách khóa học của user
   const dispatch = useDispatch();
+  const toast = useToast();
 
   const [courses, setCourses] = useState([]); // state lưu danh sách khoá học của user
 
@@ -30,13 +33,25 @@ export default function ManageCourse({ navigation, route }) {
     setCourses(listCourse);
   }, [listCourse]);
 
+  const removeCourse = async (course) => {
+    console.log("course", course);
+    
+    // dispatch(deleteCourse(course._id)); // xóa khoá học
+    let res = await dispatch(deleteCourse(course.id)); // xóa khoá học
+
+    if (res && +res.payload.EC === 0) {
+      // dispatch(getAllCourseUser(user._id)); // lấy danh sách khoá học của user
+      await dispatch(getAllCourseUser(1)); // lấy danh sách khoá học của user
+      toast(res.payload.EM);
+    } else {
+      toast(res.payload.EM, "error");
+    }
+  };
+
   const renderCourseItem = ({ item }) => (
     <TouchableOpacity onPress={() => navigation.navigate("ManageLesson")}>
       <View style={styles.courseCard}>
-        <Image
-          source={{uri: item.image}}
-          style={styles.courseImage}
-        />
+        <Image source={{ uri: item.image }} style={styles.courseImage} />
         <View style={styles.courseInfo}>
           <Text style={styles.courseTitle} numberOfLines={1}>
             {item.name}
@@ -50,12 +65,19 @@ export default function ManageCourse({ navigation, route }) {
           </Text>
         </View>
         <View style={styles.actionButtons}>
-          <TouchableOpacity onPress={() => navigation.navigate("FormCourse")}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("FormCourse", {
+                active: "UPDATE",
+                course: item,
+              })
+            }
+          >
             <View style={[styles.iconButton, styles.editButton]}>
               <Ionicons name="pencil" size={18} color="#fff" />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => removeCourse(item)}>
             <View style={[styles.iconButton, styles.trashButton]}>
               <Ionicons name="trash" size={18} color="#FFF" />
             </View>
@@ -71,7 +93,9 @@ export default function ManageCourse({ navigation, route }) {
       <View style={styles.header}>
         <Text style={styles.title}>My course</Text>
 
-        <TouchableOpacity onPress={() => navigation.navigate("FormCourse")}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("FormCourse", { active: "ADD" })}
+        >
           <View style={[styles.iconButton, styles.addButton]}>
             <Ionicons name="add" size={18} color="#FFf" />
           </View>
