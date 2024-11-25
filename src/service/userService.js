@@ -99,6 +99,11 @@ const deleteCartSelected = async (courseID) => {
   }
 };
 
+// history cart getOrdersByUserId
+const getOrdersByUserId = (userID) => {
+  return axios.get(`${baseUrl}/getOrderByUserID/${userID}`);
+};
+
 //search course
 const searchCourseService = (keyword) => {
   return axios.get(`${baseUrl}/searchCourse/${keyword}`);
@@ -125,4 +130,5 @@ export {
   addCourseToCart,
   searchCourseService,
   deleteCartSelected,
+  getOrdersByUserId,
 };

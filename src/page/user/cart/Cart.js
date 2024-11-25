@@ -13,11 +13,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCartByUser, deleteCart } from "../../../redux/cartSlice";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-
+import { useToast } from "../../../component/customToast";
 const Cart = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-
+  const toast = useToast();
   const { listCart, isLoading, isError, errorMessage } = useSelector(
     (state) => state.cart
   );

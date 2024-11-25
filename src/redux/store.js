@@ -7,6 +7,8 @@ import lessonReducer from "./lessonSlice";
 import reviewReducer from "./reviewSlice";
 import projectReducer from "./projectSlice";
 import cartReducer from "./cartSlice";
+import orderReducer from "./orderSlide";
+
 export const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -17,5 +19,6 @@ export const store = configureStore({
     review: reviewReducer,
     project: projectReducer,
     cart: cartReducer,
+    orders: orderReducer,
   },
 });

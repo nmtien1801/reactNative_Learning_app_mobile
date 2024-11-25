@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from "react";
 import {
   View,
   Text,
@@ -7,18 +7,12 @@ import {
   TouchableOpacity,
   FlatList,
   SafeAreaView,
-} from 'react-native';
-import { ArrowLeft, Search, Star } from 'lucide-react-native';
+} from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchOrdersByUserId } from "../../../redux/orderSlide";
+import { ArrowLeft, Search, Star } from "lucide-react-native";
 
-// interface Course {
-//   id: string;
-//   title: string;
-//   instructor: string;
-//   price: number;
-//   rating: number;
-//   image: string;
-// }
-
+// Thành phần hiển thị sao đánh giá
 const StarRating = ({ rating }) => {
   return (
     <View style={styles.starContainer}>
@@ -26,73 +20,56 @@ const StarRating = ({ rating }) => {
         <Star
           key={index}
           size={20}
-          color={index <= rating ? '#FFD700' : '#E0E0E0'}
-          fill={index <= rating ? '#FFD700' : 'transparent'}
+          color={index <= rating ? "#FFD700" : "#E0E0E0"}
+          fill={index <= rating ? "#FFD700" : "transparent"}
         />
       ))}
     </View>
   );
 };
 
-const CourseItem = ({ course }) => {
-  return (
-    <View style={styles.courseItem}>
-      <Image source={{ uri: course.image }} style={styles.courseImage} />
-      <View style={styles.courseInfo}>
-        <View style={styles.titleContainer}>
-          <Text style={styles.courseTitle}>{course.title}</Text>
-          <Text style={styles.instructorName}>{course.instructor}</Text>
+// Thành phần hiển thị thông tin đơn hàng
+const CourseItem = ({ course }) => (
+  <View style={styles.courseItem}>
+    <Image source={{ uri: course.image }} style={styles.courseImage} />
+    <View style={styles.courseInfo}>
+      <View style={styles.titleContainer}>
+        <Text style={styles.courseTitle}>{course.title}</Text>
+        <Text style={styles.instructorName}>{course.instructor}</Text>
+      </View>
+      <View style={styles.detailsContainer}>
+        <View style={styles.priceContainer}>
+          <Text style={styles.priceLabel}>Thành tiền:</Text>
+          <Text style={styles.price}>${course.price}</Text>
         </View>
-        <View style={styles.detailsContainer}>
-          <View style={styles.priceContainer}>
-            <Text style={styles.priceLabel}>thành tiền:</Text>
-            <Text style={styles.price}>${course.price}</Text>
-          </View>
-          <View style={styles.ratingRow}>
-            <StarRating rating={course.rating} />
-            <TouchableOpacity style={styles.rateButton}>
-              <Text style={styles.rateButtonText}>Đánh giá</Text>
-            </TouchableOpacity>
-          </View>
+        <View style={styles.ratingRow}>
+          <StarRating rating={course.rating} />
         </View>
       </View>
     </View>
-  );
-};
+  </View>
+);
 
-export default function HistoryCart({ navigation, route }) {
-  const courses = [
-    {
-      id: '1',
-      title: 'Design Basics',
-      instructor: 'Kelly Hamilton',
-      price: 89,
-      rating: 3,
-      image: 'https://v0.dev/placeholder.svg?height=200&width=200',
-    },
-    {
-      id: '2',
-      title: 'Design Basics',
-      instructor: 'Kelly Hamilton',
-      price: 89,
-      rating: 3,
-      image: 'https://v0.dev/placeholder.svg?height=200&width=200',
-    },
-    {
-      id: '3',
-      title: 'Design Basics',
-      instructor: 'Kelly Hamilton',
-      price: 89,
-      rating: 3,
-      image: 'https://v0.dev/placeholder.svg?height=200&width=200',
-    },
-  ];
+export default function HistoryCart({ navigation }) {
+  const dispatch = useDispatch();
+  const { orders, loading, error } = useSelector((state) => state.orders); // Lấy trạng thái từ Redux
+  const userId = 1; // ID người dùng (có thể được truyền từ màn hình khác hoặc lấy từ Redux)
+
+  // Lấy dữ liệu đơn hàng khi component được mount
+  useEffect(() => {
+    dispatch(fetchOrdersByUserId(userId));
+  }, [dispatch, userId]);
+  console.log("order", orders);
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <TouchableOpacity style={styles.backButton}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+          >
             <ArrowLeft size={24} color="#000" />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Đơn đã mua</Text>
@@ -102,13 +79,20 @@ export default function HistoryCart({ navigation, route }) {
         </TouchableOpacity>
       </View>
 
-      <FlatList
-        data={courses}
-        renderItem={({ item }) => <CourseItem course={item} />}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.listContainer}
-        showsVerticalScrollIndicator={false}
-      />
+      {/* Nội dung */}
+      {loading ? (
+        <Text style={styles.loadingText}>Đang tải...</Text>
+      ) : error ? (
+        <Text style={styles.errorText}>Lỗi: {error}</Text>
+      ) : (
+        <FlatList
+          data={orders}
+          renderItem={({ item }) => <CourseItem course={item.courses} />}
+          keyExtractor={(item) => item.id.toString()}
+          contentContainerStyle={styles.listContainer}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
     </SafeAreaView>
   );
 }
@@ -116,27 +100,27 @@ export default function HistoryCart({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
+    borderBottomColor: "#E0E0E0",
   },
   headerLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   backButton: {
     padding: 4,
   },
   headerTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginLeft: 12,
   },
   searchButton: {
@@ -146,16 +130,13 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   courseItem: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginBottom: 16,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 8,
     padding: 12,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
@@ -168,26 +149,26 @@ const styles = StyleSheet.create({
   },
   courseInfo: {
     flex: 1,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
   titleContainer: {
     marginBottom: 8,
   },
   courseTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 4,
   },
   instructorName: {
     fontSize: 14,
-    color: '#666',
+    color: "#666",
   },
   detailsContainer: {
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
   priceContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 8,
   },
   priceLabel: {
@@ -196,26 +177,26 @@ const styles = StyleSheet.create({
   },
   price: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#FF0000',
+    fontWeight: "bold",
+    color: "#FF0000",
   },
   ratingRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   starContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
-  rateButton: {
-    backgroundColor: '#FF6B6B',
-    paddingHorizontal: 16,
-    paddingVertical: 6,
-    borderRadius: 4,
+  loadingText: {
+    textAlign: "center",
+    marginTop: 20,
+    fontSize: 16,
+    color: "#666",
   },
-  rateButtonText: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: 'bold',
+  errorText: {
+    textAlign: "center",
+    marginTop: 20,
+    fontSize: 16,
+    color: "red",
   },
 });
