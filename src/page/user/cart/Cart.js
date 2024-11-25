@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
-  CheckBox,
+  Alert,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { getCartByUser, deleteCart } from "../../../redux/cartSlice";
@@ -18,21 +18,29 @@ const Cart = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  // Lấy dữ liệu giỏ hàng từ Redux
   const { listCart, isLoading, isError, errorMessage } = useSelector(
     (state) => state.cart
   );
 
-  const [selectedItems, setSelectedItems] = useState([]); // Dùng để lưu các courseID được chọn
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
 
-  const userID = 1; // User cụ thể (tùy chỉnh nếu cần)
+  const userID = 1;
 
-  // Lấy danh sách giỏ hàng khi trang được tải
   useEffect(() => {
     dispatch(getCartByUser(userID));
   }, [dispatch, userID]);
 
-  // Xử lý chọn/deselect một khóa học
+  useEffect(() => {
+    const newTotalPrice = selectedItems.reduce((total, courseID) => {
+      const course = cartItems.find(
+        (item) => (item.courseID || item.id) === courseID
+      );
+      return total + (course ? parseFloat(course.price) : 0);
+    }, 0);
+    setTotalPrice(newTotalPrice);
+  }, [selectedItems]);
+
   const handleSelectItem = (courseID) => {
     if (selectedItems.includes(courseID)) {
       setSelectedItems(selectedItems.filter((id) => id !== courseID));
@@ -41,13 +49,20 @@ const Cart = () => {
     }
   };
 
-  // Xóa các khóa học được chọn khỏi giỏ hàng
+  const handleSelectAll = () => {
+    if (selectedItems.length === cartItems.length) {
+      setSelectedItems([]);
+    } else {
+      setSelectedItems(cartItems.map((item) => item.courseID || item.id));
+    }
+  };
+
   const handleRemoveSelected = () => {
     if (selectedItems.length > 0) {
-      dispatch(deleteCart(selectedItems)) // Gọi action xóa với danh sách courseID
+      dispatch(deleteCart(selectedItems))
         .then(() => {
-          setSelectedItems([]); // Xóa lựa chọn sau khi xóa thành công
-          dispatch(getCartByUser(userID)); // Tải lại danh sách giỏ hàng
+          setSelectedItems([]);
+          dispatch(getCartByUser(userID));
         })
         .catch((error) => {
           alert("Failed to remove selected courses: " + error.message);
@@ -57,35 +72,74 @@ const Cart = () => {
     }
   };
 
-  // Hiển thị trạng thái tải dữ liệu
+  const handlePurchase = () => {
+    if (selectedItems.length > 0) {
+      Alert.alert(
+        "Confirm Purchase",
+        `Are you sure you want to purchase ${
+          selectedItems.length
+        } course(s) for $${totalPrice.toFixed(2)}?`,
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+          {
+            text: "Purchase",
+            onPress: () => {
+              // Implement purchase logic here
+              console.log("Purchasing courses:", selectedItems);
+              Alert.alert(
+                "Purchase Successful",
+                "Thank you for your purchase!"
+              );
+              setSelectedItems([]);
+            },
+          },
+        ]
+      );
+    } else {
+      Alert.alert(
+        "No Courses Selected",
+        "Please select at least one course to purchase."
+      );
+    }
+  };
+
   if (isLoading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
   }
 
-  // Hiển thị lỗi nếu có
   if (isError) {
     return <Text style={styles.errorMessage}>Error: {errorMessage}</Text>;
   }
 
-  const cartItems = listCart?.DT || []; // Danh sách các khóa học trong giỏ hàng
+  const cartItems = listCart?.DT || [];
   if (cartItems.length === 0) {
     return <Text style={styles.emptyCart}>Your cart is empty!</Text>;
   }
 
   return (
     <View style={styles.container}>
-      {/* Hiển thị danh sách các khóa học */}
       <FlatList
         data={cartItems}
         keyExtractor={(item) =>
           item.courseID ? item.courseID.toString() : item.id.toString()
-        } // Kiểm tra courseID và fallback sang id
+        }
         renderItem={({ item }) => (
           <View style={styles.courseItem}>
-            <CheckBox
-              value={selectedItems.includes(item.courseID || item.id)} // Kiểm tra xem item.courseID hay item.id có tồn tại không
-              onValueChange={() => handleSelectItem(item.courseID || item.id)} // Xử lý lựa chọn khóa học
-            />
+            <TouchableOpacity
+              style={styles.checkBox}
+              onPress={() => handleSelectItem(item.courseID || item.id)}
+            >
+              <View
+                style={[
+                  styles.checkBoxInner,
+                  selectedItems.includes(item.courseID || item.id) &&
+                    styles.checkBoxChecked,
+                ]}
+              />
+            </TouchableOpacity>
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate("courseDetailOverView", {
@@ -118,13 +172,35 @@ const Cart = () => {
         )}
       />
 
-      {/* Nút xóa các khóa học đã chọn */}
-      <TouchableOpacity
-        style={styles.clearButton}
-        onPress={handleRemoveSelected}
-      >
-        <Text style={styles.buttonText}>Remove Selected</Text>
-      </TouchableOpacity>
+      <View style={styles.footer}>
+        <View style={styles.footerTop}>
+          <TouchableOpacity
+            style={styles.selectAllButton}
+            onPress={handleSelectAll}
+          >
+            <Text style={styles.selectAllText}>
+              {selectedItems.length === cartItems.length
+                ? "Deselect All"
+                : "Select All"}
+            </Text>
+          </TouchableOpacity>
+          <Text style={styles.totalPrice}>Total: ${totalPrice.toFixed(2)}</Text>
+        </View>
+        <View style={styles.footerBottom}>
+          <TouchableOpacity
+            style={styles.purchaseButton}
+            onPress={handlePurchase}
+          >
+            <Text style={styles.purchaseButtonText}>Purchase</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.clearButton}
+            onPress={handleRemoveSelected}
+          >
+            <Ionicons name="trash-outline" size={24} color="white" />
+          </TouchableOpacity>
+        </View>
+      </View>
     </View>
   );
 };
@@ -199,15 +275,70 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 20,
   },
-  clearButton: {
+  footer: {
+    marginTop: 20,
+    paddingTop: 10,
+    borderTopWidth: 1,
+    borderTopColor: "#ddd",
+  },
+  footerTop: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  footerBottom: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  totalPrice: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#FF0000",
+  },
+  selectAllButton: {
     padding: 10,
-    backgroundColor: "#ff6347",
+    backgroundColor: "#69E41D",
     borderRadius: 5,
-    marginTop: 10,
+  },
+  selectAllText: {
+    color: "white",
+    fontWeight: "bold",
+  },
+  purchaseButton: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: "#00BDD6",
+    borderRadius: 5,
+    marginRight: 10,
     alignItems: "center",
   },
-  buttonText: {
+  purchaseButtonText: {
     color: "white",
-    textAlign: "center",
+    fontWeight: "bold",
+  },
+  clearButton: {
+    padding: 10,
+    backgroundColor: "#FF0000",
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  checkBox: {
+    width: 24,
+    height: 24,
+    borderWidth: 2,
+    borderColor: "#00BDD6",
+    borderRadius: 5,
+    marginRight: 10,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  checkBoxInner: {
+    width: 12,
+    height: 12,
+    borderRadius: 1,
+  },
+  checkBoxChecked: {
+    backgroundColor: "#00BDD6",
   },
 });
