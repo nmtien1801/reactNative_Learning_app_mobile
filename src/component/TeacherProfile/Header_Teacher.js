@@ -10,7 +10,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTeacherOverview } from "../../redux/teacherSlide"; // Import action
 
-export default function TeacherProfileScreen({navigation, route}) {
+export default function TeacherProfileScreen({ navigation, route }) {
   const dispatch = useDispatch();
 
   // Dữ liệu từ Redux store
@@ -24,7 +24,7 @@ export default function TeacherProfileScreen({navigation, route}) {
   // Gửi yêu cầu lấy dữ liệu khi component được mount
   useEffect(() => {
     dispatch(fetchTeacherOverview(teacherID));
-  }, [dispatch, teacherID]);
+  }, []);
 
   // Nếu đang tải
   if (isLoading) {

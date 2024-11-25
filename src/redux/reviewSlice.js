@@ -24,7 +24,7 @@ const reviewSlice = createSlice({
   // dùng api mới sử dụng extraReducers
   // 3 trạng thái của api: pending, fulfilled, rejected
   extraReducers: (builder) => {
-    // getAllLesson
+    // getReviewByCourse
     builder
       .addCase(getReviewByCourse.pending, (state) => {
         state.isLoading = true;

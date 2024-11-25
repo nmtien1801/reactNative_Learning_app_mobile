@@ -21,7 +21,7 @@ export default function TeacherCourses({ navigation, route }) {
   );
   const user = useSelector((state) => state.auth.user);
 
-  const { showToast } = useToast();
+  const toast = useToast();
   const teacherID = 1; // ID của giáo viên
 
   // Fetch dữ liệu khi component được mount
@@ -43,7 +43,7 @@ export default function TeacherCourses({ navigation, route }) {
 
   // Trạng thái lỗi
   if (isError) {
-    showToast("Failed to load teacher data");
+    toast("Failed to load teacher data", "error");
     return (
       <Layout navigation={navigation} route={route}>
         <View style={styles.errorContainer}>

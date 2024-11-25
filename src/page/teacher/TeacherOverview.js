@@ -20,51 +20,14 @@ export default function TeacherOverview({ navigation, route }) {
   );
   const user = useSelector((state) => state.auth.user);
 
-  const { showToast } = useToast();
+  const toast = useToast();
 
   const teacherID = 1; // ID của giáo viên
 
   // Fetch dữ liệu khi component được mount
   useEffect(() => {
     dispatch(fetchTeacherOverview(teacherID));
-  }, [dispatch]);
-
-  // Trạng thái loading
-  if (isLoading) {
-    return (
-      <Layout navigation={navigation} route={route}>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#4A90E2" />
-          <Text style={styles.loadingText}>Loading...</Text>
-        </View>
-      </Layout>
-    );
-  }
-
-  // Trạng thái lỗi
-  if (isError) {
-    showToast("Failed to load teacher data");
-    return (
-      <Layout navigation={navigation} route={route}>
-        <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>Failed to load data</Text>
-        </View>
-      </Layout>
-    );
-  }
-
-  // Không có dữ liệu
-  if (!teacherOverview || Object.keys(teacherOverview).length === 0) {
-    return (
-      <Layout navigation={navigation} route={route}>
-        <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>No data available</Text>
-        </View>
-      </Layout>
-    );
-  } else {
-    // showToast("Data loaded successfully");
-  }
+  }, [dispatch, teacherID]);
 
   // Destructure dữ liệu giáo viên và cung cấp giá trị mặc định
   const { userName, image, description, email, phone, address, title } =

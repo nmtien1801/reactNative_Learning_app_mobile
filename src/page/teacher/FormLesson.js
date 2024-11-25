@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,112 +6,98 @@ import {
   TouchableOpacity,
   FlatList,
   StyleSheet,
+  ScrollView,
+  Image,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import * as DocumentPicker from "expo-document-picker";
+import { useDispatch, useSelector } from "react-redux";
+import { useToast } from "../../component/customToast";
+
+import {getLessonByCourse, createLesson, updateLesson} from "../../redux/lessonSlice";
 
 export default function Component({ navigation, route }) {
-  const [options, setOptions] = useState({
-    design: false,
-    code: false,
-    business: false,
-    video: false,
-    language: false,
-    other: false,
-  });
-  const [otherText, setOtherText] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
 
-  const toggleOption = (key) => {
-    setOptions((prevOptions) => ({
-      ...prevOptions,
-      [key]: !prevOptions[key], // nghĩa là nếu key đã được chọn thì bỏ chọn và ngược lại
-    }));
-  };
+  const dataUpdate = route.params;
 
-  const renderCategory = ({ item: [key, value] }) => (
-    <View style={styles.categoryRow}>
-      <TouchableOpacity
-        style={[styles.checkbox, value && styles.checkboxChecked]}
-        onPress={() => toggleCategory(key)}
-      >
-        {value && <Text style={styles.checkboxText}>✓</Text>}
-      </TouchableOpacity>
-      <Text style={styles.categoryText}>
-        {key.charAt(0).toUpperCase() + key.slice(1)}
-      </Text>
-      {key === "other" && value && (
-        <TextInput
-          style={[styles.input, styles.otherInput]}
-          value={otherText}
-          onChangeText={setOtherText}
-          placeholder="Specify other category"
-        />
-      )}
-    </View>
+  const dispatch = useDispatch();
+  const toast = useToast();
+
+  const active = route.params?.active;
+  const [name, setName] = useState(
+    dataUpdate && dataUpdate.name ? dataUpdate.name : "" // tên khóa học
+  );
+  const [title, setTitle] = useState(
+    dataUpdate ? dataUpdate.title : "" // tiêu đề
+  );
+  const [urlVideo, setUrlVideo] = useState(
+    dataUpdate && dataUpdate.urlVideo? dataUpdate.urlVideo : "" // url video
   );
 
+  const handleSubmit = async () => {
+    dataNewLesson = {
+      lessonID: dataUpdate.lessonID,
+      videoID: dataUpdate.videoID,
+      title: title,
+      name: name,
+      urlVideo: urlVideo,
+      courseID: dataUpdate.courseID,
+    };
+  console.log("dataNewLesson: ", dataNewLesson);
+
+    let res;
+    if (active === "ADD") {
+      res = await dispatch(createLesson(dataNewLesson));
+    } else if (active === "UPDATE") {
+      res = await dispatch(updateLesson(dataNewLesson));
+    }
+    if (res && +res.payload.EC === 0) {
+      // dispatch(getLessonByCourse(dataUpdate.courseID)); // lấy danh sách khoá học của user
+      dispatch(getLessonByCourse(1)); // lấy danh sách khoá học của user
+      navigation.navigate("ManageLesson");
+      toast(res.payload.EM);
+    } else {
+      toast(res.payload.EM, "error");
+    }
+  };
+
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Title</Text>
-        <TextInput style={styles.input} placeholder="Enter title" />
+        <TextInput
+          style={styles.input}
+          placeholder="Enter title"
+          onChangeText={setTitle}
+          value={title} // Dùng biến trạng thái đã định nghĩa
+        />
+      </View>
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Name</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter name"
+          onChangeText={setName}
+          value={name} // Dùng biến trạng thái đã định nghĩa
+        />
       </View>
 
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Description</Text>
+        <Text style={styles.label}>URL video</Text>
         <TextInput
           style={styles.input}
-          placeholder="Enter description"
-          multiline
+          placeholder="Enter url video"
+          onChangeText={setUrlVideo}
+          value={urlVideo}
         />
       </View>
 
-      <View style={styles.categoriesContainer}>
-        <Text style={styles.label}>Categories</Text>
-        <FlatList
-          data={Object.entries(categories)}
-          renderItem={renderCategory}
-          keyExtractor={([key]) => key}
-        />
-      </View>
-
-      <View style={styles.imageContainer}>
-        <Text style={styles.label}>Image</Text>
-        <View style={styles.imageInputContainer}>
-          <TextInput
-            style={[styles.input, styles.imageInput]}
-            value={imageUrl}
-            onChangeText={setImageUrl}
-            placeholder="URL"
-          />
-          <TouchableOpacity style={styles.uploadButton}>
-            <Ionicons name="cloud-upload-outline" size={20} color="#666" />
-          </TouchableOpacity>
-        </View>
-      </View>
-      <View style={styles.imageContainer}>
-        <Text style={styles.label}>Video</Text>
-        <View style={styles.imageInputContainer}>
-          <TextInput
-            style={[styles.input, styles.imageInput]}
-            value={imageUrl}
-            onChangeText={setImageUrl}
-            placeholder="URL"
-          />
-          <TouchableOpacity style={styles.uploadButton}>
-            <Ionicons name="cloud-upload-outline" size={20} color="#666" />
-          </TouchableOpacity>
-        </View>
-      </View>
-
-        <TouchableOpacity
-          style={styles.doneButton}
-          onPress={() => navigation.navigate("ManageLesson")}
-        >
-          <Text style={styles.doneButtonText}>Done</Text>
-        </TouchableOpacity>
- 
-    </View>
+      <TouchableOpacity style={styles.doneButton} onPress={handleSubmit}>
+        <Text style={styles.doneButtonText}>
+          {active == "ADD" ? "ADD" : "UPDATE"}
+        </Text>
+      </TouchableOpacity>
+    </ScrollView>
   );
 }
 
@@ -119,9 +105,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    padding: 20,
+    padding: 16,
   },
-
   inputContainer: {
     marginBottom: 20,
   },
@@ -168,35 +153,37 @@ const styles = StyleSheet.create({
     fontSize: 16,
     flex: 1,
   },
-  otherInput: {
-    flex: 1,
-    marginLeft: 12,
-  },
   imageContainer: {
     marginBottom: 20,
   },
-  imageInputContainer: {
+  uploadBtn: {
     flexDirection: "row",
     alignItems: "center",
-  },
-  imageInput: {
-    flex: 1,
-    marginRight: 12,
-  },
-  uploadButton: {
-    padding: 12,
+    borderWidth: 1,
+    borderColor: "#00BDD6",
     borderRadius: 8,
-    backgroundColor: "#00BDD6",
+    padding: 12,
+    marginVertical: 12,
+  },
+  uploadText: {
+    color: "#00BDD6",
+    fontSize: 16,
+    marginLeft: 8,
   },
   doneButton: {
     backgroundColor: "#4CD964",
     padding: 16,
     borderRadius: 8,
     alignItems: "center",
+    marginTop: 20,
   },
   doneButtonText: {
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  image: {
+    width: 200,
+    height: 200,
   },
 });

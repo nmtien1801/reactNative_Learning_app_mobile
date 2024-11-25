@@ -1,5 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getAllLessonService } from "../service/userService";
+import {
+  getAllLessonService,
+  getLessonByCourseService,
+} from "../service/userService";
+import {
+  createLessonService,
+  deleteVideoService,
+  updateLessonService,
+} from "../service/teacherService";
 
 const initialState = {
   listLesson: [],
@@ -10,8 +18,40 @@ const initialState = {
 // action -> export
 export const getAllLesson = createAsyncThunk(
   "lesson/getAllLesson",
-  async ( thunkAPI) => {
-    const response = await getAllLessonService(); 
+  async (thunkAPI) => {
+    const response = await getAllLessonService();
+    return response.data;
+  }
+);
+
+export const getLessonByCourse = createAsyncThunk(
+  "lesson/getLessonByCourse",
+  async (courseID, thunkAPI) => {
+    const response = await getLessonByCourseService(courseID);
+    return response.data;
+  }
+);
+
+export const createLesson = createAsyncThunk(
+  "lesson/createLesson",
+  async (data, thunkAPI) => {
+    const response = await createLessonService(data);
+    return response.data;
+  }
+);
+
+export const deleteVideo = createAsyncThunk(
+  "lesson/deleteVideo",
+  async (videoID, thunkAPI) => {
+    const response = await deleteVideoService(videoID);
+    return response.data;
+  }
+);
+
+export const updateLesson = createAsyncThunk(
+  "lesson/updateLesson",
+  async (data, thunkAPI) => {
+    const response = await updateLessonService(data);
     return response.data;
   }
 );
@@ -39,7 +79,63 @@ const lessonSlice = createSlice({
         state.isError = true;
       });
 
-    
+    // getLessonByCourse
+    builder
+      .addCase(getLessonByCourse.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+      })
+      .addCase(getLessonByCourse.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.listLesson = action.payload.DT || {};
+      })
+      .addCase(getLessonByCourse.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+      });
+
+    // createLesson
+    builder
+      .addCase(createLesson.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+      })
+      .addCase(createLesson.fulfilled, (state, action) => {
+        state.isLoading = false;
+      })
+      .addCase(createLesson.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError;
+      });
+
+    // deleteVideo
+    builder
+      .addCase(deleteVideo.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+      })
+      .addCase(deleteVideo.fulfilled, (state, action) => {
+        state.isLoading = false;
+      })
+      .addCase(deleteVideo.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError;
+      });
+
+      // updateLesson
+      builder
+      .addCase(updateLesson.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+      })
+      .addCase(updateLesson.fulfilled, (state, action) => {
+        state.isLoading = false;
+      })
+      .addCase(updateLesson.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError
+      }
+    );
   },
 });
 

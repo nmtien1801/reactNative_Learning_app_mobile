@@ -35,7 +35,7 @@ export default function ManageCourse({ navigation, route }) {
 
   const removeCourse = async (course) => {
     console.log("course", course);
-    
+
     // dispatch(deleteCourse(course._id)); // xóa khoá học
     let res = await dispatch(deleteCourse(course.id)); // xóa khoá học
 
@@ -49,7 +49,7 @@ export default function ManageCourse({ navigation, route }) {
   };
 
   const renderCourseItem = ({ item }) => (
-    <TouchableOpacity onPress={() => navigation.navigate("ManageLesson")}>
+    <TouchableOpacity onPress={() => navigation.navigate("ManageLesson", {courseID: item.id})}>
       <View style={styles.courseCard}>
         <Image source={{ uri: item.image }} style={styles.courseImage} />
         <View style={styles.courseInfo}>
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#69E41D",
     marginLeft: 20,
     justifyContent: "center",
-    borderRadius: "50%",
+    borderRadius: 50,
     padding: 25,
   },
 });
