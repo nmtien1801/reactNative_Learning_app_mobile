@@ -10,7 +10,6 @@ import {
   Image,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import * as DocumentPicker from "expo-document-picker";
 import { useDispatch, useSelector } from "react-redux";
 import { useToast } from "../../component/customToast";
 

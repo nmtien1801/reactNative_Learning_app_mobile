@@ -4,7 +4,7 @@ import { Platform } from "react-native";
 
 const baseUrl =
   Platform.OS === "android"
-    ? "http://172.20.33.189:8080/api" // URL cho Android và iOS
+    ? "http://192.168.1.6:8080/api" // URL cho Android và iOS
     : "http://localhost:8080/api"; // URL cho web hoặc môi trường khác
 
 const handleLoginApi = (email, password) => {
@@ -89,8 +89,6 @@ const searchCourseService = (keyword) => {
 const getLessonByCourseService = (courseID) => {
   return axios.get(`${baseUrl}/getLessonByCourse/${courseID}`);
 };
-
-
 
 export {
   handleLoginApi,

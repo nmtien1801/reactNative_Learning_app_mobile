@@ -32,6 +32,8 @@ import { CustomToast } from "./component/customToast";
 import { useSelector } from "react-redux";
 import HeaderSetting from "./header/Header_Setting";
 
+import ChatBox from "./component/chatbox/ChatScreens";
+
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -135,7 +137,11 @@ const Project = () => {
           component={RegisterScreen}
           options={{ header: () => {} }}
         />
-
+        <Stack.Screen
+          name="chatBox"
+          component={ChatBox}
+          options={{ header: () => {} }}
+        />
         {/* ================ search course */}
         <Stack.Screen
           name="courseSearch"
