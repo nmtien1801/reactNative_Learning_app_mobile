@@ -1,7 +1,9 @@
 import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { ChevronRight, User, Lock } from 'lucide-react-native';
-
+import {handleLogout} from "../../redux/authSlice";
+import { useToast } from "../../component/customToast";
+import { useDispatch, useSelector } from "react-redux";
 
 
 const SettingItem = ({ label, value, onPress, showChevron = true }) => (
@@ -14,11 +16,11 @@ const SettingItem = ({ label, value, onPress, showChevron = true }) => (
   </TouchableOpacity>
 );
 
-const SectionHeader = ({ title, subtitle }) => (
-  <View style={styles.sectionHeader}>
+const SectionHeader = ({ title, subtitle , onPress}) => (
+  <View style={styles.sectionHeader} >
     <Text style={styles.sectionTitle}>{title}</Text>
     {subtitle && (
-      <TouchableOpacity>
+      <TouchableOpacity onPress={onPress}>
         <Text style={styles.sectionSubtitle}>{subtitle}</Text>
       </TouchableOpacity>
     )}
@@ -26,10 +28,25 @@ const SectionHeader = ({ title, subtitle }) => (
 );
 
 export default function Setting({navigation, route}) {
+  const toast = useToast();
+  const dispatch = useDispatch();
+
   const handlePress = (section) => {
     console.log(`Navigating to ${section}`);
   };
 
+  const OnClickLogout = async () => {
+    
+    let res = await dispatch(handleLogout());
+    console.log("sdfsdf: ", res);
+    
+    if (res && +res.payload.EC === 0) {
+      toast("logout success...");
+    } else {
+      toast(res.payload.EM , "error");
+    }
+  };
+  
   return (
     <ScrollView style={styles.container}>
       <SectionHeader 
@@ -70,8 +87,9 @@ export default function Setting({navigation, route}) {
       />
 
       <SectionHeader 
-        title="Đăng nhập & khôi phục"
-        subtitle="Quản lý mật khẩu"
+        title="Đăng xuất"
+        subtitle="Đăng xuất khỏi tài khoản của bạn"
+        onPress={() => OnClickLogout()}
       />
 
       <View style={styles.settingsGroup}>

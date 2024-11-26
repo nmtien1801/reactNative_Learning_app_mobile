@@ -106,7 +106,7 @@ export default function CourseListing({ navigation }) {
         )}
       </ScrollView>
 
-      <Footer navigation={navigation} showActive="search" />
+        <Footer navigation={navigation} showActive="search" />
     </View>
   );
 }

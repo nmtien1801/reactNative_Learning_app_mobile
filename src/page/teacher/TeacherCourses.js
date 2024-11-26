@@ -64,6 +64,7 @@ export default function TeacherCourses({ navigation, route }) {
       </Layout>
     );
   }
+console.log("TeacherCourses: ", TeacherCourses);
 
   // Destructure dữ liệu từ TeacherCourses.DT
   const courses = TeacherCourses.DT;
@@ -85,9 +86,7 @@ export default function TeacherCourses({ navigation, route }) {
     const { name, title, image } = item;
     const courseImage =
       image ??
-      { uri: image } | require("../../../img/Login_Register/Login.jpg"); // Hình ảnh mặc định
-
-      
+      { uri: image } | require("../../../img/Login_Register/Login.jpg"); // Hình ảnh mặc định      
     return (
       <View style={styles.courseCard}>
         <Image source={courseImage} style={styles.courseImage} />

@@ -27,9 +27,8 @@ export default function TeacherReviews({ navigation, route }) {
     // dispatch(getAllCourseUser(1)); // lấy danh sách khoá học của user
   }, []);
 
-  const allReviewOfCourse = listCourse?.map((item) => item.Review) || []; // lấy tất cả review của các khóa học [ [1, 2], [3, 4, 5] ]
+  const allReviewOfCourse = Array.isArray(listCourse) ? listCourse.map((item) => item.Review) : []; // lấy tất cả review của các khóa học [ [1, 2], [3, 4, 5] ]
   const reviewCourse = allReviewOfCourse.flat(); // merge các mảng con thành một mảng [1, 2, 3, 4, 5]
-  console.log("listCourse: ", listCourse, "reviewCourse: ", reviewCourse);
 
   // Tính averageRating và tổng số review
   let totalRating = 0;

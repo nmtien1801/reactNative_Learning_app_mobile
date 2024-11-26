@@ -83,9 +83,9 @@ export default function LoginScreen({ navigation, route }) {
             >
               <Text style={styles.loginButtonText}>Login</Text>
             </TouchableOpacity>
-            <Text style={styles.errorText}>
+            {/* <Text style={styles.errorText}>
               Username hoặc mật khẩu không chính xác
-            </Text>
+            </Text> */}
 
             <View
               style={{

@@ -521,7 +521,7 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   courseImage: {
-    width: "100%",
+    // width: "100%",
     height: 160,
     backgroundColor: "#f0f0f0",
     resizeMode: "contain",
@@ -586,7 +586,7 @@ const styles = StyleSheet.create({
     marginRight: 16,
   },
   teacherImage: {
-    width: "100%",
+    // width: "100%",
     height: 160,
     borderRadius: 8,
     marginBottom: 8,

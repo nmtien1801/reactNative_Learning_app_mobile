@@ -105,6 +105,8 @@ const ChatBox = () => {
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
+    right: 10,  // Giữ chatbox ở bên phải màn hình
+    bottom: 100,  // Vị trí cách đáy một khoảng nhỏ
     zIndex: 1000,
   },
   chatIcon: {

@@ -24,7 +24,6 @@ export default function ManageCourse({ navigation, route }) {
 
   const [courses, setCourses] = useState([]); // state lưu danh sách khoá học của user
   const userID = user._id;
-console.log("course: ", courses);
 
   useEffect(() => {
     // dispatch(getAllCourseUser(user._id)); // lấy danh sách khoá học của user

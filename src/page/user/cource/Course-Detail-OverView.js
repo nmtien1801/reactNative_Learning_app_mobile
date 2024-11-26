@@ -68,7 +68,7 @@ export default function CourseDetailOverView({ navigation, route }) {
           rating: course.averageRating,
           reviews: course.totalRating,
           lessons: course.totalLessons,
-          image: "https://v0.dev/placeholder.svg?height=200&width=200",
+          image: course.image,
           bookmarked: false,
         })),
       ]);

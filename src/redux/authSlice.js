@@ -67,7 +67,9 @@ const authSlice = createSlice({
       .addCase(handleLogin.fulfilled, (state, action) => {
         state.isLoading = false;
         state.user = action.payload.DT || {};
-        state.isLogin = true;
+        if (action.payload.EC === 0) {
+          state.isLogin = true;
+        } else state.isLogin = false;
 
         // state.token = action.payload.token;
         // localStorage.setItem("learning_App", action.payload.DT.access_token); // Lưu token vào localStorage
@@ -86,7 +88,9 @@ const authSlice = createSlice({
       .addCase(handleLogout.fulfilled, (state, action) => {
         state.isLoading = false;
         state.user = {};
-        state.isLogin = false;
+        if (action.payload.EC === 0) {
+          state.isLogin = false;
+        } else state.isLogin = true;
         // localStorage.removeItem("learning_App"); // Xóa token khỏi localStorage
         console.log("action: ", action);
       })
