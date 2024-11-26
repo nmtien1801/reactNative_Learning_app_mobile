@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { findAllCourses, searchCourse } from "../../../redux/courseSlice"; // Import hành động searchCourse
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons"; // Ensure this is imported for the icon
 import Footer from "../../../component/footer/FooterUser";
 
 // HotTopic Component
@@ -150,13 +150,9 @@ export default function CourseSearch({ navigation, route }) {
             onChangeText={setKeyword}
             onSubmitEditing={handleSearch} // Gọi khi người dùng nhấn enter
           />
-          <TouchableOpacity onPress={handleSearch}>
-            <Ionicons
-              name="search"
-              size={20}
-              color="#666"
-              style={styles.searchIcon}
-            />
+
+          <TouchableOpacity style={styles.filterButton} onPress={handleSearch}>
+            <Text style={styles.filterButtonText}>Search</Text>
           </TouchableOpacity>
         </View>
 
@@ -347,5 +343,17 @@ const styles = StyleSheet.create({
   errorText: {
     color: "red",
     fontSize: 16,
+  },
+  filterButton: {
+    backgroundColor: "#00BCD4",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    marginLeft: 10,
+    justifyContent: "center",
+  },
+  filterButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
 });
