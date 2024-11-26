@@ -151,6 +151,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 4,
+    resizeMode: "contain",
   },
   courseInfo: {
     flex: 1,

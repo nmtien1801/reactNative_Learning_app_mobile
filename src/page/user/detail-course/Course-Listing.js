@@ -101,6 +101,7 @@ export default function CourseListing({ navigation }) {
             data={listCourse}
             renderItem={({ item }) => <CourseListItem item={item} />}
             keyExtractor={(item) => item.id.toString()}
+            nestedScrollEnabled={true} // Kích hoạt cuộn lồng nhau -> do lồng trong scrollView
           />
         )}
       </ScrollView>
@@ -191,6 +192,7 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 8,
     marginRight: 15,
+    resizeMode: "contain",
   },
   courseDetails: {
     flex: 1,

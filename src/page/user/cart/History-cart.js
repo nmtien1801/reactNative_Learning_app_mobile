@@ -261,6 +261,7 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 8,
     marginBottom: 12,
+    resizeMode: "contain",
   },
   courseTitle: {
     fontSize: 16,

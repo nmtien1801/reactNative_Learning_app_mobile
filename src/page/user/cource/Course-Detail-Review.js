@@ -17,6 +17,7 @@ import { useToast } from "../../../component/customToast";
 import { useDispatch, useSelector } from "react-redux";
 import { findCourseByID } from "../../../redux/courseSlice";
 import { getReviewByCourse } from "../../../redux/reviewSlice";
+import { WebView } from 'react-native-webview';
 
 export default function CourseDetailReview({ navigation, route }) {
   const courseDetail = useSelector((state) => state.course.courseDetail); // lấy thông tin top teacher

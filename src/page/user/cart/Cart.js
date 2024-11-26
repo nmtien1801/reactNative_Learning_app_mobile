@@ -283,6 +283,7 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 5,
     marginRight: 15,
+    resizeMode: "contain",
   },
   courseDetails: {
     flex: 1,

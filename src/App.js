@@ -112,6 +112,7 @@ export default function App() {
     <Provider store={store}>
       <CustomToast>
         <Project />
+        <ChatBox />
       </CustomToast>
     </Provider>
   );
@@ -123,7 +124,7 @@ const Project = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator initialRouteName="chatBox">
         {!isLogin ? (
           <>
             <Stack.Screen
@@ -141,6 +142,11 @@ const Project = () => {
               component={RegisterScreen}
               options={{ header: () => {} }}
             />
+             {/* <Stack.Screen
+              name="chatBox"
+              component={ChatBox}
+              options={{ header: () => {} }}
+            /> */}
           </>
         ) : (
           <>

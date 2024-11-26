@@ -181,6 +181,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 180,
     borderRadius: 8,
+    resizeMode: "contain",
   },
   projectName: {
     fontSize: 14,

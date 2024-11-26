@@ -120,6 +120,7 @@ export default function UserProfileScreen({ navigation, route }) {
               />
             )}
             keyExtractor={(item) => item.id.toString()}
+            nestedScrollEnabled={true} // Kích hoạt cuộn lồng nhau -> do lồng trong scrollView
           />
         </View>
       </ScrollView>
