@@ -25,7 +25,11 @@ import { useEffect, useState } from "react";
 import { useToast } from "../../component/customToast";
 
 import { useDispatch, useSelector } from "react-redux";
-import { findAllCourses, findPopularCourses , findInspireCourses} from "../../redux/courseSlice";
+import {
+  findAllCourses,
+  findPopularCourses,
+  findInspireCourses,
+} from "../../redux/courseSlice";
 import { getTopTeacher } from "../../redux/userSlice";
 
 const { width } = Dimensions.get("window");
@@ -46,9 +50,9 @@ export default function HomeUser({ navigation, route }) {
   const categories = [
     { id: 1, icon: BarChart2, title: "Business", color: "#FF8A8A" },
     { id: 2, icon: Pen, title: "Design", color: "#8B5CF6" },
-    { id: 3,icon: Code, title: "Code", color: "#FF6B6B" },
-    { id: 4,icon: FileText, title: "Writing", color: "#4C6EF5" },
-    { id: 5,icon: Tv, title: "Movie", color: "#7C3AED" },
+    { id: 3, icon: Code, title: "Code", color: "#FF6B6B" },
+    { id: 4, icon: FileText, title: "Writing", color: "#4C6EF5" },
+    { id: 5, icon: Tv, title: "Movie", color: "#7C3AED" },
     { id: 6, icon: Globe, title: "Language", color: "#F97316" },
   ];
 
@@ -81,7 +85,7 @@ export default function HomeUser({ navigation, route }) {
               rating: course.averageRating,
               reviews: course.totalRating,
               lessons: course.totalLessons,
-              image: "https://v0.dev/placeholder.svg?height=200&width=200",
+              image: course.image,
             })),
           ],
         },
@@ -97,7 +101,7 @@ export default function HomeUser({ navigation, route }) {
               rating: course.averageRating,
               reviews: course.totalRating,
               lessons: course.totalLessons,
-              image: "https://v0.dev/placeholder.svg?height=200&width=200",
+              image: course.image,
             })),
           ],
         },
@@ -118,7 +122,7 @@ export default function HomeUser({ navigation, route }) {
           rating: course.averageRating,
           reviews: course.totalRating,
           lessons: course.totalLessons,
-          image: "https://v0.dev/placeholder.svg?height=200&width=200",
+          image: course.image,
         })),
       ]);
     }
@@ -193,10 +197,12 @@ export default function HomeUser({ navigation, route }) {
     </View>
   );
 
-  const CategoryItem = ({ icon: Icon, title, color , categoryID}) => (
+  const CategoryItem = ({ icon: Icon, title, color, categoryID }) => (
     <TouchableOpacity
       style={[styles.categoryItem, { backgroundColor: color }]}
-      onPress={() => navigation.navigate("courseListing", {categoryID: categoryID})}
+      onPress={() =>
+        navigation.navigate("courseListing", { categoryID: categoryID })
+      }
     >
       <View style={styles.categoryIcon}>
         <Icon size={24} color="#FFF" />
@@ -208,7 +214,9 @@ export default function HomeUser({ navigation, route }) {
   const CourseInspiresCard = ({ course }) => (
     <TouchableOpacity
       style={styles.courseCard}
-      onPress={() => navigation.navigate("courseDetailOverView",  { courseID: course.id })}
+      onPress={() =>
+        navigation.navigate("courseDetailOverView", { courseID: course.id })
+      }
     >
       <Image source={{ uri: course.image }} style={styles.courseImage} />
       <View style={styles.courseContent}>
@@ -235,7 +243,7 @@ export default function HomeUser({ navigation, route }) {
   const TeacherCard = ({ teacher }) => (
     <TouchableOpacity
       style={styles.teacherCard}
-      onPress={() => navigation.navigate("Teacher", {teacherID: teacher.id})}
+      onPress={() => navigation.navigate("Teacher", { teacherID: teacher.id })}
     >
       <Image source={{ uri: teacher.image }} style={styles.teacherImage} />
       <Text style={styles.teacherName}>{teacher.name}</Text>
@@ -334,6 +342,7 @@ export default function HomeUser({ navigation, route }) {
             showsVerticalScrollIndicator={false}
             scrollEnabled={false}
             contentContainerStyle={{ paddingHorizontal: 16, gap: 16 }}
+            nestedScrollEnabled={true} // Kích hoạt cuộn lồng nhau -> do lồng trong scrollView
           />
         </View>
 
@@ -347,6 +356,7 @@ export default function HomeUser({ navigation, route }) {
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.teacherList}
+            nestedScrollEnabled={true} // Kích hoạt cuộn lồng nhau -> do lồng trong scrollView
           />
         </View>
       </ScrollView>
@@ -514,6 +524,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 160,
     backgroundColor: "#f0f0f0",
+    resizeMode: "contain",
   },
   courseContent: {
     padding: 12,
@@ -579,6 +590,7 @@ const styles = StyleSheet.create({
     height: 160,
     borderRadius: 8,
     marginBottom: 8,
+    resizeMode: "contain",
   },
   teacherName: {
     fontSize: 16,

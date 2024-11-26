@@ -15,26 +15,7 @@ import { useToast } from "../../component/customToast";
 import { useDispatch, useSelector } from "react-redux";
 import { getCourseOfUser } from "../../redux/userSlice";
 
-const Item = ({ image, title, author, price, rating, lessons, navigation }) => (
-  <TouchableOpacity onPress={() => navigation.navigate("Lesson")}>
-    <View style={styles.courseItem}>
-      <Image source={image} style={styles.courseImage} />
-      <View style={styles.courseInfo}>
-        <Text style={styles.courseTitle}>{title}</Text>
-        <Text style={styles.courseAuthor}>{author}</Text>
-        <View style={styles.courseDetails}>
-          <Text style={styles.coursePrice}>${price}</Text>
-          <View style={styles.ratingContainer}>
-            <Ionicons name="star" size={16} color="#FFD700" />
-            <Text style={styles.ratingText}>{rating}</Text>
-          </View>
-          <Text style={styles.lessonCount}>{lessons} lessons</Text>
-        </View>
-      </View>
-      <Ionicons name="bookmark" style={styles.bookmarkIcon} />
-    </View>
-  </TouchableOpacity>
-);
+
 
 export default function UserProfileScreen({ navigation, route }) {
   const user = useSelector((state) => state.auth.user); // lấy thông tin user login
@@ -53,7 +34,6 @@ export default function UserProfileScreen({ navigation, route }) {
       setCourseOfUser(listCourse);
     }
   }, [listCourse]);
-  console.log("listCourse", courseOfUser.courses);
 
   // Mảng dữ liệu người dùng bao gồm thông tin cá nhân và hình ảnh
   const userData = {
@@ -78,6 +58,27 @@ export default function UserProfileScreen({ navigation, route }) {
       };
     }),
   };
+
+  const Item = ({ image, title, author, price, rating, lessons , courseID}) => (
+    <TouchableOpacity onPress={() => navigation.navigate("courseDetailOverView", {courseID: courseID})}>
+      <View style={styles.courseItem}>
+        <Image source={image} style={styles.courseImage} />
+        <View style={styles.courseInfo}>
+          <Text style={styles.courseTitle}>{title}</Text>
+          <Text style={styles.courseAuthor}>{author}</Text>
+          <View style={styles.courseDetails}>
+            <Text style={styles.coursePrice}>${price}</Text>
+            <View style={styles.ratingContainer}>
+              <Ionicons name="star" size={16} color="#FFD700" />
+              <Text style={styles.ratingText}>{rating}</Text>
+            </View>
+            <Text style={styles.lessonCount}>{lessons} lessons</Text>
+          </View>
+        </View>
+        <Ionicons name="bookmark" style={styles.bookmarkIcon} />
+      </View>
+    </TouchableOpacity>
+  );
 
   return (
     <View style={styles.container}>
@@ -115,10 +116,11 @@ export default function UserProfileScreen({ navigation, route }) {
                 price={item.price}
                 rating={item.rating}
                 lessons={item.lessons}
-                navigation={navigation}
+                courseID={item.id}
               />
             )}
             keyExtractor={(item) => item.id.toString()}
+            nestedScrollEnabled={true} // Kích hoạt cuộn lồng nhau -> do lồng trong scrollView
           />
         </View>
       </ScrollView>

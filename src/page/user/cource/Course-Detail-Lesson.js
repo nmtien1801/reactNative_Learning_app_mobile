@@ -10,6 +10,7 @@ import {
   StatusBar,
   Platform,
 } from "react-native";
+import { WebView } from 'react-native-webview';
 import { Ionicons } from "@expo/vector-icons";
 import { useToast } from "../../../component/customToast";
 

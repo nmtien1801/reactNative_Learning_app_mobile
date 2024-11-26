@@ -40,9 +40,7 @@ const CourseCard = ({ course, navigation }) => (
   >
     <Image
       source={{
-        uri:
-          course.image ||
-          "https://inkythuatso.com/uploads/thumbnails/800/2023/03/1-hinh-anh-ngay-moi-hanh-phuc-sieu-cute-inkythuatso-09-13-35-50.jpg", // Fallback image if course image is not available
+        uri: course?.image,
       }}
       style={styles.courseImage}
     />
@@ -79,6 +77,9 @@ export default function CourseSearch({ navigation, route }) {
   const [courses, setCourses] = useState([]);
   const [keyword, setKeyword] = useState(""); // Để lưu từ khóa tìm kiếm
 
+console.log("courses: ", courses);
+
+
   // Fetch courses and update state
   useEffect(() => {
     dispatch(findAllCourses());
@@ -95,7 +96,7 @@ export default function CourseSearch({ navigation, route }) {
           rating: course.averageRating.toFixed(2) || "0.0", // Default to 0.0 if no rating
           reviews: course.totalRating || 0, // Default to 0 reviews if not available
           lessons: course.totalLessons || 0, // Default to 0 lessons if not available
-          image: course.image,
+          image: course?.image,
         }))
       );
     }
@@ -158,7 +159,7 @@ export default function CourseSearch({ navigation, route }) {
 
         {/* Hot Topics */}
         <Text style={styles.sectionTitle}>Hot Topics</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} nestedScrollEnabled={true}>
           {["Java", "Python", "SQL", "JavaScript", "Photoshop"].map(
             (topic, index) => (
               <HotTopic
@@ -194,7 +195,7 @@ export default function CourseSearch({ navigation, route }) {
 
         {/* Recommended Courses */}
         <Text style={styles.sectionTitle}>Recommended for You</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} nestedScrollEnabled={true}>
           {courses.map((course) => (
             <CourseCard
               key={course.id} // Use the course id to ensure unique key
@@ -283,6 +284,7 @@ const styles = StyleSheet.create({
     height: 150,
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
+    resizeMode: "contain",
   },
   courseContent: {
     paddingHorizontal: 10,

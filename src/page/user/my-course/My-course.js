@@ -39,7 +39,7 @@ export default function MyCourse({ navigation, route }) {
       onPress={() => navigation.navigate("Lesson", { courseID: course.id })}
     >
       <Image
-        source={{ uri: "https://v0.dev/placeholder.svg?height=200&width=200" }}
+        source={{ uri: course.image }}
         style={styles.courseImage}
       />
       <View style={styles.courseInfo}>
@@ -167,6 +167,7 @@ const styles = StyleSheet.create({
     height: 80,
     borderRadius: 8,
     marginRight: 12,
+    resizeMode: "contain",
   },
   courseInfo: {
     flex: 1,

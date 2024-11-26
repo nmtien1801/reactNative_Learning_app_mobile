@@ -138,6 +138,18 @@ const createReview = async (courseID, userID, rating) => {
   }
 };
 
+const buyCoursesService = async (userID, courseID) => {
+  try {
+    const response = await axios.post(`${baseUrl}/buyCourses`, {
+      userID,
+      courseID,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Lỗi khi mua khóa học:", error.response || error.message);
+    throw error;
+  }
+};
 export {
   handleLoginApi,
   logOutUser,
@@ -164,4 +176,5 @@ export {
   findInspireCoursesService,
   getLessonByCourseService,
   createReview,
+  buyCoursesService,
 };

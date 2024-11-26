@@ -47,7 +47,7 @@ export default function LoginScreen({ navigation, route }) {
     
     if (res.payload && +res.payload.EC === 0) {
       toast(res.payload.EM);
-      navigation.navigate("homeUser");
+      // navigation.navigate("homeUser");
     } else {
       toast(res.payload.EM, "error");
       setErrMessage(res.payload.EM);

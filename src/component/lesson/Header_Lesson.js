@@ -17,7 +17,6 @@ import { useDispatch, useSelector } from "react-redux";
 export default function Header({ navigation, route }) {
   const urlVideo = useSelector((state) => state.lesson.urlVideo);
   console.log("urlVideo: ", urlVideo);
-  
 
   return (
     <View style={styles.container}>

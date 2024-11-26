@@ -35,8 +35,6 @@ import HeaderSetting from "./header/Header_Setting";
 import ChatBox from "./component/chatbox/ChatScreens";
 import ChangePassword from "./component/setting/Change-pass";
 
-import StatisticsScreen from "./page/teacher/StatisticsScreen";
-
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -114,6 +112,7 @@ export default function App() {
     <Provider store={store}>
       <CustomToast>
         <Project />
+        <ChatBox />
       </CustomToast>
     </Provider>
   );
@@ -125,12 +124,7 @@ const Project = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="StatisticsScreen">
-        <Stack.Screen
-          name="StatisticsScreen"
-          component={StatisticsScreen}
-          options={{ header: () => {} }}
-        />
+      <Stack.Navigator initialRouteName="Login">
         {!isLogin ? (
           <>
             <Stack.Screen
@@ -148,11 +142,23 @@ const Project = () => {
               component={RegisterScreen}
               options={{ header: () => {} }}
             />
+            {/* <Stack.Screen
+              name="chatBox"
+              component={ChatBox}
+              options={{ header: () => {} }}
+            /> */}
           </>
         ) : (
           <>
             {user.role === 2 ? (
               <>
+                {/* ===================== user - home */}
+                <Stack.Screen
+                  name="homeUser"
+                  component={HomeUser}
+                  options={{ header: () => {} }}
+                />
+
                 {/* ================ search course */}
                 <Stack.Screen
                   name="courseSearch"
@@ -215,12 +221,6 @@ const Project = () => {
                 <Stack.Screen
                   name="historyCart"
                   component={HistoryCart}
-                  options={{ header: () => {} }}
-                />
-                {/* ===================== user - home */}
-                <Stack.Screen
-                  name="homeUser"
-                  component={HomeUser}
                   options={{ header: () => {} }}
                 />
 

@@ -3,7 +3,7 @@ import { buyCourseService, getOrdersByUserId } from "../service/userService"; //
 import { deleteCart } from "./cartSlice";
 
 // Mua khóa học
-export const buyCourse = createAsyncThunk(
+export const buyCourses = createAsyncThunk(
   "orders/buyCourses",
   async ({ courseIDs, userID }, { dispatch, rejectWithValue }) => {
     try {
@@ -40,6 +40,7 @@ export const fetchOrdersByUserId = createAsyncThunk(
     return response.data; // Trả về dữ liệu nhận được
   }
 );
+
 // Slice quản lý đơn hàng
 const orderSlice = createSlice({
   name: "orders",

@@ -4,7 +4,7 @@ import { Platform } from "react-native";
 
 const baseUrl =
   Platform.OS === "android"
-    ? "http://172.16.0.159/api" // URL cho Android và iOS
+    ? "http://172.16.0.159:8080/api" // URL cho Android và iOS
     : "http://localhost:8080/api"; // URL cho web hoặc môi trường khác
 
 const handleTeacherOverview = (teacherID) => {
