@@ -43,6 +43,10 @@ const findCourseSimilarService = (id) => {
   return axios.get(`${baseUrl}/findCourseSimilar/${id}`);
 };
 
+const findInspireCoursesService = () => {
+  return axios.get(`${baseUrl}/findInspireCourses`);
+};
+
 const getAllLessonService = (state) => {
   return axios.get(`${baseUrl}/getAllLesson`);
 };
@@ -127,5 +131,6 @@ export {
   getCartByUserService,
   addCourseToCart,
   searchCourseService,
-  changePasswordService
+  changePasswordService,
+  findInspireCoursesService,
 };

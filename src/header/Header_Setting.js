@@ -12,7 +12,6 @@ import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 
 const HeaderSetting = ({ navigation, route }) => {
-    console.log("route", route);
     
   return (
     <View style={styles.header}>

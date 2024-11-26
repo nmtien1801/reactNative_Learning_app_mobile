@@ -22,7 +22,8 @@ export default function TeacherOverview({ navigation, route }) {
 
   const toast = useToast();
 
-  const teacherID = 1; // ID của giáo viên
+  // const teacherID = 1; // ID của giáo viên
+  const teacherID = route.params.params?.teacherID ?? user._id;// ID của giáo viên
 
   // Fetch dữ liệu khi component được mount
   useEffect(() => {

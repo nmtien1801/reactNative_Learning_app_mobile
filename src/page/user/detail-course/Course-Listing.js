@@ -15,13 +15,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { Bookmark, Star } from "lucide-react-native";
 import Footer from "../../../component/footer/FooterUser";
 
-
 export default function CourseListing({ navigation, route }) {
   const { keyword } = route.params || {}; // Lấy từ khóa tìm kiếm từ route
   const { listCourse, isLoading, isError } = useSelector(
     (state) => state.course
   );
 
+  console.log("route: ", route, "listCourse: ", listCourse);
+  
   useEffect(() => {
     if (keyword) {
       console.log(`Searching for courses with keyword: ${keyword}`);
@@ -32,7 +33,7 @@ export default function CourseListing({ navigation, route }) {
     <View style={styles.courseItem}>
       <TouchableOpacity
         onPress={() =>
-          navigation.navigate("courseDetailOverView", { courseId: item.id })
+          navigation.navigate("courseDetailOverView", { courseID: item.id })
         }
       >
         <Image source={{ uri: item.image }} style={styles.courseImage} />
@@ -40,7 +41,7 @@ export default function CourseListing({ navigation, route }) {
       <View style={styles.courseDetails}>
         <TouchableOpacity
           onPress={() =>
-            navigation.navigate("courseDetailOverView", { courseId: item.id })
+            navigation.navigate("courseDetailOverView", { courseID: item.id })
           }
         >
           <Text style={styles.courseName}>{item.name}</Text>

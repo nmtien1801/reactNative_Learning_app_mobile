@@ -20,9 +20,10 @@ export default function TeacherCourses({ navigation, route }) {
     (state) => state.teacher
   );
   const user = useSelector((state) => state.auth.user);
-
+  
   const toast = useToast();
-  const teacherID = 1; // ID của giáo viên
+  const teacherID = route.params.params?.teacherID ?? user._id; // ID của giáo viên
+  // const teacherID = 1; // ID của giáo viên
 
   // Fetch dữ liệu khi component được mount
   useEffect(() => {

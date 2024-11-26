@@ -19,9 +19,11 @@ export default function TeacherReviews({ navigation, route }) {
   const listCourse = useSelector((state) => state.user.listCourse); // lấy danh sách khóa học của user
   const dispatch = useDispatch();
 
+  const teacherID = route.params.params?.teacherID ?? user._id; // ID của giáo viên
+
   useEffect(() => {
-    // dispatch(getAllCourseUser(user._id)); // lấy danh sách khoá học của user
-    dispatch(getAllCourseUser(1)); // lấy danh sách khoá học của user
+    dispatch(getAllCourseUser(teacherID)); // lấy danh sách khoá học của user
+    // dispatch(getAllCourseUser(1)); // lấy danh sách khoá học của user
   }, []);
 
   const allReviewOfCourse = listCourse?.map((item) => item.Review) || []; // lấy tất cả review của các khóa học [ [1, 2], [3, 4, 5] ]

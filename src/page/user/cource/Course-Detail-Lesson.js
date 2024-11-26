@@ -13,7 +13,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useToast } from "../../../component/customToast";
 
 import { useDispatch, useSelector } from "react-redux";
-import { getAllLesson } from "../../../redux/lessonSlice";
+import { getLessonByCourse } from "../../../redux/lessonSlice";
 import { findCourseByID } from "../../../redux/courseSlice";
 
 export default function CourseDetailLesson({ navigation, route }) {
@@ -30,7 +30,7 @@ export default function CourseDetailLesson({ navigation, route }) {
 
   useEffect(() => {
     dispatch(findCourseByID(courseID)); // Gửi action để lấy thông tin course
-    dispatch(getAllLesson()); // gọi api lấy danh sách lesson
+    dispatch(getLessonByCourse(courseID)); // gọi api lấy danh sách lesson
   }, []);
 
   // top-page detail course

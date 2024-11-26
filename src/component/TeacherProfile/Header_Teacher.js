@@ -19,7 +19,8 @@ export default function TeacherProfileScreen({ navigation, route }) {
   );
   const user = useSelector((state) => state.auth.user);
 
-  const teacherID = 1; // ID của giáo viên
+  const teacherID = route.params.params?.teacherID ?? user._id; // ID của giáo viên
+  // const teacherID = 1; // ID của giáo viên
 
   // Gửi yêu cầu lấy dữ liệu khi component được mount
   useEffect(() => {
