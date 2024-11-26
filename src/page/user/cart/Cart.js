@@ -17,6 +17,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useToast } from "../../../component/customToast";
 
 const Cart = () => {
+  const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const toast = useToast();
@@ -27,7 +28,7 @@ const Cart = () => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
 
-  const userID = 1;
+  const userID = user._id;
 
   useEffect(() => {
     dispatch(getCartByUser(userID));

@@ -1,5 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { handleLoginApi, logOutUser, registerUser } from "../service/userService";
+import {
+  handleLoginApi,
+  logOutUser,
+  registerUser,
+  changePasswordService,
+} from "../service/userService";
 
 const initialState = {
   user: {}, // user info nào login(hs - teacher)
@@ -27,8 +32,20 @@ export const handleLogout = createAsyncThunk(
 
 export const handleRegister = createAsyncThunk(
   "auth/handleRegister",
-  async ({email, userName, password},thunkAPI) => {
+  async ({ email, userName, password }, thunkAPI) => {
     const response = await registerUser(email, userName, password);
+    return response.data;
+  }
+);
+
+export const handleChangePassword = createAsyncThunk(
+  "auth/handleChangePassword",
+  async ({ currentPassword, newPassword, email }, thunkAPI) => {
+    const response = await changePasswordService(
+      currentPassword,
+      newPassword,
+      email
+    );
     return response.data;
   }
 );
@@ -51,7 +68,6 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.user = action.payload.DT || {};
         state.isLogin = true;
-        
 
         // state.token = action.payload.token;
         // localStorage.setItem("learning_App", action.payload.DT.access_token); // Lưu token vào localStorage
@@ -89,9 +105,24 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         console.log("action: ", action);
-        
       })
       .addCase(handleRegister.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+      });
+
+    // change password
+    builder
+      .addCase(handleChangePassword.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+      })
+      .addCase(handleChangePassword.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        console.log("action: ", action);
+      })
+      .addCase(handleChangePassword.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
       });

@@ -54,7 +54,9 @@ const StarRating = ({ rating, onPress }) => {
 };
 
 // Course Item Component
+// Course Item Component
 const CourseItem = ({ order }) => {
+  const user = useSelector((state) => state.auth.user);
   const toast = useToast();
   const dispatch = useDispatch();
   const [rating, setRating] = useState(
@@ -69,9 +71,13 @@ const CourseItem = ({ order }) => {
         submitCourseReview({
           courseID: order.OrderDetails[0]?.courseID,
           rating: value,
-          userID: 1, // Replace with actual userID
+          userID: user._id,
         })
       );
+      console.log("====================================");
+      console.log("userID", order.userID);
+
+      console.log("courseID", order.OrderDetails[0]?.courseID);
 
       if (result.meta.requestStatus === "fulfilled") {
         setRating(value); // Update UI immediately
@@ -85,6 +91,10 @@ const CourseItem = ({ order }) => {
       setIsModalVisible(false); // Close the modal after submitting review
     }
   };
+
+  if (!course) {
+    return <Text style={styles.errorText}>=====.</Text>;
+  }
 
   if (!course) {
     return <Text style={styles.errorText}>=====.</Text>;
@@ -124,6 +134,7 @@ const CourseItem = ({ order }) => {
       </View>
 
       {/* Modal for Rating */}
+      {/* Modal for Rating */}
       <Modal
         visible={isModalVisible}
         transparent={true}
@@ -149,9 +160,10 @@ const CourseItem = ({ order }) => {
 
 // Main HistoryCart Component
 export default function HistoryCart({ navigation }) {
+  const user = useSelector((state) => state.auth.user); // Lấy thông tin user
   const dispatch = useDispatch();
   const { orders, loading, error } = useSelector((state) => state.orders);
-  const userId = 1; // Set userID, you can replace with actual user ID from Redux or props
+  const userId = user._id;
 
   useEffect(() => {
     dispatch(fetchOrdersByUserId(userId)); // Fetch orders when component mounts
@@ -200,6 +212,7 @@ export default function HistoryCart({ navigation }) {
 }
 
 // Styles
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -261,6 +274,7 @@ const styles = StyleSheet.create({
   },
   detailsContainer: {
     flexDirection: "row",
+    flexDirection: "row",
     justifyContent: "space-between",
   },
   priceContainer: {
@@ -286,6 +300,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 15,
     backgroundColor: "#FF6347",
+    backgroundColor: "#FF6347",
     borderRadius: 5,
   },
   ratingButtonText: {
@@ -303,17 +318,23 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     padding: 20,
     borderRadius: 10,
+    borderRadius: 10,
     alignItems: "center",
+    width: 250,
     width: 250,
   },
   modalTitle: {
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 15,
+    marginBottom: 15,
   },
   closeButton: {
     marginTop: 15,
+    marginTop: 15,
     backgroundColor: "#FF6347",
+    paddingVertical: 8,
+    paddingHorizontal: 20,
     paddingVertical: 8,
     paddingHorizontal: 20,
     borderRadius: 5,
@@ -326,13 +347,19 @@ const styles = StyleSheet.create({
   loadingText: {
     textAlign: "center",
     fontSize: 16,
+    fontSize: 16,
     marginTop: 20,
   },
   errorText: {
     textAlign: "center",
     fontSize: 16,
     color: "#FF0000",
+    fontSize: 16,
+    color: "#FF0000",
     marginTop: 20,
+  },
+  starContainer: {
+    flexDirection: "row",
   },
   starContainer: {
     flexDirection: "row",

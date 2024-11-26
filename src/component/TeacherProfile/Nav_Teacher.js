@@ -8,21 +8,18 @@ import {
 } from "react-native";
 
 import {
-  useNavigation,
-  useRoute,
   useFocusEffect,
 } from "@react-navigation/native";
 
-export default function Nav_Teacher() {
-  const navigation = useNavigation();
-  const route = useRoute();
-  const [activeTab, setActiveTab] = useState("TeacherOverview");
+export default function Nav_Teacher({navigation, route}) {
+  const [activeTab, setActiveTab] = useState("");
 
   useFocusEffect(
     React.useCallback(() => {
       setActiveTab(route.name);
     }, [route.name])
   );
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.tabContainer}>
@@ -69,7 +66,6 @@ export default function Nav_Teacher() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: "#F5F5F5",
   },
   tabContainer: {
@@ -77,7 +73,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     backgroundColor: "#FFF",
     paddingVertical: 12,
-    marginBottom: 16,
   },
   tab: {
     paddingVertical: 8,

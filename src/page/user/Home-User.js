@@ -20,12 +20,12 @@ import {
   Bookmark,
   Star,
 } from "lucide-react-native";
-import Footer from "../../component/Footer";
+import Footer from "../../component/footer/FooterUser";
 import { useEffect, useState } from "react";
 import { useToast } from "../../component/customToast";
 
 import { useDispatch, useSelector } from "react-redux";
-import { findAllCourses, findPopularCourses } from "../../redux/courseSlice";
+import { findAllCourses, findPopularCourses , findInspireCourses} from "../../redux/courseSlice";
 import { getTopTeacher } from "../../redux/userSlice";
 
 const { width } = Dimensions.get("window");
@@ -36,17 +36,20 @@ export default function HomeUser({ navigation, route }) {
   const listCoursePopular = useSelector(
     (state) => state.course.listCoursePopular
   ); // lấy thông tin course phổ biến
+  const listCourseInspire = useSelector(
+    (state) => state.course.listCourseInspire
+  ); // lấy thông tin course truyền cảm hứng
   const topTeacher = useSelector((state) => state.user.topTeacher); // lấy thông tin top teacher
   const dispatch = useDispatch();
   const toast = useToast();
 
   const categories = [
-    { icon: BarChart2, title: "Business", color: "#FF8A8A" },
-    { icon: Pen, title: "Design", color: "#8B5CF6" },
-    { icon: Code, title: "Code", color: "#FF6B6B" },
-    { icon: FileText, title: "Writing", color: "#4C6EF5" },
-    { icon: Tv, title: "Movie", color: "#7C3AED" },
-    { icon: Globe, title: "Language", color: "#F97316" },
+    { id: 1, icon: BarChart2, title: "Business", color: "#FF8A8A" },
+    { id: 2, icon: Pen, title: "Design", color: "#8B5CF6" },
+    { id: 3,icon: Code, title: "Code", color: "#FF6B6B" },
+    { id: 4,icon: FileText, title: "Writing", color: "#4C6EF5" },
+    { id: 5,icon: Tv, title: "Movie", color: "#7C3AED" },
+    { id: 6, icon: Globe, title: "Language", color: "#F97316" },
   ];
 
   //////////////////////////////
@@ -58,6 +61,7 @@ export default function HomeUser({ navigation, route }) {
     dispatch(findAllCourses());
     dispatch(getTopTeacher());
     dispatch(findPopularCourses());
+    dispatch(findInspireCourses());
   }, []);
 
   // popular + recommended for you courses
@@ -103,10 +107,10 @@ export default function HomeUser({ navigation, route }) {
 
   // course that inspires
   useEffect(() => {
-    if (listCourse.length !== 0) {
+    if (listCourseInspire.length !== 0) {
       setCourses([
         ...courses,
-        ...listCourse.map((course, index) => ({
+        ...listCourseInspire.map((course, index) => ({
           id: course.id, // Sử dụng kết hợp giữa id và index để đảm bảo tính duy nhất
           title: course.name,
           instructor: course.UserFollow[0]?.user.userName, // người tạo khóa học
@@ -118,7 +122,7 @@ export default function HomeUser({ navigation, route }) {
         })),
       ]);
     }
-  }, [listCourse]);
+  }, [listCourseInspire]);
 
   // top teachers
   useEffect(() => {
@@ -149,7 +153,9 @@ export default function HomeUser({ navigation, route }) {
   const CourseCard = ({ course }) => (
     <TouchableOpacity
       style={[styles.courseCard, { width: CARD_WIDTH }]}
-      onPress={() => navigation.navigate("courseDetailOverView", {courseID: course.id})}
+      onPress={() =>
+        navigation.navigate("courseDetailOverView", { courseID: course.id })
+      }
     >
       <Image source={{ uri: course.image }} style={styles.courseImage} />
       <View style={styles.courseContent}>
@@ -187,10 +193,10 @@ export default function HomeUser({ navigation, route }) {
     </View>
   );
 
-  const CategoryItem = ({ icon: Icon, title, color }) => (
+  const CategoryItem = ({ icon: Icon, title, color , categoryID}) => (
     <TouchableOpacity
       style={[styles.categoryItem, { backgroundColor: color }]}
-      onPress={() => navigation.navigate("courseListing")}
+      onPress={() => navigation.navigate("courseListing", {categoryID: categoryID})}
     >
       <View style={styles.categoryIcon}>
         <Icon size={24} color="#FFF" />
@@ -202,7 +208,7 @@ export default function HomeUser({ navigation, route }) {
   const CourseInspiresCard = ({ course }) => (
     <TouchableOpacity
       style={styles.courseCard}
-      onPress={() => navigation.navigate("courseDetailOverView")}
+      onPress={() => navigation.navigate("courseDetailOverView",  { courseID: course.id })}
     >
       <Image source={{ uri: course.image }} style={styles.courseImage} />
       <View style={styles.courseContent}>
@@ -229,7 +235,7 @@ export default function HomeUser({ navigation, route }) {
   const TeacherCard = ({ teacher }) => (
     <TouchableOpacity
       style={styles.teacherCard}
-      onPress={() => navigation.navigate("courseDetailOverView")}
+      onPress={() => navigation.navigate("Teacher", {teacherID: teacher.id})}
     >
       <Image source={{ uri: teacher.image }} style={styles.teacherImage} />
       <Text style={styles.teacherName}>{teacher.name}</Text>
@@ -300,6 +306,7 @@ export default function HomeUser({ navigation, route }) {
             {categories.map((category, index) => (
               <CategoryItem
                 key={index}
+                categoryID={category.id}
                 icon={category.icon}
                 title={category.title}
                 color={category.color}

@@ -31,6 +31,7 @@ function BenefitItem({ icon, text }) {
 }
 
 export default function CourseDetailOverView({ navigation, route }) {
+  const user = useSelector((state) => state.auth.user); // Lấy thông tin user
   const courseDetail = useSelector((state) => state.course.courseDetail); // lấy thông tin top teacher
   const listCourseSimilar = useSelector(
     (state) => state.course.listCourseSimilar
@@ -42,8 +43,8 @@ export default function CourseDetailOverView({ navigation, route }) {
   const [isAdding, setIsAdding] = useState(false); // Lưu trạng thái khi thêm vào giỏ hàng
   const [addError, setAddError] = useState("");
 
-  const courseID = 5; // Hardcoded courseID, replace it with dynamic value if needed
-  const userID = 1; // Giả sử userID = 1, bạn có thể thay bằng ID người dùng thực tế
+  const courseID = route.params.params.courseID; // Lấy courseID từ route params
+  const userID = user._id; 
 
   useEffect(() => {
     dispatch(findCourseByID(courseID)); // Gửi action để lấy thông tin course
@@ -54,6 +55,7 @@ export default function CourseDetailOverView({ navigation, route }) {
     setCourse(courseDetail);
   }, [courseDetail]);
 
+  
   useEffect(() => {
     if (listCourseSimilar.length !== 0) {
       setListSimilar([
@@ -77,8 +79,8 @@ export default function CourseDetailOverView({ navigation, route }) {
     try {
       setIsAdding(true);
 
-      const userID = 1; // Thay thế bằng userID thực tế
-      const courseID = 5; // Thay thế bằng courseID thực tế
+      // const userID = 1; // Thay thế bằng userID thực tế
+      // const courseID = 5; // Thay thế bằng courseID thực tế
 
       console.log(
         "Adding course to cart with courseID:",

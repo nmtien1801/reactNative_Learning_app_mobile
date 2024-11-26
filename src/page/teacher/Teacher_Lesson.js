@@ -38,7 +38,7 @@ const lessons = [
   },
 ];
 
-export default function LessonList() {
+export default function LessonList({ navigation, route }) {
   const renderLesson = ({ item }) => (
     <View style={styles.lessonItem}>
       <Image source={item.imgVideo} style={styles.thumbnail} />

@@ -25,7 +25,7 @@ const SectionHeader = ({ title, subtitle }) => (
   </View>
 );
 
-export default function Setting() {
+export default function Setting({navigation, route}) {
   const handlePress = (section) => {
     console.log(`Navigating to ${section}`);
   };
@@ -78,7 +78,7 @@ export default function Setting() {
         <SettingItem
           label="Đổi mật khẩu"
           value="Chưa đổi mật khẩu"
-          onPress={() => handlePress('changePassword')}
+          onPress={() => navigation.navigate('changePassword')}
         />
       </View>
     </ScrollView>

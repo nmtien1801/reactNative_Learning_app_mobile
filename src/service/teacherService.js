@@ -4,7 +4,7 @@ import { Platform } from "react-native";
 
 const baseUrl =
   Platform.OS === "android"
-    ? "http://192.168.1.5:8080/api" // URL cho Android và iOS
+    ? "http://192.168.1.6:8080/api" // URL cho Android và iOS
     : "http://localhost:8080/api"; // URL cho web hoặc môi trường khác
 
 const handleTeacherOverview = (teacherID) => {
@@ -15,4 +15,37 @@ const handleFindCourseByTeacherID_Categories = (teacherID) => {
   return axios.get(`${baseUrl}/findCourseByTeacherID_Categories/${teacherID}`);
 };
 
-export { handleTeacherOverview, handleFindCourseByTeacherID_Categories };
+const addNewCourseService = (course) => {
+  return axios.post(`${baseUrl}/addNewCourse`, course);
+};
+
+const updateCourseService = (course) => {
+  return axios.put(`${baseUrl}/updateCourse`, course);
+};
+
+const deleteCourseService = (courseID) => {
+  return axios.delete(`${baseUrl}/deleteCourse/${courseID}`);
+};
+
+const createLessonService = (data) => {
+  return axios.post(`${baseUrl}/createLesson`, data);
+};
+
+const deleteVideoService = (videoID) => {
+  return axios.delete(`${baseUrl}/deleteVideo/${videoID}`);
+}
+
+const updateLessonService = (data) => {
+  return axios.put(`${baseUrl}/updateLesson`, data);
+};
+
+export {
+  handleTeacherOverview,
+  handleFindCourseByTeacherID_Categories,
+  addNewCourseService,
+  updateCourseService,
+  deleteCourseService,
+  createLessonService,
+  deleteVideoService,
+  updateLessonService,
+};

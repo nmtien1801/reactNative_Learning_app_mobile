@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -11,31 +11,36 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 
 import Layout from "../../component/TeacherProfile/Layout_Teacher";
-const reviews = [
-  {
-    id: "1",
-    reviewerName: "Thùy Nhi",
-    reviewText: "Anh thật đẹp trai quá",
-    reviewDate: "2 days ago",
-    stars: 5,
-  },
-  {
-    id: "2",
-    reviewerName: "Minh Anh",
-    reviewText: "Giảng viên rất nhiệt tình và dễ hiểu",
-    reviewDate: "1 week ago",
-    stars: 4,
-  },
-  {
-    id: "3",
-    reviewerName: "Thanh Tâm",
-    reviewText: "Khóa học rất hay và bổ ích",
-    reviewDate: "2 weeks ago",
-    stars: 5,
-  },
-];
+import { getAllCourseUser } from "../../redux/userSlice";
+import { useDispatch, useSelector } from "react-redux";
 
-export default function TeacherReviews() {
+export default function TeacherReviews({ navigation, route }) {
+  const user = useSelector((state) => state.auth.user); // lấy thông tin user login
+  const listCourse = useSelector((state) => state.user.listCourse); // lấy danh sách khóa học của user
+  const dispatch = useDispatch();
+
+  const teacherID = route.params.params?.teacherID ?? user._id; // ID của giáo viên
+
+  useEffect(() => {
+    dispatch(getAllCourseUser(teacherID)); // lấy danh sách khoá học của user
+    // dispatch(getAllCourseUser(1)); // lấy danh sách khoá học của user
+  }, []);
+
+  const allReviewOfCourse = listCourse?.map((item) => item.Review) || []; // lấy tất cả review của các khóa học [ [1, 2], [3, 4, 5] ]
+  const reviewCourse = allReviewOfCourse.flat(); // merge các mảng con thành một mảng [1, 2, 3, 4, 5]
+
+  // Tính averageRating và tổng số review
+  let totalRating = 0;
+  let totalReviews = 0;
+
+  reviewCourse.forEach((review) => {
+    totalReviews += 1; // Đếm số lượng review
+    totalRating += review.rating; // Tổng điểm rating
+  });
+
+  let averageRating =
+    totalReviews > 0 ? (totalRating / totalReviews).toFixed(2) : 0;   // trung bình điểm rating
+
   const renderStars = (count) => (
     <View style={styles.starsContainer}>
       {[...Array(5)].map((_, index) => (
@@ -57,24 +62,24 @@ export default function TeacherReviews() {
         style={styles.avatar}
       />
       <View style={styles.reviewContent}>
-        <Text style={styles.reviewerName}>{item.reviewerName}</Text>
-        <Text style={styles.reviewTime}>{item.reviewDate}</Text>
-        <Text style={styles.reviewText}>{item.reviewText}</Text>
-        {renderStars(item.stars)}
+        <Text style={styles.reviewerName}>{item.user.userName}</Text>
+        <Text style={styles.reviewTime}>{item.time}</Text>
+        <Text style={styles.reviewText}>{item.review}</Text>
+        {renderStars(item.rating)}
       </View>
     </View>
   );
 
   return (
-    <Layout>
+    <Layout navigation={navigation} route={route}>
       <View style={styles.ratingOverview}>
         <View style={styles.ratingHeader}>
           <View style={styles.ratingLeft}>
             <View style={styles.ratingStarRow}>
               <Ionicons name="star" size={20} color="#FFD700" />
-              <Text style={styles.ratingScore}>4.5/5</Text>
+              <Text style={styles.ratingScore}>{averageRating}/5</Text>
             </View>
-            <Text style={styles.reviewCount}>(12334 reviews)</Text>
+            <Text style={styles.reviewCount}>({totalReviews} reviews)</Text>
           </View>
           <TouchableOpacity>
             <Text style={styles.viewAll}>view all</Text>
@@ -96,7 +101,7 @@ export default function TeacherReviews() {
       </View>
 
       <FlatList
-        data={reviews}
+        data={reviewCourse}
         renderItem={renderReviewItem}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.reviewsList}
@@ -118,7 +123,9 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   ratingLeft: {
-    gap: 4,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
   },
   ratingStarRow: {
     flexDirection: "row",

@@ -11,8 +11,9 @@ import {
   StyleSheet,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import Footer from "../../component/Footer";
-export default function Component() {
+import Footer from "../../component/footer/FooterTeacher";
+
+export default function Component({ navigation, route }) {
   const [projects, setProjects] = useState([
     { id: "1", name: "Nguyen Van A", checked: false },
     { id: "2", name: "Nguyen Van B", checked: false },
@@ -68,8 +69,6 @@ export default function Component() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>Project</Text>
-
         <View style={styles.searchBar}>
           <Ionicons
             name="search-outline"
@@ -102,7 +101,7 @@ export default function Component() {
           keyExtractor={(item) => item.id}
         />
       </View>
-      <Footer navigation={navigation} /> 
+      <Footer navigation={navigation} route={route} showActive="book" />
     </SafeAreaView>
   );
 }
@@ -116,11 +115,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
   },
-  title: {
-    fontSize: 20,
-    fontWeight: "600",
-    marginBottom: 16,
-  },
+
   searchBar: {
     flexDirection: "row",
     alignItems: "center",

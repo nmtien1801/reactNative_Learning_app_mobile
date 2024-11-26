@@ -4,7 +4,7 @@ import { Platform } from "react-native";
 
 const baseUrl =
   Platform.OS === "android"
-    ? "http:// 172.16.0.159:8080/api" // URL cho Android và iOS
+    ? "http://172.20.33.189:8080/api" // URL cho Android và iOS
     : "http://localhost:8080/api"; // URL cho web hoặc môi trường khác
 
 const handleLoginApi = (email, password) => {
@@ -17,6 +17,14 @@ const logOutUser = () => {
 
 const registerUser = (email, userName, password) => {
   return axios.post(`${baseUrl}/register`, { email, userName, password });
+};
+
+const changePasswordService = (currentPassword, newPassword, email) => {
+  return axios.post(`${baseUrl}/changePassword`, {
+    currentPassword,
+    newPassword,
+    email,
+  });
 };
 
 const findAllCoursesService = () => {
@@ -37,6 +45,10 @@ const findCourseByIDService = (id) => {
 
 const findCourseSimilarService = (id) => {
   return axios.get(`${baseUrl}/findCourseSimilar/${id}`);
+};
+
+const findInspireCoursesService = () => {
+  return axios.get(`${baseUrl}/findInspireCourses`);
 };
 
 const getAllLessonService = (state) => {
@@ -108,11 +120,9 @@ const getOrdersByUserId = (userID) => {
 const searchCourseService = (keyword) => {
   return axios.get(`${baseUrl}/searchCourse/${keyword}`);
 };
-const buyCourseService = async (courseIDs, userID) => {
-  return axios.post(`${baseUrl}/buyCourses`, {
-    userID,
-    courseIDs,
-  });
+
+const getLessonByCourseService = (courseID) => {
+  return axios.get(`${baseUrl}/getLessonByCourse/${courseID}`);
 };
 const createReview = async (courseID, userID, rating) => {
   try {
@@ -150,6 +160,8 @@ export {
   searchCourseService,
   deleteCartSelected,
   getOrdersByUserId,
-  buyCourseService,
+  changePasswordService,
+  findInspireCoursesService,
+  getLessonByCourseService,
   createReview,
 };

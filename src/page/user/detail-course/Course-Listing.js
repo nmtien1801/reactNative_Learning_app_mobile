@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -10,15 +10,21 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from "react-native";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
-import Footer from "../../../component/Footer";
+import { Bookmark, Star } from "lucide-react-native";
+import Footer from "../../../component/footer/FooterUser";
+import { findCourseByCategory } from "../../../redux/courseSlice";
 
 export default function CourseListing({ navigation, route }) {
   const { keyword } = route.params || {}; // Lấy từ khóa tìm kiếm từ route
+  const dispatch = useDispatch();
   const { listCourse, isLoading, isError } = useSelector(
     (state) => state.course
   );
+
+  const categoryID = route.params?.categoryID;    // tìm theo categoryID từ route
+  console.log("route: ", route, "listCourse: ", listCourse);
 
   useEffect(() => {
     if (keyword) {
@@ -26,11 +32,18 @@ export default function CourseListing({ navigation, route }) {
     }
   }, [keyword]);
 
+  // locj theo category
+  useEffect(() => {
+    if (categoryID) {
+      dispatch(findCourseByCategory(categoryID));
+    }
+  }, []);
+
   const CourseListItem = ({ item }) => (
     <View style={styles.courseItem}>
       <TouchableOpacity
         onPress={() =>
-          navigation.navigate("courseDetailOverView", { courseId: item.id })
+          navigation.navigate("courseDetailOverView", { courseID: item.id })
         }
       >
         <Image source={{ uri: item.image }} style={styles.courseImage} />
@@ -38,7 +51,7 @@ export default function CourseListing({ navigation, route }) {
       <View style={styles.courseDetails}>
         <TouchableOpacity
           onPress={() =>
-            navigation.navigate("courseDetailOverView", { courseId: item.id })
+            navigation.navigate("courseDetailOverView", { courseID: item.id })
           }
         >
           <Text style={styles.courseName}>{item.name}</Text>

@@ -14,7 +14,7 @@ import {
   findCourseUserState1,
   findCourseUserState2,
 } from "../../../redux/userSlice";
-import Footer from "../../../component/Footer";
+import Footer from "../../../component/footer/FooterUser";
 
 export default function MyCourse({ navigation, route }) {
   const [activeTab, setActiveTab] = useState("All");
@@ -29,7 +29,7 @@ export default function MyCourse({ navigation, route }) {
     } else if (activeTab === "COMPLETED") {
       dispatch(findCourseUserState2(user._id)); // Fetch COMPLETED courses
     } else {
-      dispatch(getAllCourseUser(user._id)); // Fetch all courses if "All" is selected -> chưa sửa
+      dispatch(getAllCourseUser(user._id)); // Fetch all courses if "All" is selected 
     }
   }, [activeTab, dispatch]);
 

@@ -14,13 +14,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchTeacherCourses } from "../../redux/teacherSlide";
 import { useToast } from "../../component/customToast";
 
-export default function TeacherCourses() {
+export default function TeacherCourses({ navigation, route }) {
   const dispatch = useDispatch();
   const { TeacherCourses, isLoading, isError } = useSelector(
     (state) => state.teacher
   );
-  const { showToast } = useToast();
-  const teacherID = 1; // ID của giáo viên
+  const user = useSelector((state) => state.auth.user);
+  
+  const toast = useToast();
+  const teacherID = route.params.params?.teacherID ?? user._id; // ID của giáo viên
+  // const teacherID = 1; // ID của giáo viên
 
   // Fetch dữ liệu khi component được mount
   useEffect(() => {
@@ -30,7 +33,7 @@ export default function TeacherCourses() {
   // Trạng thái loading
   if (isLoading) {
     return (
-      <Layout>
+      <Layout navigation={navigation} route={route}>
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#4A90E2" />
           <Text style={styles.loadingText}>Loading...</Text>
@@ -41,9 +44,9 @@ export default function TeacherCourses() {
 
   // Trạng thái lỗi
   if (isError) {
-    showToast("Failed to load teacher data");
+    toast("Failed to load teacher data", "error");
     return (
-      <Layout>
+      <Layout navigation={navigation} route={route}>
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>Failed to load data</Text>
         </View>
@@ -54,7 +57,7 @@ export default function TeacherCourses() {
   // Kiểm tra dữ liệu TeacherCourses.DT
   if (!TeacherCourses || !TeacherCourses.DT) {
     return (
-      <Layout>
+      <Layout navigation={navigation} route={route}>
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>No data available</Text>
         </View>
@@ -119,7 +122,7 @@ export default function TeacherCourses() {
   const categoryNames = Object.keys(groupedByCategory);
 
   return (
-    <Layout>
+    <Layout navigation={navigation} route={route}>
       {categoryNames.map((categoryName) => {
         return (
           <View key={categoryName}>
@@ -171,7 +174,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginBottom: 16,
     padding: 12,
-    width: 150,
+    width: 300,
     height: 150,
     flexDirection: "column",
     justifyContent: "center",

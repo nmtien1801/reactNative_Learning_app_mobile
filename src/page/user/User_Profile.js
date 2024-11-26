@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import Footer from "../../component/Footer";
+import Footer from "../../component/footer/FooterUser";
 import { useToast } from "../../component/customToast";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -42,7 +42,6 @@ export default function UserProfileScreen({ navigation, route }) {
   const dispatch = useDispatch();
 
   const [courseOfUser, setCourseOfUser] = useState([]); //state lưu danh sách khóa học của user
-  console.log("user", user);
 
   useEffect(() => {
     dispatch(getCourseOfUser(user._id)); // id user login
@@ -83,9 +82,6 @@ export default function UserProfileScreen({ navigation, route }) {
   return (
     <View style={styles.container}>
       <ScrollView>
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>User's profile</Text>
-        </View>
         <View style={styles.profileSection}>
           <Image source={userData.bannerImage} style={styles.bannerImage} />
           <Image source={userData.profileImage} style={styles.profileImage} />

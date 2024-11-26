@@ -2,6 +2,9 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   handleTeacherOverview,
   handleFindCourseByTeacherID_Categories,
+  addNewCourseService,
+  updateCourseService,
+  deleteCourseService,
 } from "../service/teacherService";
 
 const initialState = {
@@ -27,6 +30,42 @@ export const fetchTeacherCourses = createAsyncThunk(
   async (teacherID, thunkAPI) => {
     try {
       const response = await handleFindCourseByTeacherID_Categories(teacherID);
+      return response.data; // Trả về dữ liệu từ API
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message); // Trả về lỗi nếu có
+    }
+  }
+);
+
+export const addNewCourse = createAsyncThunk(
+  "teacher/addNewCourse",
+  async (course, thunkAPI) => {
+    try {
+      const response = await addNewCourseService(course);
+      return response.data; // Trả về dữ liệu từ API
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message); // Trả về lỗi nếu có
+    }
+  }
+);
+
+export const updateCourse = createAsyncThunk(
+  "teacher/updateCourse",
+  async (course, thunkAPI) => {
+    try {
+      const response = await updateCourseService(course);
+      return response.data; // Trả về dữ liệu từ API
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message); // Trả về lỗi nếu có
+    }
+  }
+);
+
+export const deleteCourse = createAsyncThunk(
+  "teacher/deleteCourse",
+  async (courseID, thunkAPI) => {
+    try {
+      const response = await deleteCourseService(courseID);
       return response.data; // Trả về dữ liệu từ API
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message); // Trả về lỗi nếu có
@@ -66,6 +105,57 @@ const teacherSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         console.error("Error fetching teacher courses:", action.payload); // Log lỗi khi fetch bị lỗi
+      });
+
+    // addNewCourse
+    builder
+      .addCase(addNewCourse.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+      })
+      .addCase(addNewCourse.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+      })
+      .addCase(addNewCourse.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        console.error("Error adding new course:", action.payload); // Log lỗi khi fetch b
+      });
+
+    // updateCourse
+    builder
+      .addCase(updateCourse.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+      })
+      .addCase(updateCourse.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+      })
+      .addCase(updateCourse.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        console.error("Error updating course:", action.payload); // Log lỗi khi fetch bị lỗi
+      });
+
+    // deleteCourse
+    builder
+      .addCase(deleteCourse.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+      })
+      .addCase(deleteCourse.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+      })
+      .addCase(deleteCourse.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        console.error("Error deleting course:", action.payload); // Log lỗi khi fetch bị lỗi
       });
   },
 });
