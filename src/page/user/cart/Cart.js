@@ -15,6 +15,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
 const Cart = () => {
+  const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
@@ -25,7 +26,7 @@ const Cart = () => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
 
-  const userID = 1;
+  const userID = user._id;
 
   useEffect(() => {
     dispatch(getCartByUser(userID));

@@ -27,8 +27,8 @@ export default function LessonList({ navigation, route }) {
   const courseID = route.params?.courseID;
 
   useEffect(() => {
-    // dispatch(getLessonByCourse(courseID)); // lấy danh lesson của course
-    dispatch(getLessonByCourse(1)); // lấy danh lesson của course
+    dispatch(getLessonByCourse(courseID)); // lấy danh lesson của course
+    // dispatch(getLessonByCourse(1)); // lấy danh lesson của course
   }, []);
 
   useEffect(() => {
@@ -116,8 +116,8 @@ export default function LessonList({ navigation, route }) {
     let res = await dispatch(deleteVideo(id));
 
     if (res && +res.payload.EC === 0) {
-      // dispatch(getLessonByCourse(courseID)); // lấy danh sách khoá học của user
-      await dispatch(getLessonByCourse(1)); // lấy danh sách khoá học của user
+      dispatch(getLessonByCourse(courseID)); // lấy danh sách khoá học của user
+      // await dispatch(getLessonByCourse(1)); // lấy danh sách khoá học của user
       toast(res.payload.EM);
     } else {
       toast(res.payload.EM, "error");

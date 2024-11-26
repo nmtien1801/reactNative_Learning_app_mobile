@@ -26,7 +26,7 @@ export default function ManageCourse({ navigation, route }) {
 
   useEffect(() => {
     // dispatch(getAllCourseUser(user._id)); // lấy danh sách khoá học của user
-    dispatch(getAllCourseUser(1)); // lấy danh sách khoá học của user
+    dispatch(getAllCourseUser(user._id)); // lấy danh sách khoá học của user
   }, []);
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export default function ManageCourse({ navigation, route }) {
 
     if (res && +res.payload.EC === 0) {
       // dispatch(getAllCourseUser(user._id)); // lấy danh sách khoá học của user
-      await dispatch(getAllCourseUser(1)); // lấy danh sách khoá học của user
+      await dispatch(getAllCourseUser(user._id)); // lấy danh sách khoá học của user
       toast(res.payload.EM);
     } else {
       toast(res.payload.EM, "error");

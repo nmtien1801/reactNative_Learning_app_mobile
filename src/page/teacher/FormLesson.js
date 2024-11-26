@@ -51,8 +51,8 @@ export default function Component({ navigation, route }) {
       res = await dispatch(updateLesson(dataNewLesson));
     }
     if (res && +res.payload.EC === 0) {
-      // dispatch(getLessonByCourse(dataUpdate.courseID)); // lấy danh sách khoá học của user
-      dispatch(getLessonByCourse(1)); // lấy danh sách khoá học của user
+      dispatch(getLessonByCourse(dataUpdate.courseID)); // lấy danh sách khoá học của user
+      // dispatch(getLessonByCourse(1)); // lấy danh sách khoá học của user
       navigation.navigate("ManageLesson");
       toast(res.payload.EM);
     } else {

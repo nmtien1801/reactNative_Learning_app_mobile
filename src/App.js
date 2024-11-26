@@ -118,134 +118,151 @@ export default function App() {
 }
 
 const Project = () => {
-  const isLogin = useSelector((state) => state.auth.isLogin);
+  const { user, isLogin } = useSelector((state) => state.auth);
+  console.log("user: ", user);
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="courseSearch">
-        <Stack.Screen
-          name="Intro"
-          component={Intro}
-          options={{ header: () => {} }}
-        />
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{ header: () => {} }}
-        />
-        <Stack.Screen
-          name="SignUp"
-          component={RegisterScreen}
-          options={{ header: () => {} }}
-        />
-        <Stack.Screen
-          name="chatBox"
-          component={ChatBox}
-          options={{ header: () => {} }}
-        />
-        {/* ================ search course */}
-        <Stack.Screen
-          name="courseSearch"
-          component={CourseSearch}
-          options={{ header: () => {} }}
-        />
-        <Stack.Screen
-          name="courseListing"
-          component={CourseListing}
-          options={{ header: () => {} }}
-        />
+      <Stack.Navigator initialRouteName="Login">
+        {!isLogin ? (
+          <>
+            <Stack.Screen
+              name="Intro"
+              component={Intro}
+              options={{ header: () => {} }}
+            />
+            <Stack.Screen
+              name="Login"
+              component={Login}
+              options={{ header: () => {} }}
+            />
+            <Stack.Screen
+              name="SignUp"
+              component={RegisterScreen}
+              options={{ header: () => {} }}
+            />
+            <Stack.Screen
+              name="chatBox"
+              component={ChatBox}
+              options={{ header: () => {} }}
+            />
+          </>
+        ) : (
+          <>
+            {user.role === 2 ? (
+              <>
+                {/* ================ search course */}
+                <Stack.Screen
+                  name="courseSearch"
+                  component={CourseSearch}
+                  options={{ header: () => {} }}
+                />
+                <Stack.Screen
+                  name="courseListing"
+                  component={CourseListing}
+                  options={{ header: () => {} }}
+                />
 
-        {/* ===================== course */}
-        <Stack.Screen
-          name="courseDetailOverView"
-          component={DrawerHeader}
-          initialParams={{ screenName: "CourseDetailOverView" }}
-          options={{ header: () => {} }}
-        />
-        <Stack.Screen
-          name="courseDetailLesson"
-          component={DrawerHeader}
-          initialParams={{ screenName: "CourseDetailLesson" }}
-          options={{ header: () => {} }}
-        />
-        <Stack.Screen
-          name="courseDetailReview"
-          component={DrawerHeader}
-          initialParams={{ screenName: "CourseDetailReview" }}
-          options={{ header: () => {} }}
-        />
+                {/* ===================== course */}
+                <Stack.Screen
+                  name="courseDetailOverView"
+                  component={DrawerHeader}
+                  initialParams={{ screenName: "CourseDetailOverView" }}
+                  options={{ header: () => {} }}
+                />
+                <Stack.Screen
+                  name="courseDetailLesson"
+                  component={DrawerHeader}
+                  initialParams={{ screenName: "CourseDetailLesson" }}
+                  options={{ header: () => {} }}
+                />
+                <Stack.Screen
+                  name="courseDetailReview"
+                  component={DrawerHeader}
+                  initialParams={{ screenName: "CourseDetailReview" }}
+                  options={{ header: () => {} }}
+                />
 
-        {/* ===================== my course */}
-        <Stack.Screen
-          name="myCourse"
-          component={MyCourse}
-          options={{ header: () => {} }}
-        />
+                {/* ===================== my course */}
+                <Stack.Screen
+                  name="myCourse"
+                  component={MyCourse}
+                  options={{ header: () => {} }}
+                />
 
-        {/* ===================== user - student */}
-        <Stack.Screen
-          name="userProfile"
-          component={DrawerHeader}
-          initialParams={{
-            screenName: "UserProfile",
-          }}
-          options={{ header: () => {} }}
-        />
+                {/* ===================== user - student */}
+                <Stack.Screen
+                  name="userProfile"
+                  component={DrawerHeader}
+                  initialParams={{
+                    screenName: "UserProfile",
+                  }}
+                  options={{ header: () => {} }}
+                />
 
-        <Stack.Screen
-          name="cart"
-          component={Cart}
-          options={({ navigation, route }) => ({
-            header: () => <HeaderCart navigation={navigation} route={route} />,
-          })}
-        />
-        {/* ===================== user - home */}
-        <Stack.Screen
-          name="homeUser"
-          component={HomeUser}
-          options={{ header: () => {} }}
-        />
+                <Stack.Screen
+                  name="cart"
+                  component={Cart}
+                  options={({ navigation, route }) => ({
+                    header: () => (
+                      <HeaderCart navigation={navigation} route={route} />
+                    ),
+                  })}
+                />
+                {/* ===================== user - home */}
+                <Stack.Screen
+                  name="homeUser"
+                  component={HomeUser}
+                  options={{ header: () => {} }}
+                />
 
-        {/* ===================== teacher */}
-        <Stack.Screen name="FormCourse" component={FormCourse} />
-        <Stack.Screen name="FormLesson" component={FormLesson} />
-        <Stack.Screen
-          name="Lesson"
-          component={LessonTabs}
-          options={{ header: () => {} }}
-        />
-        <Stack.Screen
-          name="Teacher"
-          component={TeacherTabs}
-          initialParams={{ screenName: "TeacherOverView" }}
-          options={{ header: () => {} }}
-        />
-        <Stack.Screen
-          name="ManageCourse"
-          component={ManageCourse}
-          options={{ header: () => {} }}
-        />
-        <Stack.Screen name="ManageLesson" component={ManageLesson} />
+                {/* setting */}
+                <Stack.Screen
+                  name="setting"
+                  component={Setting}
+                  options={({ navigation, route }) => ({
+                    header: () => (
+                      <HeaderSetting navigation={navigation} route={route} />
+                    ),
+                  })}
+                />
 
-        <Stack.Screen name="ManageProject" component={ManageProject} />
+                <Stack.Screen
+                  name="changePassword"
+                  component={ChangePassword}
+                  options={{ header: () => {} }}
+                />
+              </>
+            ) : (
+              <>
+                {/* ===================== teacher */}
+                <Stack.Screen
+                  name="Teacher"
+                  component={TeacherTabs}
+                  initialParams={{ screenName: "TeacherOverView" }}
+                  options={{ header: () => {} }}
+                />
+                <Stack.Screen
+                  name="ManageCourse"
+                  component={ManageCourse}
+                  options={{ header: () => {} }}
+                />
+                <Stack.Screen name="ManageLesson" component={ManageLesson} />
+                <Stack.Screen name="FormCourse" component={FormCourse} />
+                <Stack.Screen name="FormLesson" component={FormLesson} />
+                <Stack.Screen
+                  name="Lesson"
+                  component={LessonTabs}
+                  options={{ header: () => {} }}
+                />
+               
+                
 
-        {/* setting */}
-        <Stack.Screen
-          name="setting"
-          component={Setting}
-          options={({ navigation, route }) => ({
-            header: () => (
-              <HeaderSetting navigation={navigation} route={route} />
-            ),
-          })}
-        />
-
-        <Stack.Screen
-          name="changePassword"
-          component={ChangePassword}
-          options={{ header: () => {} }}
-
-        />
+                <Stack.Screen name="ManageProject" component={ManageProject} />
+              </>
+            )}
+          </>
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );

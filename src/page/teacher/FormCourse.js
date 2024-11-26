@@ -18,6 +18,7 @@ import { addNewCourse , updateCourse} from "../../redux/teacherSlide";
 import { getAllCourseUser } from "../../redux/userSlice";
 
 export default function Component({ navigation, route }) {
+  const user = useSelector((state) => state.auth.user);
   const dataUpdate = route.params?.course;
 
   const dispatch = useDispatch();
@@ -29,6 +30,9 @@ export default function Component({ navigation, route }) {
   );
   const [title, setTitle] = useState(
     dataUpdate ? dataUpdate.title : "" // tiêu đề
+  );
+  const [price, setPrice] = useState(
+    dataUpdate ? dataUpdate.price : "" // giá
   );
   const [description, setDescription] = useState(
     dataUpdate ? dataUpdate.description : "" // mô tả
@@ -152,10 +156,11 @@ export default function Component({ navigation, route }) {
 
   const handleSubmit = async () => {
     dataNewCourse = {
-      userID: 1, // Lấy từ redux
+      userID: user._id,
       name: name,
       title: title,
       description: description,
+      price: price,
       descriptionProject: descriptionProject,
       categoryID: getSelectedCategory(),
       image: file,
@@ -209,6 +214,16 @@ export default function Component({ navigation, route }) {
           multiline // Cho phép nhập nhiều dòng
           onChangeText={setDescription}
           value={description}
+        />
+      </View>
+
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Price</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter price"
+          onChangeText={setPrice}
+          value={price} // Dùng biến trạng thái đã định nghĩa
         />
       </View>
 
