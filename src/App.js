@@ -33,6 +33,7 @@ import { useSelector } from "react-redux";
 import HeaderSetting from "./header/Header_Setting";
 
 import ChatBox from "./component/chatbox/ChatScreens";
+import ChangePassword from "./component/setting/Change-pass";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -121,7 +122,7 @@ const Project = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="ManageCourse">
+      <Stack.Navigator initialRouteName="Login">
         <Stack.Screen
           name="Intro"
           component={Intro}
@@ -228,6 +229,7 @@ const Project = () => {
 
         <Stack.Screen name="ManageProject" component={ManageProject} />
 
+        {/* setting */}
         <Stack.Screen
           name="setting"
           component={Setting}
@@ -236,6 +238,13 @@ const Project = () => {
               <HeaderSetting navigation={navigation} route={route} />
             ),
           })}
+        />
+
+        <Stack.Screen
+          name="changePassword"
+          component={ChangePassword}
+          options={{ header: () => {} }}
+
         />
       </Stack.Navigator>
     </NavigationContainer>

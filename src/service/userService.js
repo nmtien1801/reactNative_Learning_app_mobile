@@ -19,6 +19,10 @@ const registerUser = (email, userName, password) => {
   return axios.post(`${baseUrl}/register`, { email, userName, password });
 };
 
+const changePasswordService = (currentPassword, newPassword, email) => {
+  return axios.post(`${baseUrl}/changePassword`, { currentPassword, newPassword, email});
+};
+
 const findAllCoursesService = () => {
   return axios.get(`${baseUrl}/findAllCourses`);
 };
@@ -76,20 +80,33 @@ const getCartByUserService = (userID) => {
   return axios.get(`${baseUrl}/getCartByUser/${userID}`);
 };
 
-//add to cart
 const addCourseToCart = (courseID, userID) => {
+  // Kiểm tra trước khi gửi request
+  console.log(
+    "Adding course to cart with courseID:",
+    courseID,
+    "and userID:",
+    userID
+  );
   return axios.post(`${baseUrl}/addCourseToCart`, { courseID, userID });
+};
+const deleteCartSelected = async (courseID) => {
+  console.log("courseID", courseID);
+  try {
+    const response = await axios.post(`${baseUrl}/cart/deleteSelectedCourse`, {
+      courseID,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Lỗi khi xóa sản phẩm:", error.response || error.message);
+    throw error;
+  }
 };
 
 //search course
 const searchCourseService = (keyword) => {
   return axios.get(`${baseUrl}/searchCourse/${keyword}`);
 };
-
-const getLessonByCourseService = (courseID) => {
-  return axios.get(`${baseUrl}/getLessonByCourse/${courseID}`);
-};
-
 export {
   handleLoginApi,
   logOutUser,
@@ -110,5 +127,5 @@ export {
   getCartByUserService,
   addCourseToCart,
   searchCourseService,
-  getLessonByCourseService,
+  changePasswordService
 };
