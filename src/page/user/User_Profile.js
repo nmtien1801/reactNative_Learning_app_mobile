@@ -34,7 +34,6 @@ export default function UserProfileScreen({ navigation, route }) {
       setCourseOfUser(listCourse);
     }
   }, [listCourse]);
-  console.log("listCourse", courseOfUser.courses);
 
   // Mảng dữ liệu người dùng bao gồm thông tin cá nhân và hình ảnh
   const userData = {

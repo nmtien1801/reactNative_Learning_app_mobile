@@ -18,7 +18,8 @@ export default function TeacherReviews({ navigation, route }) {
   const user = useSelector((state) => state.auth.user); // lấy thông tin user login
   const listCourse = useSelector((state) => state.user.listCourse); // lấy danh sách khóa học của user
   const dispatch = useDispatch();
-
+  
+  
   const teacherID = route.params.params?.teacherID ?? user._id; // ID của giáo viên
 
   useEffect(() => {
@@ -28,6 +29,7 @@ export default function TeacherReviews({ navigation, route }) {
 
   const allReviewOfCourse = listCourse?.map((item) => item.Review) || []; // lấy tất cả review của các khóa học [ [1, 2], [3, 4, 5] ]
   const reviewCourse = allReviewOfCourse.flat(); // merge các mảng con thành một mảng [1, 2, 3, 4, 5]
+  console.log("listCourse: ", listCourse, "reviewCourse: ", reviewCourse);
 
   // Tính averageRating và tổng số review
   let totalRating = 0;
@@ -103,7 +105,7 @@ export default function TeacherReviews({ navigation, route }) {
       <FlatList
         data={reviewCourse}
         renderItem={renderReviewItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item, index) => item.id || `${item.user.userName}-${index}`} // Ensure unique keys
         contentContainerStyle={styles.reviewsList}
       />
     </Layout>

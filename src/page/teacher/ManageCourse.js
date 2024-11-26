@@ -23,10 +23,12 @@ export default function ManageCourse({ navigation, route }) {
   const toast = useToast();
 
   const [courses, setCourses] = useState([]); // state lưu danh sách khoá học của user
+  const userID = user._id;
+console.log("course: ", courses);
 
   useEffect(() => {
     // dispatch(getAllCourseUser(user._id)); // lấy danh sách khoá học của user
-    dispatch(getAllCourseUser(user._id)); // lấy danh sách khoá học của user
+    dispatch(getAllCourseUser(userID)); // lấy danh sách khoá học của user
   }, []);
 
   useEffect(() => {
@@ -41,7 +43,7 @@ export default function ManageCourse({ navigation, route }) {
 
     if (res && +res.payload.EC === 0) {
       // dispatch(getAllCourseUser(user._id)); // lấy danh sách khoá học của user
-      await dispatch(getAllCourseUser(user._id)); // lấy danh sách khoá học của user
+      await dispatch(getAllCourseUser(userID)); // lấy danh sách khoá học của user
       toast(res.payload.EM);
     } else {
       toast(res.payload.EM, "error");

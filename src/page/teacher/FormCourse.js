@@ -175,8 +175,8 @@ export default function Component({ navigation, route }) {
       
     }
     if (res && +res.payload.EC === 0) {
-      // dispatch(getAllCourseUser(user._id)); // lấy danh sách khoá học của user
-      dispatch(getAllCourseUser(1)); // lấy danh sách khoá học của user
+      dispatch(getAllCourseUser(user._id)); // lấy danh sách khoá học của user
+      // dispatch(getAllCourseUser(1)); // lấy danh sách khoá học của user
       navigation.navigate("ManageCourse");
       toast(res.payload.EM);
     } else {

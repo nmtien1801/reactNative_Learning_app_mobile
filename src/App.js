@@ -146,6 +146,13 @@ const Project = () => {
           <>
             {user.role === 2 ? (
               <>
+                {/* ===================== user - home */}
+                <Stack.Screen
+                  name="homeUser"
+                  component={HomeUser}
+                  options={{ header: () => {} }}
+                />
+
                 {/* ================ search course */}
                 <Stack.Screen
                   name="courseSearch"
@@ -208,12 +215,6 @@ const Project = () => {
                 <Stack.Screen
                   name="historyCart"
                   component={HistoryCart}
-                  options={{ header: () => {} }}
-                />
-                {/* ===================== user - home */}
-                <Stack.Screen
-                  name="homeUser"
-                  component={HomeUser}
                   options={{ header: () => {} }}
                 />
 

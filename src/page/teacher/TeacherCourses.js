@@ -20,7 +20,7 @@ export default function TeacherCourses({ navigation, route }) {
     (state) => state.teacher
   );
   const user = useSelector((state) => state.auth.user);
-  
+
   const toast = useToast();
   const teacherID = route.params.params?.teacherID ?? user._id; // ID của giáo viên
   // const teacherID = 1; // ID của giáo viên
@@ -84,10 +84,10 @@ export default function TeacherCourses({ navigation, route }) {
   const renderCourseItem = ({ item }) => {
     const { name, title, image } = item;
     const courseImage =
-      image && image.data && image.data.length > 0
-        ? { uri: image }
-        : require("../../../img/Login_Register/Login.jpg"); // Hình ảnh mặc định
+      image ??
+      { uri: image } | require("../../../img/Login_Register/Login.jpg"); // Hình ảnh mặc định
 
+      
     return (
       <View style={styles.courseCard}>
         <Image source={courseImage} style={styles.courseImage} />

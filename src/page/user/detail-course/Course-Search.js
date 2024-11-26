@@ -40,9 +40,7 @@ const CourseCard = ({ course, navigation }) => (
   >
     <Image
       source={{
-        uri:
-          course.image ||
-          "https://inkythuatso.com/uploads/thumbnails/800/2023/03/1-hinh-anh-ngay-moi-hanh-phuc-sieu-cute-inkythuatso-09-13-35-50.jpg", // Fallback image if course image is not available
+        uri: course.image,
       }}
       style={styles.courseImage}
     />
