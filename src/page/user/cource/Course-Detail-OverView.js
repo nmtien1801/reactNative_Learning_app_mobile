@@ -75,12 +75,52 @@ export default function CourseDetailOverView({ navigation, route }) {
     }
   }, [listCourseSimilar]);
 
+  // const handleAddToCart = async () => {
+  //   try {
+  //     setIsAdding(true);
+
+  //     // const userID = 1; // Thay thế bằng userID thực tế
+  //     // const courseID = 5; // Thay thế bằng courseID thực tế
+
+  //     console.log(
+  //       "Adding course to cart with courseID:",
+  //       courseID,
+  //       "and userID:",
+  //       userID
+  //     );
+
+  //     // Gửi yêu cầu GET hoặc POST với query parameters (Tùy API yêu cầu POST hay GET)
+  //     const response = await axios.post(
+  //       `http://localhost:8080/api/addCourseToCart?userID=${userID}&courseID=${courseID}`,
+  //       {},
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json", // Bạn có thể bỏ qua phần body nếu API không yêu cầu nó
+  //         },
+  //       }
+  //     );
+
+  //     console.log("Response:", response.data); // In ra kết quả trả về từ API
+
+  //     // Nếu thành công
+  //     setIsAdding(false);
+  //     toast("Course added to cart successfully!", "success");
+  //   } catch (error) {
+  //     setIsAdding(false);
+  //     setAddError(error.message || "Failed to add course to cart");
+  //     console.error(
+  //       "Error adding course to cart:",
+  //       error.response ? error.response.data : error.message
+  //     );
+  //     toast("Failed to add course to cart", "error");
+  //   }
+  // };
+
   const handleAddToCart = async () => {
+    if (isAdding) return; // Đảm bảo không thêm khóa học khi đang trong quá trình thêm
+
     try {
       setIsAdding(true);
-
-      // const userID = 1; // Thay thế bằng userID thực tế
-      // const courseID = 5; // Thay thế bằng courseID thực tế
 
       console.log(
         "Adding course to cart with courseID:",
@@ -89,28 +129,26 @@ export default function CourseDetailOverView({ navigation, route }) {
         userID
       );
 
-      // Gửi yêu cầu GET hoặc POST với query parameters (Tùy API yêu cầu POST hay GET)
-      const response = await axios.post(
-        `http://localhost:8080/api/addCourseToCart?userID=${userID}&courseID=${courseID}`,
-        {},
-        {
-          headers: {
-            "Content-Type": "application/json", // Bạn có thể bỏ qua phần body nếu API không yêu cầu nó
-          },
-        }
-      );
+      // Dispatch action Redux để thêm khóa học vào giỏ hàng
+      const resultAction = await dispatch(addCart({ courseID, userID }));
 
-      console.log("Response:", response.data); // In ra kết quả trả về từ API
+      // Kiểm tra xem action có thành công hay không
+      if (addCart.fulfilled.match(resultAction)) {
+        toast("Course added to cart successfully!", "success");
+      } else {
+        toast(
+          `Error: ${resultAction.payload || "Failed to add course to cart"}`,
+          "error"
+        );
+      }
 
-      // Nếu thành công
-      setIsAdding(false);
-      toast("Course added to cart successfully!", "success");
+      setIsAdding(false); // Đặt trạng thái isAdding về false sau khi hoàn tất
     } catch (error) {
       setIsAdding(false);
       setAddError(error.message || "Failed to add course to cart");
       console.error(
         "Error adding course to cart:",
-        error.response ? error.response.data : error.message
+        error.response || error.message
       );
       toast("Failed to add course to cart", "error");
     }

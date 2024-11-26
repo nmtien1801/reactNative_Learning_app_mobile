@@ -96,7 +96,11 @@ const addCourseToCart = (courseID, userID) => {
     "and userID:",
     userID
   );
-  return axios.post(`${baseUrl}/addCourseToCart`, { courseID, userID });
+  // Khi sử dụng query string trong URL cho API nhận
+  return axios.post(
+    `${baseUrl}/addCourseToCart?userID=${userID}&courseID=${courseID}`,
+    {}
+  );
 };
 const deleteCartSelected = async (courseID) => {
   console.log("courseID", courseID);

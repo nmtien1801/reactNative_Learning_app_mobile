@@ -27,7 +27,16 @@ export const addCart = createAsyncThunk(
   async ({ courseID, userID }, thunkAPI) => {
     try {
       const response = await addCourseToCart(courseID, userID);
-      return response.data; // Updated cart data
+      console.log("response", response); // Kiểm tra cấu trúc dữ liệu trả về từ API
+
+      // Kiểm tra EC để xác định trạng thái thành công hay thất bại
+      if (response.data.EC === 0) {
+        // Nếu thành công, trả về dữ liệu trong DT
+        return response.data.DT;
+      } else {
+        // Nếu có lỗi, từ chối với thông điệp lỗi
+        return thunkAPI.rejectWithValue(response.data.EM);
+      }
     } catch (error) {
       console.error("Error adding to cart:", error.response || error.message);
       return thunkAPI.rejectWithValue(
@@ -80,8 +89,10 @@ const cartSlice = createSlice({
       })
       .addCase(addCart.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.listCart = action.payload; // Update cart after adding course
+        // Thêm khóa học vào giỏ hàng (state.listCart sẽ được cập nhật với dữ liệu trả về từ DT)
+        state.listCart = action.payload;
       })
+
       .addCase(addCart.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;

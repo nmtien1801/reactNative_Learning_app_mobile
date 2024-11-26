@@ -60,10 +60,23 @@ const CourseItem = ({ order }) => {
   const toast = useToast();
   const dispatch = useDispatch();
   const [rating, setRating] = useState(
-    order.OrderDetails[0]?.Course?.averageRating || 0
+    order?.OrderDetails?.[0]?.Course?.averageRating || 0
   );
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const course = order.OrderDetails[0]?.Course;
+  const course = order?.OrderDetails?.[0]?.Course;
+  const [base64Image, setBase64Image] = useState(null);
+
+  if (!course) {
+    return <Text style={styles.errorText}>Không có khóa học.</Text>;
+  }
+
+  useEffect(() => {
+    if (course?.image) {
+      // Giả sử ảnh trả về dưới dạng Blob và bạn muốn chuyển thành Base64
+      const imageBase64 = `data:image/png;base64,${course.image}`;
+      setBase64Image(imageBase64);
+    }
+  }, [course]);
 
   const handleStarPress = async (value) => {
     try {
@@ -74,13 +87,8 @@ const CourseItem = ({ order }) => {
           userID: user._id,
         })
       );
-      console.log("====================================");
-      console.log("userID", order.userID);
-
-      console.log("courseID", order.OrderDetails[0]?.courseID);
-
       if (result.meta.requestStatus === "fulfilled") {
-        setRating(value); // Update UI immediately
+        setRating(value);
         toast("Đánh giá thành công!");
       } else {
         toast("Có lỗi xảy ra. Vui lòng thử lại!");
@@ -92,25 +100,17 @@ const CourseItem = ({ order }) => {
     }
   };
 
-  if (!course) {
-    return <Text style={styles.errorText}>=====.</Text>;
-  }
-
-  if (!course) {
-    return <Text style={styles.errorText}>=====.</Text>;
-  }
-
   return (
     <View style={styles.courseItem}>
-      <Text style={styles.courseTitle}>{course.name}</Text>
+      <Text style={styles.courseTitle}>{course?.name}</Text>
       <Text style={styles.courseInstructor}>
-        {course.UserFollow[0]?.user.userName}
+        {course?.UserFollow?.[0]?.user?.userName}
       </Text>
-      {course.image && (
+      {base64Image && (
         <Image
           source={{
             uri:
-              course.image ||
+              base64Image ||
               "https://v0.dev/placeholder.svg?height=200&width=200",
           }}
           style={styles.courseImage}
@@ -120,7 +120,7 @@ const CourseItem = ({ order }) => {
       <View style={styles.detailsContainer}>
         <View style={styles.priceContainer}>
           <Text style={styles.priceLabel}>Thành tiền:</Text>
-          <Text style={styles.price}>${order.total}</Text>
+          <Text style={styles.price}>${order?.total}</Text>
         </View>
 
         <View style={styles.ratingRow}>
@@ -133,7 +133,6 @@ const CourseItem = ({ order }) => {
         </View>
       </View>
 
-      {/* Modal for Rating */}
       {/* Modal for Rating */}
       <Modal
         visible={isModalVisible}
