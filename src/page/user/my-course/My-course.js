@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
   review: {
     fontSize: 14,
     marginRight: 10,
-    color: "#888",
+    color: "#FFD700",
   },
   totalRating: {
     fontSize: 14,
