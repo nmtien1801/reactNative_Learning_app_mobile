@@ -148,7 +148,7 @@ const CourseItem = ({ order }) => {
 };
 
 // Main HistoryCart Component
-export default function HistoryCart({ navigation }) {
+export default function HistoryCart({ navigation , route}) {
   const dispatch = useDispatch();
   const { orders, loading, error } = useSelector((state) => state.orders);
   const userId = 1; // Set userID, you can replace with actual user ID from Redux or props

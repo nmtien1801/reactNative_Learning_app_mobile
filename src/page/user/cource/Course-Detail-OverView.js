@@ -54,6 +54,7 @@ export default function CourseDetailOverView({ navigation, route }) {
     setCourse(courseDetail);
   }, [courseDetail]);
 
+  
   useEffect(() => {
     if (listCourseSimilar.length !== 0) {
       setListSimilar([

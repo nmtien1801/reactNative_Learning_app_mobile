@@ -209,6 +209,12 @@ const Project = () => {
                     ),
                   })}
                 />
+
+                <Stack.Screen
+                  name="historyCart"
+                  component={HistoryCart}
+                  options={{ header: () => {} }}
+                />
                 {/* ===================== user - home */}
                 <Stack.Screen
                   name="homeUser"
@@ -255,8 +261,6 @@ const Project = () => {
                   component={LessonTabs}
                   options={{ header: () => {} }}
                 />
-               
-                
 
                 <Stack.Screen name="ManageProject" component={ManageProject} />
               </>
