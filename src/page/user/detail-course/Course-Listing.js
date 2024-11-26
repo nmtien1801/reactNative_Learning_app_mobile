@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -10,24 +10,34 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from "react-native";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import { Bookmark, Star } from "lucide-react-native";
 import Footer from "../../../component/footer/FooterUser";
+import { findCourseByCategory } from "../../../redux/courseSlice";
 
 export default function CourseListing({ navigation, route }) {
   const { keyword } = route.params || {}; // Lấy từ khóa tìm kiếm từ route
+  const dispatch = useDispatch();
   const { listCourse, isLoading, isError } = useSelector(
     (state) => state.course
   );
 
+  const categoryID = route.params?.categoryID;    // tìm theo categoryID từ route
   console.log("route: ", route, "listCourse: ", listCourse);
-  
+
   useEffect(() => {
     if (keyword) {
       console.log(`Searching for courses with keyword: ${keyword}`);
     }
   }, [keyword]);
+
+  // locj theo category
+  useEffect(() => {
+    if (categoryID) {
+      dispatch(findCourseByCategory(categoryID));
+    }
+  }, []);
 
   const CourseListItem = ({ item }) => (
     <View style={styles.courseItem}>

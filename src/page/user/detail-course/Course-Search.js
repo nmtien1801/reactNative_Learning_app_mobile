@@ -22,7 +22,7 @@ const HotTopic = ({ title, onPress }) => (
 );
 
 // Category Component
-const Category = ({ icon, title, onPress }) => (
+const Category = ({ icon, title, onPress}) => (
   <TouchableOpacity style={styles.category} onPress={onPress}>
     <Ionicons name={icon} size={24} color="#666" style={styles.categoryIcon} />
     <Text style={styles.categoryTitle}>{title}</Text>
@@ -178,17 +178,17 @@ export default function CourseSearch({ navigation, route }) {
         {/* Categories */}
         <Text style={styles.sectionTitle}>Categories</Text>
         {[
-          { icon: "briefcase", title: "Business" },
-          { icon: "color-palette", title: "Design" },
-          { icon: "code-slash", title: "Coding" },
-          { icon: "film", title: "Movie" },
-          { icon: "language", title: "Language" },
+          { id: 1, icon: "briefcase", title: "Business" },
+          { id: 2, icon: "color-palette", title: "Design" },
+          { id: 3, icon: "code-slash", title: "Coding" },
+          { id: 4, icon: "film", title: "Movie" },
+          { id: 5, icon: "language", title: "Language" },
         ].map((category, index) => (
           <Category
             key={index}
             icon={category.icon}
             title={category.title}
-            onPress={() => navigation.navigate("courseListing")}
+            onPress={() => navigation.navigate("courseListing", {categoryID: category.id})} // Chuyển đến trang danh sách khóa học theo danh mục
           />
         ))}
 

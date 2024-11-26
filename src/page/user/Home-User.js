@@ -44,12 +44,12 @@ export default function HomeUser({ navigation, route }) {
   const toast = useToast();
 
   const categories = [
-    { icon: BarChart2, title: "Business", color: "#FF8A8A" },
-    { icon: Pen, title: "Design", color: "#8B5CF6" },
-    { icon: Code, title: "Code", color: "#FF6B6B" },
-    { icon: FileText, title: "Writing", color: "#4C6EF5" },
-    { icon: Tv, title: "Movie", color: "#7C3AED" },
-    { icon: Globe, title: "Language", color: "#F97316" },
+    { id: 1, icon: BarChart2, title: "Business", color: "#FF8A8A" },
+    { id: 2, icon: Pen, title: "Design", color: "#8B5CF6" },
+    { id: 3,icon: Code, title: "Code", color: "#FF6B6B" },
+    { id: 4,icon: FileText, title: "Writing", color: "#4C6EF5" },
+    { id: 5,icon: Tv, title: "Movie", color: "#7C3AED" },
+    { id: 6, icon: Globe, title: "Language", color: "#F97316" },
   ];
 
   //////////////////////////////
@@ -193,10 +193,10 @@ export default function HomeUser({ navigation, route }) {
     </View>
   );
 
-  const CategoryItem = ({ icon: Icon, title, color }) => (
+  const CategoryItem = ({ icon: Icon, title, color , categoryID}) => (
     <TouchableOpacity
       style={[styles.categoryItem, { backgroundColor: color }]}
-      onPress={() => navigation.navigate("courseListing", {})}
+      onPress={() => navigation.navigate("courseListing", {categoryID: categoryID})}
     >
       <View style={styles.categoryIcon}>
         <Icon size={24} color="#FFF" />
@@ -306,6 +306,7 @@ export default function HomeUser({ navigation, route }) {
             {categories.map((category, index) => (
               <CategoryItem
                 key={index}
+                categoryID={category.id}
                 icon={category.icon}
                 title={category.title}
                 color={category.color}

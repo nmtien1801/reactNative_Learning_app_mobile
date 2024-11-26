@@ -111,6 +111,11 @@ const deleteCartSelected = async (courseID) => {
 const searchCourseService = (keyword) => {
   return axios.get(`${baseUrl}/searchCourse/${keyword}`);
 };
+
+const findCourseByCategoryService = (categoryID) => {
+  return axios.get(`${baseUrl}/findCourseByCategory/${categoryID}`);
+}
+  
 export {
   handleLoginApi,
   logOutUser,
@@ -133,4 +138,5 @@ export {
   searchCourseService,
   changePasswordService,
   findInspireCoursesService,
+  findCourseByCategoryService,
 };
