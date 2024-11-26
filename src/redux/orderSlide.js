@@ -1,27 +1,41 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { buyCourseService, getOrdersByUserId } from "../service/userService"; // Đảm bảo buyCourseService đã được định nghĩa
-import { deleteCart } from "./cartSlice";
+import { buyCourseService, getOrdersByUserId } from "../service/userService";
 
-// Mua khóa học
-export const buyCourses = createAsyncThunk(
+// // Mua khóa học
+// export const buyCourse = createAsyncThunk(
+//   "orders/buyCourses",
+//   async ({ courseIDs, userID }, { rejectWithValue }) => {
+//     try {
+//       const response = await buyCourseService(courseIDs, userID);
+//       if (response?.DT) {
+//         // Trả về dữ liệu đơn hàng khi mua thành công
+//         return response.DT;
+//       }
+//       throw new Error("Invalid response data from API.");
+//     } catch (error) {
+//       console.error("Failed to buy courses:", error.message);
+//       return rejectWithValue(
+//         error.response?.data?.message ||
+//           error.message ||
+//           "Failed to buy courses."
+//       );
+//     }
+//   }
+// );
+
+export const buyCourse = createAsyncThunk(
   "orders/buyCourses",
-  async ({ courseIDs, userID }, { dispatch, rejectWithValue }) => {
+  async ({ courseIDs, userID }, { rejectWithValue }) => {
     try {
       const response = await buyCourseService(courseIDs, userID);
-      console.log("response", response);
 
-      if (response?.data?.DT) {
-        // Xóa các khóa học đã mua khỏi giỏ hàng
-        await dispatch(deleteCart(courseIDs))
-          .unwrap()
-          .catch(() => {
-            console.warn("Failed to remove courses from cart.");
-          });
-
-        return response.data.DT; // Trả về dữ liệu đơn hàng
+      if (response?.DT?.orderDetails) {
+        // Trả về thông tin orderDetails, vì đó là mảng các khóa học đã mua
+        return response.DT.orderDetails;
       }
 
-      throw new Error("Invalid response data from API.");
+      // Nếu không có orderDetails, ném lỗi
+      throw new Error("Invalid response data: Missing orderDetails.");
     } catch (error) {
       console.error("Failed to buy courses:", error.message);
       return rejectWithValue(
@@ -37,22 +51,21 @@ export const fetchOrdersByUserId = createAsyncThunk(
   "orders/getOrdersByUserId",
   async (userID) => {
     const response = await getOrdersByUserId(userID);
-    return response.data; // Trả về dữ liệu nhận được
+    return response.data;
   }
 );
 
-// Slice quản lý đơn hàng
 const orderSlice = createSlice({
   name: "orders",
   initialState: {
-    orders: [], // Danh sách đơn hàng
-    loading: false, // Trạng thái tải
-    error: null, // Thông báo lỗi
+    orders: [],
+    loading: false,
+    error: null,
   },
   reducers: {
     clearOrders: (state) => {
-      state.orders = []; // Xóa danh sách đơn hàng
-      state.error = null; // Xóa thông báo lỗi
+      state.orders = [];
+      state.error = null;
     },
   },
   extraReducers: (builder) => {
@@ -63,7 +76,8 @@ const orderSlice = createSlice({
       })
       .addCase(buyCourse.fulfilled, (state, action) => {
         state.loading = false;
-        state.orders = [...state.orders, ...action.payload]; // Thêm đơn hàng mới
+        // Lưu các đơn hàng vào state khi mua thành công
+        state.orders = [...state.orders, ...action.payload];
       })
       .addCase(buyCourse.rejected, (state, action) => {
         state.loading = false;
@@ -72,21 +86,15 @@ const orderSlice = createSlice({
 
     builder
       .addCase(fetchOrdersByUserId.pending, (state) => {
-        state.loading = true; // Bắt đầu tải
-        state.error = null; // Reset lỗi
+        state.loading = true;
       })
       .addCase(fetchOrdersByUserId.fulfilled, (state, action) => {
-        state.loading = false; // Kết thúc tải
-        if (action.payload && action.payload.DT) {
-          state.orders = action.payload.DT; // Lưu danh sách đơn hàng
-        } else {
-          state.orders = [];
-          state.error = "Dữ liệu không hợp lệ từ API.";
-        }
+        state.loading = false;
+        state.orders = action.payload?.DT || [];
       })
       .addCase(fetchOrdersByUserId.rejected, (state, action) => {
-        state.loading = false; // Kết thúc tải
-        state.error = action.error.message || "Không thể tải dữ liệu từ API.";
+        state.loading = false;
+        state.error = action.error.message || "Failed to fetch orders.";
       });
   },
 });

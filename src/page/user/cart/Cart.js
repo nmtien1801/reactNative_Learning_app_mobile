@@ -77,51 +77,77 @@ const Cart = () => {
     }
   };
 
+  // const handlePurchase = async () => {
+  //   if (selectedItems.length === 0) {
+  //     toast("No courses selected for purchase.", "warning");
+  //     return;
+  //   }
+
+  //   try {
+  //     // Gọi API mua khóa học
+  //     const response = await dispatch(
+  //       buyCourse({ courseIDs: selectedItems, userID })
+  //     ).unwrap();
+
+  //     // Kiểm tra dữ liệu phản hồi và xử lý
+  //     if (response.EM === "Mua khóa học thành công") {
+  //       const orderID = response.DT.order.id;
+  //       const orderDetails = response.DT.orderDetails;
+
+  //       toast("Mua khóa học thành công!", "success");
+
+  //       // Sau khi mua thành công, xóa các khóa học đã mua khỏi giỏ hàng
+  //       await dispatch(deleteCart(selectedItems)).unwrap();
+  //       toast("Đã xóa các khóa học đã mua khỏi giỏ hàng", "success");
+
+  //       // Làm mới giỏ hàng và xóa các khóa học đã chọn
+  //       setSelectedItems([]);
+  //       dispatch(getCartByUser(userID));
+
+  //       // Cập nhật thông tin đơn hàng (orderID, orderDetails, totalPrice)
+  //       console.log("Đơn hàng đã được tạo:", {
+  //         orderID,
+  //         orderDetails,
+  //         totalPrice: response.DT.totalPrice,
+  //       });
+  //     } else {
+  //       toast("Mua khóa học thất bại. Vui lòng thử lại!", "error");
+  //     }
+  //   } catch (error) {
+  //     toast(`Error during purchase: ${error.message}`, "error");
+  //   }
+  // };
+
   const handlePurchase = async () => {
     if (selectedItems.length === 0) {
       toast("No courses selected for purchase.", "warning");
       return;
     }
 
-    console.log("Selected courses:", selectedItems);
+    const courseIDs = selectedItems.join(",");
 
     try {
-      // Chuyển selectedItems thành chuỗi nếu là mảng (ví dụ ['1', '2', '3'])
-      const courseIDs = selectedItems.join(",");
+      // Gọi action mua khóa học
+      const resultAction = await dispatch(buyCourse({ userID, courseIDs }));
 
-      // Gọi API mua khóa học với axios
-      const response = await axios.post(
-        `http://localhost:8080/api/buyCourses`,
-        {
-          userID: userID,
-          courseIDs: courseIDs, // Gửi danh sách các khóa học đã chọn
-        }
-      );
+      if (buyCourse.fulfilled.match(resultAction)) {
+        toast("Purchase successful!", "success");
 
-      console.log("Purchase response:", response);
+        // Sử dụng handleRemoveSelected để xóa các khóa học đã mua khỏi giỏ hàng
+        handleRemoveSelected(); // Gọi hàm xóa khóa học đã chọn
 
-      // Kiểm tra phản hồi từ server
-      if (response.data.EM === "Mua khóa học thành công") {
-        // Nếu mua thành công
-        toast("Mua khóa học thành công!", "success");
-
-        // Sau khi mua thành công, xóa các khóa học đã mua khỏi giỏ hàng
-        await dispatch(deleteCart(selectedItems)).unwrap();
-        toast("Mua khóa học thành công", "success");
-
-        // Làm mới giỏ hàng và xóa các khóa học đã chọn
-        setSelectedItems([]); // Xóa các khóa học đã chọn trong UI
-        dispatch(getCartByUser(userID)); // Làm mới giỏ hàng sau khi mua
+        // Làm mới giỏ hàng sau khi mua
+        dispatch(getCartByUser(userID));
       } else {
-        // Nếu có lỗi từ server
-        toast(`Error: ${response.data.EM}`, "error");
+        toast(
+          `Error: ${resultAction.payload || "Failed to purchase courses"}`,
+          "error"
+        );
       }
     } catch (error) {
-      console.error("Purchase error:", error);
       toast(`Error during purchase: ${error.message}`, "error");
     }
   };
-
   if (isLoading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
   }
@@ -179,9 +205,7 @@ const Cart = () => {
               <Text style={styles.price}>${item.price}</Text>
               <View style={styles.ratingContainer}>
                 <Ionicons name="star" size={16} color="#FFD700" />
-                <Text style={styles.rating}>
-                  {item.averageRating.toFixed(2)}
-                </Text>
+                <Text style={styles.rating}>{item.averageRating}</Text>
                 <Text style={styles.reviews}>({item.totalRating} reviews)</Text>
               </View>
               <Text style={styles.lessons}>{item.totalLessons} lessons</Text>

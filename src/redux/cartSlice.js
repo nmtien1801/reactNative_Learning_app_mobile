@@ -3,6 +3,7 @@ import {
   getCartByUserService,
   addCourseToCart,
   deleteCartSelected,
+  buyCoursesService,
 } from "../service/userService";
 
 const initialState = {
@@ -50,7 +51,6 @@ export const deleteCart = createAsyncThunk(
     }
   }
 );
-
 const cartSlice = createSlice({
   name: "cart",
   initialState,
