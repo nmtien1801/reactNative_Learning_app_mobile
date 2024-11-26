@@ -10,11 +10,12 @@ import {
   Modal,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchOrdersByUserId } from "../../../redux/orderSlide"; // Lấy đơn hàng của người dùng
-import { submitCourseReview } from "../../../redux/reviewSlice"; // Action gửi review
-import { ArrowLeft, Search, Star } from "lucide-react-native"; // Các icon
-import { useToast } from "../../../component/customToast"; // Thông báo Toast
+import { fetchOrdersByUserId } from "../../../redux/orderSlide"; // Fetch orders of the user
+import { submitCourseReview } from "../../../redux/reviewSlice"; // Action to submit review
+import { ArrowLeft, Search, Star } from "lucide-react-native"; // Icons
+import { useToast } from "../../../component/customToast"; // Toast notifications
 
+// Star Rating Component
 const StarRating = ({ rating, onPress }) => {
   const fullStars = Math.floor(rating);
   const hasHalfStar = rating % 1 !== 0;
@@ -52,39 +53,42 @@ const StarRating = ({ rating, onPress }) => {
   );
 };
 
+// Course Item Component
 const CourseItem = ({ order }) => {
   const toast = useToast();
   const dispatch = useDispatch();
   const [rating, setRating] = useState(
-    order.OrderDetails[0].Course.averageRating || 0
+    order.OrderDetails[0]?.Course?.averageRating || 0
   );
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const course = order.OrderDetails[0].Course;
+  const course = order.OrderDetails[0]?.Course;
 
   const handleStarPress = async (value) => {
     try {
       const result = await dispatch(
         submitCourseReview({
-          courseID: order.OrderDetails[0].courseID,
+          courseID: order.OrderDetails[0]?.courseID,
           rating: value,
-          userID: 1, // ID người dùng (có thể lấy từ Redux hoặc props)
+          userID: 1, // Replace with actual userID
         })
       );
 
       if (result.meta.requestStatus === "fulfilled") {
-        setRating(value); // Cập nhật giao diện ngay lập tức
+        setRating(value); // Update UI immediately
         toast("Đánh giá thành công!");
       } else {
-        console.error("Lỗi khi gửi đánh giá:", result.error);
         toast("Có lỗi xảy ra. Vui lòng thử lại!");
       }
     } catch (error) {
-      console.error("Lỗi khi gửi đánh giá:", error);
       toast("Có lỗi xảy ra. Vui lòng thử lại!");
     } finally {
-      setIsModalVisible(false);
+      setIsModalVisible(false); // Close the modal after submitting review
     }
   };
+
+  if (!course) {
+    return <Text style={styles.errorText}>=====.</Text>;
+  }
 
   return (
     <View style={styles.courseItem}>
@@ -110,21 +114,21 @@ const CourseItem = ({ order }) => {
         </View>
 
         <View style={styles.ratingRow}>
-          {/* <StarRating rating={rating} onPress={handleStarPress} /> */}
           <TouchableOpacity
             style={styles.ratingButton}
-            onPress={() => setIsModalVisible(true)}
+            onPress={() => setIsModalVisible(true)} // Open the modal for review
           >
             <Text style={styles.ratingButtonText}>Đánh giá</Text>
           </TouchableOpacity>
         </View>
       </View>
 
+      {/* Modal for Rating */}
       <Modal
         visible={isModalVisible}
         transparent={true}
         animationType="fade"
-        onRequestClose={() => setIsModalVisible(false)}
+        onRequestClose={() => setIsModalVisible(false)} // Close modal when requested
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
@@ -132,7 +136,7 @@ const CourseItem = ({ order }) => {
             <StarRating rating={rating} onPress={handleStarPress} />
             <TouchableOpacity
               style={styles.closeButton}
-              onPress={() => setIsModalVisible(false)}
+              onPress={() => setIsModalVisible(false)} // Close modal
             >
               <Text style={styles.closeButtonText}>Đóng</Text>
             </TouchableOpacity>
@@ -143,16 +147,27 @@ const CourseItem = ({ order }) => {
   );
 };
 
-// Main component HistoryCart
+// Main HistoryCart Component
 export default function HistoryCart({ navigation }) {
   const dispatch = useDispatch();
   const { orders, loading, error } = useSelector((state) => state.orders);
-  const userId = 1; // ID người dùng (có thể lấy từ Redux hoặc props)
+  const userId = 1; // Set userID, you can replace with actual user ID from Redux or props
 
-  // Lấy dữ liệu đơn hàng khi component được mount
   useEffect(() => {
-    dispatch(fetchOrdersByUserId(userId));
+    dispatch(fetchOrdersByUserId(userId)); // Fetch orders when component mounts
   }, [dispatch, userId]);
+
+  if (loading) {
+    return <Text style={styles.loadingText}>Đang tải...</Text>;
+  }
+
+  if (error) {
+    return <Text style={styles.errorText}>Lỗi: {error}</Text>;
+  }
+
+  if (!orders || orders.length === 0) {
+    return <Text style={styles.errorText}>Không có đơn hàng nào!</Text>;
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -172,25 +187,19 @@ export default function HistoryCart({ navigation }) {
         </TouchableOpacity>
       </View>
 
-      {/* Nội dung */}
-      {loading ? (
-        <Text style={styles.loadingText}>Đang tải...</Text>
-      ) : error ? (
-        <Text style={styles.errorText}>Lỗi: {error}</Text>
-      ) : (
-        <FlatList
-          data={orders}
-          renderItem={({ item }) => <CourseItem order={item} />} // Render thông tin đơn hàng
-          keyExtractor={(item) => item.id.toString()}
-          contentContainerStyle={styles.listContainer}
-          showsVerticalScrollIndicator={false}
-        />
-      )}
+      {/* Content */}
+      <FlatList
+        data={orders}
+        renderItem={({ item }) => <CourseItem order={item} />}
+        keyExtractor={(item) => item.id.toString()}
+        contentContainerStyle={styles.listContainer}
+        showsVerticalScrollIndicator={false}
+      />
     </SafeAreaView>
   );
 }
 
-// Styles cho các thành phần
+// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -224,7 +233,6 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   courseItem: {
-    flexDirection: "column",
     marginBottom: 16,
     backgroundColor: "#fff",
     borderRadius: 8,
@@ -252,6 +260,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   detailsContainer: {
+    flexDirection: "row",
     justifyContent: "space-between",
   },
   priceContainer: {
@@ -276,7 +285,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     paddingVertical: 5,
     paddingHorizontal: 15,
-    backgroundColor: "#FF6347", // Màu đỏ
+    backgroundColor: "#FF6347",
     borderRadius: 5,
   },
   ratingButtonText: {
@@ -293,20 +302,20 @@ const styles = StyleSheet.create({
   modalContent: {
     backgroundColor: "#fff",
     padding: 20,
-    borderRadius: 8,
+    borderRadius: 10,
     alignItems: "center",
-    width: "80%",
+    width: 250,
   },
   modalTitle: {
     fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 10,
+    marginBottom: 15,
   },
   closeButton: {
-    marginTop: 20,
-    paddingVertical: 5,
-    paddingHorizontal: 15,
+    marginTop: 15,
     backgroundColor: "#FF6347",
+    paddingVertical: 8,
+    paddingHorizontal: 20,
     borderRadius: 5,
   },
   closeButtonText: {
@@ -314,19 +323,18 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
   },
-  starContainer: {
-    flexDirection: "row",
-  },
   loadingText: {
     textAlign: "center",
-    marginTop: 20,
     fontSize: 16,
-    color: "#666",
+    marginTop: 20,
   },
   errorText: {
     textAlign: "center",
-    marginTop: 20,
     fontSize: 16,
-    color: "red",
+    color: "#FF0000",
+    marginTop: 20,
+  },
+  starContainer: {
+    flexDirection: "row",
   },
 });
