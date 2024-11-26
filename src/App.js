@@ -244,6 +244,14 @@ const Project = () => {
                   component={LessonTabs}
                   options={{ header: () => {} }}
                 />
+
+                {/* ===================== teacher */}
+                <Stack.Screen
+                  name="Teacher"
+                  component={TeacherTabs}
+                  initialParams={{ screenName: "TeacherOverView" }}
+                  options={{ header: () => {} }}
+                />
               </>
             ) : (
               <>
