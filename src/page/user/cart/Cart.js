@@ -77,47 +77,6 @@ const Cart = () => {
     }
   };
 
-  // const handlePurchase = async () => {
-  //   if (selectedItems.length === 0) {
-  //     toast("No courses selected for purchase.", "warning");
-  //     return;
-  //   }
-
-  //   try {
-  //     // Gọi API mua khóa học
-  //     const response = await dispatch(
-  //       buyCourse({ courseIDs: selectedItems, userID })
-  //     ).unwrap();
-
-  //     // Kiểm tra dữ liệu phản hồi và xử lý
-  //     if (response.EM === "Mua khóa học thành công") {
-  //       const orderID = response.DT.order.id;
-  //       const orderDetails = response.DT.orderDetails;
-
-  //       toast("Mua khóa học thành công!", "success");
-
-  //       // Sau khi mua thành công, xóa các khóa học đã mua khỏi giỏ hàng
-  //       await dispatch(deleteCart(selectedItems)).unwrap();
-  //       toast("Đã xóa các khóa học đã mua khỏi giỏ hàng", "success");
-
-  //       // Làm mới giỏ hàng và xóa các khóa học đã chọn
-  //       setSelectedItems([]);
-  //       dispatch(getCartByUser(userID));
-
-  //       // Cập nhật thông tin đơn hàng (orderID, orderDetails, totalPrice)
-  //       console.log("Đơn hàng đã được tạo:", {
-  //         orderID,
-  //         orderDetails,
-  //         totalPrice: response.DT.totalPrice,
-  //       });
-  //     } else {
-  //       toast("Mua khóa học thất bại. Vui lòng thử lại!", "error");
-  //     }
-  //   } catch (error) {
-  //     toast(`Error during purchase: ${error.message}`, "error");
-  //   }
-  // };
-
   const handlePurchase = async () => {
     if (selectedItems.length === 0) {
       toast("No courses selected for purchase.", "warning");

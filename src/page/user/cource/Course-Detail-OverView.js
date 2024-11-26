@@ -31,6 +31,7 @@ function BenefitItem({ icon, text }) {
 }
 
 export default function CourseDetailOverView({ navigation, route }) {
+  const toast = useToast();
   const user = useSelector((state) => state.auth.user); // Lấy thông tin user
   const courseDetail = useSelector((state) => state.course.courseDetail); // lấy thông tin top teacher
   const listCourseSimilar = useSelector(
@@ -44,7 +45,7 @@ export default function CourseDetailOverView({ navigation, route }) {
   const [addError, setAddError] = useState("");
 
   const courseID = route.params.params.courseID; // Lấy courseID từ route params
-  const userID = user._id; 
+  const userID = user._id;
 
   useEffect(() => {
     dispatch(findCourseByID(courseID)); // Gửi action để lấy thông tin course
@@ -55,7 +56,6 @@ export default function CourseDetailOverView({ navigation, route }) {
     setCourse(courseDetail);
   }, [courseDetail]);
 
-  
   useEffect(() => {
     if (listCourseSimilar.length !== 0) {
       setListSimilar([
@@ -104,7 +104,7 @@ export default function CourseDetailOverView({ navigation, route }) {
 
       // Nếu thành công
       setIsAdding(false);
-      console.log("Course added to cart successfully!");
+      toast("Course added to cart successfully!", "success");
     } catch (error) {
       setIsAdding(false);
       setAddError(error.message || "Failed to add course to cart");
@@ -112,6 +112,7 @@ export default function CourseDetailOverView({ navigation, route }) {
         "Error adding course to cart:",
         error.response ? error.response.data : error.message
       );
+      toast("Failed to add course to cart", "error");
     }
   };
 
