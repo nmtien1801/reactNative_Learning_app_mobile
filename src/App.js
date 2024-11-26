@@ -35,6 +35,8 @@ import HeaderSetting from "./header/Header_Setting";
 import ChatBox from "./component/chatbox/ChatScreens";
 import ChangePassword from "./component/setting/Change-pass";
 
+import StatisticsScreen from "./page/teacher/StatisticsScreen";
+
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -123,7 +125,12 @@ const Project = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator initialRouteName="StatisticsScreen">
+        <Stack.Screen
+          name="StatisticsScreen"
+          component={StatisticsScreen}
+          options={{ header: () => {} }}
+        />
         {!isLogin ? (
           <>
             <Stack.Screen
