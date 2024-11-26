@@ -21,6 +21,7 @@ import { getReviewByCourse } from "../../../redux/reviewSlice";
 export default function CourseDetailReview({ navigation, route }) {
   const courseDetail = useSelector((state) => state.course.courseDetail); // lấy thông tin top teacher
   const listReview = useSelector((state) => state.review.listReview); // lấy thông tin top teacher
+  const urlVideo = useSelector((state) => state.lesson.urlVideo); // lấy url video
   const dispatch = useDispatch();
   const courseID = route.params.params?.courseID; // lấy sẵn id để truyền vào cart
 

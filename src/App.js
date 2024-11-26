@@ -141,11 +141,6 @@ const Project = () => {
               component={RegisterScreen}
               options={{ header: () => {} }}
             />
-            <Stack.Screen
-              name="chatBox"
-              component={ChatBox}
-              options={{ header: () => {} }}
-            />
           </>
         ) : (
           <>
