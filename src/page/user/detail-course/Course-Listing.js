@@ -12,32 +12,23 @@ import {
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
-import { Bookmark, Star } from "lucide-react-native";
 import Footer from "../../../component/footer/FooterUser";
-import { findCourseByCategory } from "../../../redux/courseSlice";
+import { searchCourse } from "../../../redux/courseSlice"; // Import the searchCourse action
 
-export default function CourseListing({ navigation, route }) {
-  const { keyword } = route.params || {}; // Lấy từ khóa tìm kiếm từ route
+export default function CourseListing({ navigation }) {
   const dispatch = useDispatch();
   const { listCourse, isLoading, isError } = useSelector(
     (state) => state.course
   );
 
-  const categoryID = route.params?.categoryID;    // tìm theo categoryID từ route
-  console.log("route: ", route, "listCourse: ", listCourse);
+  const [searchTerm, setSearchTerm] = useState(""); // State for search term
 
-  useEffect(() => {
-    if (keyword) {
-      console.log(`Searching for courses with keyword: ${keyword}`);
+  // Handle search when search button is pressed
+  const handleSearch = () => {
+    if (searchTerm.trim()) {
+      dispatch(searchCourse(searchTerm)); // Dispatch the search action
     }
-  }, [keyword]);
-
-  // locj theo category
-  useEffect(() => {
-    if (categoryID) {
-      dispatch(findCourseByCategory(categoryID));
-    }
-  }, []);
+  };
 
   const CourseListItem = ({ item }) => (
     <View style={styles.courseItem}>
@@ -82,11 +73,13 @@ export default function CourseListing({ navigation, route }) {
             style={styles.searchIcon}
           />
           <TextInput
-            placeholder={keyword || "Search for courses"}
+            placeholder="Search for courses"
             style={styles.searchInput}
+            value={searchTerm}
+            onChangeText={setSearchTerm} // Update search term
           />
-          <TouchableOpacity style={styles.filterButton}>
-            <Text style={styles.filterButtonText}>Filter</Text>
+          <TouchableOpacity style={styles.filterButton} onPress={handleSearch}>
+            <Text style={styles.filterButtonText}>Search</Text>
           </TouchableOpacity>
         </View>
 
@@ -120,7 +113,7 @@ export default function CourseListing({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f9f9f9", // Màu nền sáng
+    backgroundColor: "#f9f9f9", // Light background color
   },
   content: {
     flex: 1,

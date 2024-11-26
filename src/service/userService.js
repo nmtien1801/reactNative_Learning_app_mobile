@@ -20,7 +20,11 @@ const registerUser = (email, userName, password) => {
 };
 
 const changePasswordService = (currentPassword, newPassword, email) => {
-  return axios.post(`${baseUrl}/changePassword`, { currentPassword, newPassword, email});
+  return axios.post(`${baseUrl}/changePassword`, {
+    currentPassword,
+    newPassword,
+    email,
+  });
 };
 
 const findAllCoursesService = () => {
@@ -120,7 +124,19 @@ const searchCourseService = (keyword) => {
 const getLessonByCourseService = (courseID) => {
   return axios.get(`${baseUrl}/getLessonByCourse/${courseID}`);
 };
-
+const createReview = async (courseID, userID, rating) => {
+  try {
+    const response = await axios.post(`${baseUrl}/createReview`, {
+      courseID,
+      userID,
+      rating,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Lỗi khi tạo review:", error.response || error.message);
+    throw error;
+  }
+};
 
 export {
   handleLoginApi,
@@ -147,4 +163,5 @@ export {
   changePasswordService,
   findInspireCoursesService,
   getLessonByCourseService,
+  createReview,
 };
