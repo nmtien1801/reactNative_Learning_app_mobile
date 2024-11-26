@@ -5,6 +5,7 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
+  Platform
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Layout from "../../component/lesson/Layout_Lesson";
@@ -13,10 +14,14 @@ import { useToast } from "../../component/customToast";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllLesson } from "../../redux/lessonSlice";
 import { findCourseByID } from "../../redux/courseSlice";
+import { addUrlVideo } from "../../redux/lessonSlice";
+
 
 export default function LessonComponent({ navigation, route }) {
   const listLesson = useSelector((state) => state.lesson.listLesson); // lấy thông tin lesson
   const courseDetail = useSelector((state) => state.course.courseDetail); // lấy thông tin course từ route id
+
+  const toast = useToast();
   const dispatch = useDispatch();
 
   const [lessons, setLessons] = useState([]); // khởi tạo state lessons
@@ -88,6 +93,11 @@ export default function LessonComponent({ navigation, route }) {
     );
   };
 
+  const onClickVideo = async (lessonIndex, videoIndex, urlVideo) => {
+    setActiveIndex({ lessonIndex, videoIndex });
+    await dispatch(addUrlVideo(urlVideo));
+  };
+
   return (
     <Layout navigation={navigation} route={route}>
       <View style={styles.lessonsList}>
@@ -113,7 +123,7 @@ export default function LessonComponent({ navigation, route }) {
                         activeIndex?.videoIndex === videoIndex
                       } // Kiểm tra active
                       onPress={
-                        () => setActiveIndex({ lessonIndex, videoIndex }) // Cập nhật trạng thái active
+                        () => onClickVideo(lessonIndex, videoIndex, video.urlVideo) // Cập nhật trạng thái active
                       }
                     />
                   ))}

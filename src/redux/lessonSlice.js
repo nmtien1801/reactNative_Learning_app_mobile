@@ -10,6 +10,7 @@ import {
 } from "../service/teacherService";
 
 const initialState = {
+  urlVideo: "https://www.youtube.com/embed/vs5N49eZyKg?list=RDvs5N49eZyKg",
   listLesson: [],
   isLoading: false,
   isError: false,
@@ -60,6 +61,12 @@ export const updateLesson = createAsyncThunk(
 const lessonSlice = createSlice({
   name: "lesson",
   initialState,
+  reducers: {
+    // Add url video
+    addUrlVideo: (state, action) => {
+      state.urlVideo = action.payload;
+    },
+  },
 
   // dùng api mới sử dụng extraReducers
   // 3 trạng thái của api: pending, fulfilled, rejected
@@ -122,8 +129,8 @@ const lessonSlice = createSlice({
         state.isError;
       });
 
-      // updateLesson
-      builder
+    // updateLesson
+    builder
       .addCase(updateLesson.pending, (state) => {
         state.isLoading = true;
         state.isError = false;
@@ -133,12 +140,11 @@ const lessonSlice = createSlice({
       })
       .addCase(updateLesson.rejected, (state, action) => {
         state.isLoading = false;
-        state.isError
-      }
-    );
+        state.isError = true;
+      });
   },
 });
 
-export const {} = lessonSlice.actions; // đây là action -> chỉ dùng khi trong reducer có reducers:{}
+export const { addUrlVideo} = lessonSlice.actions; // đây là action -> chỉ dùng khi trong reducer có reducers:{}
 
 export default lessonSlice.reducer;

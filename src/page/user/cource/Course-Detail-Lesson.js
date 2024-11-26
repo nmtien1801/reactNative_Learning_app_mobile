@@ -8,6 +8,7 @@ import {
   StyleSheet,
   SafeAreaView,
   StatusBar,
+  Platform,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useToast } from "../../../component/customToast";
@@ -15,12 +16,14 @@ import { useToast } from "../../../component/customToast";
 import { useDispatch, useSelector } from "react-redux";
 import { getLessonByCourse } from "../../../redux/lessonSlice";
 import { findCourseByID } from "../../../redux/courseSlice";
+import { addUrlVideo } from "../../../redux/lessonSlice";
 
 export default function CourseDetailLesson({ navigation, route }) {
   const listLesson = useSelector((state) => state.lesson.listLesson); // lấy thông tin lesson
   const courseDetail = useSelector((state) => state.course.courseDetail); // lấy thông tin course từ route id
-
+  const urlVideo = useSelector((state) => state.lesson.urlVideo); // lấy url video
   const dispatch = useDispatch();
+  const toast = useToast();
 
   const [lessons, setLessons] = useState([]); // khởi tạo state lessons
   const [course, setCourse] = useState({}); // khởi tạo state course
@@ -91,16 +94,32 @@ export default function CourseDetailLesson({ navigation, route }) {
     );
   };
 
+  const onClickVideo = async (lessonIndex, videoIndex, urlVideo) => {
+    setActiveIndex({ lessonIndex, videoIndex });
+    await dispatch(addUrlVideo(urlVideo));
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView>
-        <View style={styles.courseHeader}>
-          <Text style={styles.courseCategory}>{course.name}</Text>
-          <Text style={styles.courseTitle}>{course.title}</Text>
-          <View style={styles.playButton}>
-            <Ionicons name="play" size={24} color="white" />
-          </View>
-        </View>
+        {Platform.OS === "web" ? (
+          // Dùng iframe cho nền web
+          <iframe
+            src={urlVideo}
+            width="100%"
+            height="300"
+            title="YouTube Video"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            style={{ border: "none" }}
+          ></iframe>
+        ) : (
+          // Dùng WebView cho Android/iOS
+          <WebView
+            source={{ uri: urlVideo }}
+            style={{ flex: 1, width: "100%", height: 300 }}
+          />
+        )}
 
         <View style={styles.courseInfo}>
           <Text style={styles.courseSubtitle}>
@@ -160,7 +179,13 @@ export default function CourseDetailLesson({ navigation, route }) {
                           activeIndex?.videoIndex === videoIndex
                         } // Kiểm tra active
                         onPress={
-                          () => setActiveIndex({ lessonIndex, videoIndex }) // Cập nhật trạng thái active
+                          () =>
+                            lessonIndex < 2
+                              ? onClickVideo(lessonIndex, videoIndex, video.urlVideo) // Chạy hàm cho bài không bị khóa
+                              : toast(
+                                  "You need to complete the previous lesson",
+                                  "error"
+                                ) // Hiện thông báo khi bài bị khóa
                         }
                       />
                     ))}
@@ -300,33 +325,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
 
-  courseHeader: {
-    backgroundColor: "#7C4DFF",
-    padding: 16,
-    height: 200,
-    justifyContent: "flex-end",
-  },
-  courseCategory: {
-    color: "#fff",
-    fontSize: 14,
-  },
-  courseTitle: {
-    color: "#fff",
-    fontSize: 24,
-    fontWeight: "bold",
-    marginTop: 8,
-  },
-  playButton: {
-    position: "absolute",
-    right: 16,
-    bottom: 16,
-    backgroundColor: "rgba(255,255,255,0.3)",
-    borderRadius: 25,
-    width: 50,
-    height: 50,
-    justifyContent: "center",
-    alignItems: "center",
-  },
+ 
   courseInfo: {
     padding: 16,
   },
