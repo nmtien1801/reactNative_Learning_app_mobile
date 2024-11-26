@@ -7,8 +7,6 @@ import {
   ScrollView,
   TouchableOpacity,
   StyleSheet,
-  SafeAreaView,
-  StatusBar,
   Platform,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -91,7 +89,7 @@ export default function CourseDetailOverView({ navigation, route }) {
       // Gửi yêu cầu GET hoặc POST với query parameters (Tùy API yêu cầu POST hay GET)
       const response = await axios.post(
         `http://localhost:8080/api/addCourseToCart?userID=${userID}&courseID=${courseID}`,
-        {}, // Chúng ta không cần gửi body nữa, chỉ cần truyền query parameters
+        {},
         {
           headers: {
             "Content-Type": "application/json", // Bạn có thể bỏ qua phần body nếu API không yêu cầu nó

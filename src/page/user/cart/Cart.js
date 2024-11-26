@@ -7,18 +7,20 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
-  Alert,
 } from "react-native";
+import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { getCartByUser, deleteCart } from "../../../redux/cartSlice";
+import { buyCourse } from "../../../redux/orderSlide";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { useToast } from "../../../component/customToast";
 
 const Cart = () => {
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const navigation = useNavigation();
-
+  const toast = useToast();
   const { listCart, isLoading, isError, errorMessage } = useSelector(
     (state) => state.cart
   );
@@ -33,28 +35,30 @@ const Cart = () => {
   }, [dispatch, userID]);
 
   useEffect(() => {
-    const newTotalPrice = selectedItems.reduce((total, courseID) => {
-      const course = cartItems.find(
-        (item) => (item.courseID || item.id) === courseID
-      );
-      return total + (course ? parseFloat(course.price) : 0);
-    }, 0);
-    setTotalPrice(newTotalPrice);
-  }, [selectedItems]);
+    if (listCart?.DT?.length > 0) {
+      const newTotalPrice = selectedItems.reduce((total, courseID) => {
+        const course = listCart.DT.find(
+          (item) => (item.courseID || item.id) === courseID
+        );
+        return total + (course ? parseFloat(course.price) : 0);
+      }, 0);
+      setTotalPrice(newTotalPrice);
+    }
+  }, [selectedItems, listCart]);
 
   const handleSelectItem = (courseID) => {
-    if (selectedItems.includes(courseID)) {
-      setSelectedItems(selectedItems.filter((id) => id !== courseID));
-    } else {
-      setSelectedItems([...selectedItems, courseID]);
-    }
+    setSelectedItems((prevSelectedItems) =>
+      prevSelectedItems.includes(courseID)
+        ? prevSelectedItems.filter((id) => id !== courseID)
+        : [...prevSelectedItems, courseID]
+    );
   };
 
   const handleSelectAll = () => {
-    if (selectedItems.length === cartItems.length) {
+    if (selectedItems.length === listCart.DT.length) {
       setSelectedItems([]);
     } else {
-      setSelectedItems(cartItems.map((item) => item.courseID || item.id));
+      setSelectedItems(listCart.DT.map((item) => item.courseID || item.id));
     }
   };
 
@@ -66,44 +70,96 @@ const Cart = () => {
           dispatch(getCartByUser(userID));
         })
         .catch((error) => {
-          alert("Failed to remove selected courses: " + error.message);
+          toast("Failed to remove selected courses: " + error.message, "error");
         });
     } else {
-      alert("No courses selected for removal.");
+      toast("No courses selected for removal.", "warning");
     }
   };
 
-  const handlePurchase = () => {
-    if (selectedItems.length > 0) {
-      Alert.alert(
-        "Confirm Purchase",
-        `Are you sure you want to purchase ${
-          selectedItems.length
-        } course(s) for $${totalPrice.toFixed(2)}?`,
-        [
-          {
-            text: "Cancel",
-            style: "cancel",
-          },
-          {
-            text: "Purchase",
-            onPress: () => {
-              // Implement purchase logic here
-              console.log("Purchasing courses:", selectedItems);
-              Alert.alert(
-                "Purchase Successful",
-                "Thank you for your purchase!"
-              );
-              setSelectedItems([]);
-            },
-          },
-        ]
+  // const handlePurchase = async () => {
+  //   if (selectedItems.length === 0) {
+  //     toast("No courses selected for purchase.", "warning");
+  //     return;
+  //   }
+
+  //   try {
+  //     // Gọi API mua khóa học
+  //     const response = await dispatch(
+  //       buyCourse({ courseIDs: selectedItems, userID })
+  //     ).unwrap();
+
+  //     // Kiểm tra dữ liệu phản hồi và xử lý
+  //     if (response.EM === "Mua khóa học thành công") {
+  //       const orderID = response.DT.order.id;
+  //       const orderDetails = response.DT.orderDetails;
+
+  //       toast("Mua khóa học thành công!", "success");
+
+  //       // Sau khi mua thành công, xóa các khóa học đã mua khỏi giỏ hàng
+  //       await dispatch(deleteCart(selectedItems)).unwrap();
+  //       toast("Đã xóa các khóa học đã mua khỏi giỏ hàng", "success");
+
+  //       // Làm mới giỏ hàng và xóa các khóa học đã chọn
+  //       setSelectedItems([]);
+  //       dispatch(getCartByUser(userID));
+
+  //       // Cập nhật thông tin đơn hàng (orderID, orderDetails, totalPrice)
+  //       console.log("Đơn hàng đã được tạo:", {
+  //         orderID,
+  //         orderDetails,
+  //         totalPrice: response.DT.totalPrice,
+  //       });
+  //     } else {
+  //       toast("Mua khóa học thất bại. Vui lòng thử lại!", "error");
+  //     }
+  //   } catch (error) {
+  //     toast(`Error during purchase: ${error.message}`, "error");
+  //   }
+  // };
+
+  const handlePurchase = async () => {
+    if (selectedItems.length === 0) {
+      toast("No courses selected for purchase.", "warning");
+      return;
+    }
+
+    console.log("Selected courses:", selectedItems);
+
+    try {
+      // Chuyển selectedItems thành chuỗi nếu là mảng (ví dụ ['1', '2', '3'])
+      const courseIDs = selectedItems.join(",");
+
+      // Gọi API mua khóa học với axios
+      const response = await axios.post(
+        `http://localhost:8080/api/buyCourses`,
+        {
+          userID: userID,
+          courseIDs: courseIDs, // Gửi danh sách các khóa học đã chọn
+        }
       );
-    } else {
-      Alert.alert(
-        "No Courses Selected",
-        "Please select at least one course to purchase."
-      );
+
+      console.log("Purchase response:", response);
+
+      // Kiểm tra phản hồi từ server
+      if (response.data.EM === "Mua khóa học thành công") {
+        // Nếu mua thành công
+        toast("Mua khóa học thành công!", "success");
+
+        // Sau khi mua thành công, xóa các khóa học đã mua khỏi giỏ hàng
+        await dispatch(deleteCart(selectedItems)).unwrap();
+        toast("Mua khóa học thành công", "success");
+
+        // Làm mới giỏ hàng và xóa các khóa học đã chọn
+        setSelectedItems([]); // Xóa các khóa học đã chọn trong UI
+        dispatch(getCartByUser(userID)); // Làm mới giỏ hàng sau khi mua
+      } else {
+        // Nếu có lỗi từ server
+        toast(`Error: ${response.data.EM}`, "error");
+      }
+    } catch (error) {
+      console.error("Purchase error:", error);
+      toast(`Error during purchase: ${error.message}`, "error");
     }
   };
 
