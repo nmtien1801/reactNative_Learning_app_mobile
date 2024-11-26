@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -12,14 +12,19 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { WebView } from "react-native-webview";
 import HeaderCourseDetail from "../../header/Header-Course-Detail";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Header({ navigation, route }) {
+  const urlVideo = useSelector((state) => state.lesson.urlVideo);
+  console.log("urlVideo: ", urlVideo);
+  
+
   return (
     <View style={styles.container}>
       {Platform.OS === "web" ? (
         // Dùng iframe cho nền web
         <iframe
-          src="https://www.youtube.com/embed/147SkAVXEqM"
+          src={urlVideo}
           width="100%"
           height="300"
           title="YouTube Video"
@@ -30,7 +35,7 @@ export default function Header({ navigation, route }) {
       ) : (
         // Dùng WebView cho Android/iOS
         <WebView
-          source={{ uri: "https://www.youtube.com/embed/147SkAVXEqM" }}
+          source={{ uri: urlVideo }}
           style={{ flex: 1, width: "100%", height: 300 }}
         />
       )}

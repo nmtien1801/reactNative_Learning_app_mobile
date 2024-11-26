@@ -8,6 +8,7 @@ import {
   StyleSheet,
   SafeAreaView,
   StatusBar,
+  Platform
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Star } from "lucide-react-native"; // add npm (2)
@@ -20,6 +21,7 @@ import { getReviewByCourse } from "../../../redux/reviewSlice";
 export default function CourseDetailReview({ navigation, route }) {
   const courseDetail = useSelector((state) => state.course.courseDetail); // lấy thông tin top teacher
   const listReview = useSelector((state) => state.review.listReview); // lấy thông tin top teacher
+  const urlVideo = useSelector((state) => state.lesson.urlVideo); // lấy url video
   const dispatch = useDispatch();
   const courseID = route.params.params?.courseID; // lấy sẵn id để truyền vào cart
 
@@ -77,13 +79,26 @@ export default function CourseDetailReview({ navigation, route }) {
   return (
     <View style={styles.container}>
       <ScrollView>
-        <View style={styles.courseHeader}>
-          <Text style={styles.courseCategory}>{course.name}</Text>
-          <Text style={styles.courseTitle}>{course.title}</Text>
-          <View style={styles.playButton}>
-            <Ionicons name="play" size={24} color="white" />
-          </View>
-        </View>
+      {Platform.OS === "web" ? (
+          // Dùng iframe cho nền web
+          <iframe
+            src={urlVideo}
+            width="100%"
+            height="300"
+            title="YouTube Video"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            style={{ border: "none" }}
+          ></iframe>
+        ) : (
+          // Dùng WebView cho Android/iOS
+          <WebView
+            source={{ uri: urlVideo }}
+            style={{ flex: 1, width: "100%", height: 300 }}
+          />
+        )}
+
+
         <View style={styles.courseInfo}>
           <Text style={styles.courseSubtitle}>
             {course.name}: {course.title}
@@ -268,33 +283,6 @@ const styles = StyleSheet.create({
     color: "#00BCD4",
   },
 
-  courseHeader: {
-    backgroundColor: "#7C4DFF",
-    padding: 16,
-    height: 200,
-    justifyContent: "flex-end",
-  },
-  courseCategory: {
-    color: "#fff",
-    fontSize: 14,
-  },
-  courseTitle: {
-    color: "#fff",
-    fontSize: 24,
-    fontWeight: "bold",
-    marginTop: 8,
-  },
-  playButton: {
-    position: "absolute",
-    right: 16,
-    bottom: 16,
-    backgroundColor: "rgba(255,255,255,0.3)",
-    borderRadius: 25,
-    width: 50,
-    height: 50,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   courseInfo: {
     padding: 16,
   },

@@ -35,7 +35,7 @@ const CourseCard = ({ course, navigation }) => (
   <TouchableOpacity
     style={[styles.courseCard, { width: 250 }]}
     onPress={() =>
-      navigation.navigate("courseDetailOverView", { courseId: course.id })
+      navigation.navigate("courseDetailOverView", { courseID: course.id })
     }
   >
     <Image

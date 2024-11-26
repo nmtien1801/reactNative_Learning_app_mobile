@@ -141,11 +141,6 @@ const Project = () => {
               component={RegisterScreen}
               options={{ header: () => {} }}
             />
-            <Stack.Screen
-              name="chatBox"
-              component={ChatBox}
-              options={{ header: () => {} }}
-            />
           </>
         ) : (
           <>
@@ -238,6 +233,20 @@ const Project = () => {
                   component={ChangePassword}
                   options={{ header: () => {} }}
                 />
+
+                <Stack.Screen
+                  name="Lesson"
+                  component={LessonTabs}
+                  options={{ header: () => {} }}
+                />
+
+                {/* ===================== teacher */}
+                <Stack.Screen
+                  name="Teacher"
+                  component={TeacherTabs}
+                  initialParams={{ screenName: "TeacherOverView" }}
+                  options={{ header: () => {} }}
+                />
               </>
             ) : (
               <>
@@ -256,11 +265,6 @@ const Project = () => {
                 <Stack.Screen name="ManageLesson" component={ManageLesson} />
                 <Stack.Screen name="FormCourse" component={FormCourse} />
                 <Stack.Screen name="FormLesson" component={FormLesson} />
-                <Stack.Screen
-                  name="Lesson"
-                  component={LessonTabs}
-                  options={{ header: () => {} }}
-                />
 
                 <Stack.Screen name="ManageProject" component={ManageProject} />
               </>
