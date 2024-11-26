@@ -22,7 +22,7 @@ const HotTopic = ({ title, onPress }) => (
 );
 
 // Category Component
-const Category = ({ icon, title, onPress}) => (
+const Category = ({ icon, title, onPress }) => (
   <TouchableOpacity style={styles.category} onPress={onPress}>
     <Ionicons name={icon} size={24} color="#666" style={styles.categoryIcon} />
     <Text style={styles.categoryTitle}>{title}</Text>
@@ -143,12 +143,6 @@ export default function CourseSearch({ navigation, route }) {
       <ScrollView>
         {/* Search Bar */}
         <View style={styles.searchContainer}>
-          <Ionicons
-            name="search"
-            size={20}
-            color="#666"
-            style={styles.searchIcon}
-          />
           <TextInput
             style={styles.searchInput}
             placeholder="Search for courses"
@@ -156,6 +150,14 @@ export default function CourseSearch({ navigation, route }) {
             onChangeText={setKeyword}
             onSubmitEditing={handleSearch} // Gọi khi người dùng nhấn enter
           />
+          <TouchableOpacity onPress={handleSearch}>
+            <Ionicons
+              name="search"
+              size={20}
+              color="#666"
+              style={styles.searchIcon}
+            />
+          </TouchableOpacity>
         </View>
 
         {/* Hot Topics */}
@@ -188,7 +190,9 @@ export default function CourseSearch({ navigation, route }) {
             key={index}
             icon={category.icon}
             title={category.title}
-            onPress={() => navigation.navigate("courseListing", {categoryID: category.id})} // Chuyển đến trang danh sách khóa học theo danh mục
+            onPress={() =>
+              navigation.navigate("courseListing", { categoryID: category.id })
+            } // Chuyển đến trang danh sách khóa học theo danh mục
           />
         ))}
 
@@ -222,19 +226,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     marginBottom: 20,
     marginTop: 20,
-  },
-  searchIcon: {
-    position: "absolute",
-    left: 25,
-    zIndex: 1,
+    position: "relative",
   },
   searchInput: {
     flex: 1,
     height: 40,
     backgroundColor: "#F0F0F0",
     borderRadius: 20,
-    paddingLeft: 40,
+    paddingLeft: 15,
     paddingRight: 10,
+  },
+  searchIcon: {
+    position: "absolute",
+    right: 15,
   },
   sectionTitle: {
     fontSize: 18,
@@ -268,27 +272,34 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   courseCard: {
-    marginLeft: 15,
-    marginRight: 5,
+    marginRight: 15,
+    marginBottom: 20,
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 2 },
   },
   courseImage: {
     width: "100%",
     height: 150,
-    borderRadius: 10,
-    resizeMode: "cover",
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
   },
   courseContent: {
-    padding: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
   },
   titleRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
+    marginBottom: 5,
   },
   courseTitle: {
     fontSize: 16,
     fontWeight: "bold",
-    marginBottom: 5,
   },
   instructorName: {
     fontSize: 14,
@@ -296,14 +307,14 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   price: {
-    fontSize: 16,
-    color: "#00BCD4",
+    fontSize: 14,
     fontWeight: "bold",
+    color: "#00BCD4",
   },
   statsRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
+    marginTop: 5,
   },
   ratingContainer: {
     flexDirection: "row",
@@ -311,7 +322,7 @@ const styles = StyleSheet.create({
   },
   rating: {
     fontSize: 14,
-    color: "#FFD700",
+    fontWeight: "bold",
     marginLeft: 5,
   },
   reviews: {
@@ -320,7 +331,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   lessons: {
-    fontSize: 14,
+    fontSize: 12,
     color: "#666",
   },
   loadingContainer: {
@@ -334,7 +345,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   errorText: {
-    fontSize: 16,
     color: "red",
+    fontSize: 16,
   },
 });
