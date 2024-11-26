@@ -14,6 +14,7 @@ import { WebView } from "react-native-webview";
 import { useDispatch, useSelector } from "react-redux";
 import { findCourseByID, findCourseSimilar } from "../../../redux/courseSlice";
 import { addCart } from "../../../redux/cartSlice"; // Import action addCart
+import { useToast } from "../../../component/customToast";
 
 function BenefitItem({ icon, text }) {
   return (
@@ -73,6 +74,7 @@ export default function CourseDetailOverView({ navigation, route }) {
       ]);
     }
   }, [listCourseSimilar]);
+
   const handleAddToCart = async () => {
     try {
       setIsAdding(true);

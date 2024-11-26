@@ -29,7 +29,7 @@ export default function MyCourse({ navigation, route }) {
     } else if (activeTab === "COMPLETED") {
       dispatch(findCourseUserState2(user._id)); // Fetch COMPLETED courses
     } else {
-      dispatch(getAllCourseUser(user._id)); // Fetch all courses if "All" is selected 
+      dispatch(getAllCourseUser(user._id)); // Fetch all courses if "All" is selected
     }
   }, [activeTab, dispatch]);
 
@@ -43,8 +43,18 @@ export default function MyCourse({ navigation, route }) {
         style={styles.courseImage}
       />
       <View style={styles.courseInfo}>
-        <Text style={styles.courseTitle}>{course.title}</Text>
-        <Text style={styles.description}>{course.description} description</Text>
+        <Text style={styles.courseName}>{course.name}</Text>
+        <Text style={styles.instructor}>
+          {course.UserFollow[0]?.user.userName}{" "}
+        </Text>
+        <Text style={styles.price}>${course.price}</Text>
+
+        {/* Review, Rating, Lessons aligned horizontally */}
+        <View style={styles.reviewContainer}>
+          <Text style={styles.review}>{course.totalRating} reviews</Text>
+          <Text style={styles.totalRating}>{course.averageRating} ⭐</Text>
+          <Text style={styles.totalLessons}>{course.totalLessons} lessons</Text>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -122,7 +132,7 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
     alignItems: "center",
     flex: 1,
-    paddingVertical: 20,
+    paddingVertical: 15,
   },
   activeTab: {
     borderBottomWidth: 2,
@@ -138,11 +148,19 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   courseList: {
-    padding: 16,
+    paddingHorizontal: 16,
   },
   courseCard: {
     flexDirection: "row",
     marginBottom: 16,
+    backgroundColor: "#f9f9f9",
+    borderRadius: 8,
+    padding: 12,
+    elevation: 1,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
   courseImage: {
     width: 80,
@@ -154,15 +172,40 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
   },
-  courseTitle: {
+  courseName: {
     fontSize: 16,
     fontWeight: "bold",
     marginBottom: 4,
   },
-  description: {
+  instructor: {
     fontSize: 14,
     color: "#666",
-    marginBottom: 8,
+    marginBottom: 4,
+  },
+  price: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "#00BCD4",
+  },
+  // Review, Rating, Lessons Container aligned horizontally
+  reviewContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 4,
+  },
+  review: {
+    fontSize: 14,
+    marginRight: 10,
+    color: "#888",
+  },
+  totalRating: {
+    fontSize: 14,
+    marginRight: 10,
+    color: "#FFD700",
+  },
+  totalLessons: {
+    fontSize: 14,
+    color: "#888",
   },
   loadingContainer: {
     flex: 1,
@@ -184,6 +227,8 @@ const styles = StyleSheet.create({
   },
   bannerContainer: {
     padding: 16,
+    backgroundColor: "#f0f0f0",
+    marginBottom: 20,
   },
   banner: {
     backgroundColor: "#8B5CF6",
