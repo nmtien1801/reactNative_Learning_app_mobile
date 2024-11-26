@@ -238,6 +238,12 @@ const Project = () => {
                   component={ChangePassword}
                   options={{ header: () => {} }}
                 />
+
+                <Stack.Screen
+                  name="Lesson"
+                  component={LessonTabs}
+                  options={{ header: () => {} }}
+                />
               </>
             ) : (
               <>
@@ -256,11 +262,6 @@ const Project = () => {
                 <Stack.Screen name="ManageLesson" component={ManageLesson} />
                 <Stack.Screen name="FormCourse" component={FormCourse} />
                 <Stack.Screen name="FormLesson" component={FormLesson} />
-                <Stack.Screen
-                  name="Lesson"
-                  component={LessonTabs}
-                  options={{ header: () => {} }}
-                />
 
                 <Stack.Screen name="ManageProject" component={ManageProject} />
               </>
