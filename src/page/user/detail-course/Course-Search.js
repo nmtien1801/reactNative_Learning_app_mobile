@@ -89,7 +89,7 @@ export default function CourseSearch({ navigation, route }) {
           id: course.id, // Ensure each course has a unique id
           title: course.name,
           instructor: course.UserFollow[0]?.user.userName, // Assuming structure
-          price: course.Orders[0]?.OrderDetail?.price || "Free", // Fallback to 'Free' if no price
+          price: course.price || "Free", // Fallback to 'Free' if no price
           rating: course.averageRating.toFixed(2) || "0.0", // Default to 0.0 if no rating
           reviews: course.totalRating || 0, // Default to 0 reviews if not available
           lessons: course.totalLessons || 0, // Default to 0 lessons if not available
@@ -212,7 +212,7 @@ export default function CourseSearch({ navigation, route }) {
       </ScrollView>
 
       {/* Footer */}
-        <Footer navigation={navigation} route={route} showActive="search" />
+      <Footer navigation={navigation} route={route} showActive="search" />
     </View>
   );
 }

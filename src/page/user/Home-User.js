@@ -98,8 +98,8 @@ export default function HomeUser({ navigation, route }) {
               id: course.id, // Sử dụng kết hợp giữa id và index để đảm bảo tính duy nhất
               title: course.name,
               instructor: course.UserFollow[0]?.user.userName, // người tạo khóa học
-              price: course.Orders[0]?.OrderDetail?.price,
-              rating: course.averageRating,
+              price: course.price,
+              rating: course.averageRating.toFixed(2),
               reviews: course.totalRating,
               lessons: course.totalLessons,
               image: course.image,
@@ -115,8 +115,8 @@ export default function HomeUser({ navigation, route }) {
               id: course.id, // Sử dụng kết hợp giữa id và index để đảm bảo tính duy nhất
               title: course.name,
               instructor: course.UserFollow[0]?.user.userName, // người tạo khóa học
-              price: course.Orders[0]?.OrderDetail?.price,
-              rating: course.averageRating,
+              price: course.price,
+              rating: course.averageRating.toFixed(2),
               reviews: course.totalRating,
               lessons: course.totalLessons,
               image: course.image,
@@ -136,8 +136,8 @@ export default function HomeUser({ navigation, route }) {
           id: course.id, // Sử dụng kết hợp giữa id và index để đảm bảo tính duy nhất
           title: course.name,
           instructor: course.UserFollow[0]?.user.userName, // người tạo khóa học
-          price: course.Orders[0]?.OrderDetail?.price,
-          rating: course.averageRating,
+          price: course.price,
+          rating: course.averageRating.toFixed(2),
           reviews: course.totalRating,
           lessons: course.totalLessons,
           image: course.image,
