@@ -37,7 +37,10 @@ export default function CourseListing({ navigation }) {
           navigation.navigate("courseDetailOverView", { courseID: item.id })
         }
       >
-        <Image source={{ uri: item.image }} style={styles.courseImage} />
+        <Image
+          source={{ uri: `data:image/png;base64,${item.image}` }}
+          style={styles.courseImage}
+        />
       </TouchableOpacity>
       <View style={styles.courseDetails}>
         <TouchableOpacity
@@ -53,7 +56,8 @@ export default function CourseListing({ navigation }) {
         <Text style={styles.price}>${item.Orders[0]?.OrderDetail?.price}</Text>
         <View style={styles.ratingContainer}>
           <Ionicons name="star" size={16} color="#FFD700" />
-          <Text style={styles.rating}>{item.averageRating}</Text>
+
+          <Text style={styles.rating}>{item.averageRating.toFixed(2)}</Text>
           <Text style={styles.reviews}>({item.totalRating} reviews)</Text>
         </View>
         <Text style={styles.lessons}>{item.totalLessons} lessons</Text>

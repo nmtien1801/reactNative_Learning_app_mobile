@@ -124,7 +124,7 @@ const Project = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="chatBox">
+      <Stack.Navigator initialRouteName="Login">
         {!isLogin ? (
           <>
             <Stack.Screen

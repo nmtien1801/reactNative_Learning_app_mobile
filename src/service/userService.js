@@ -4,7 +4,7 @@ import { Platform } from "react-native";
 
 const baseUrl =
   Platform.OS === "android"
-    ? "http://192.168.1.6:8080/api" // URL cho Android và iOS
+    ? "http://172.16.0.159:8080/api" // URL cho Android và iOS
     : "http://localhost:8080/api"; // URL cho web hoặc môi trường khác
 
 const handleLoginApi = (email, password) => {
@@ -96,7 +96,11 @@ const addCourseToCart = (courseID, userID) => {
     "and userID:",
     userID
   );
-  return axios.post(`${baseUrl}/addCourseToCart`, { courseID, userID });
+  // Khi sử dụng query string trong URL cho API nhận
+  return axios.post(
+    `${baseUrl}/addCourseToCart?userID=${userID}&courseID=${courseID}`,
+    {}
+  );
 };
 const deleteCartSelected = async (courseID) => {
   console.log("courseID", courseID);
@@ -138,6 +142,22 @@ const createReview = async (courseID, userID, rating) => {
   }
 };
 
+const buyCourseService = async (courseIDs, userID) => {
+  console.log("userID", userID);
+  console.log("courseIDs", courseIDs); // Ví dụ: "1,2,3"
+  try {
+    // Gửi request tới API với userID và courseIDs (dạng chuỗi)
+    const response = await axios.post(`${baseUrl}/buyCourses`, {
+      userID,
+      courseIDs,
+    });
+    return response.data; // Trả về dữ liệu từ server
+  } catch (error) {
+    console.error("Lỗi khi mua khóa học:", error.response || error.message);
+    throw error;
+  }
+};
+
 export {
   handleLoginApi,
   logOutUser,
@@ -164,4 +184,5 @@ export {
   findInspireCoursesService,
   getLessonByCourseService,
   createReview,
+  buyCourseService,
 };
