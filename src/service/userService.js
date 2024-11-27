@@ -173,6 +173,11 @@ const updateBuyCourseService = async (courseID) => {
   return axios.put(`${baseUrl}/updateBuyCourse`, { courseID });
 };
 
+const findCourseByCategoryService = (categoryID) => {
+  
+  return axios.get(`${baseUrl}/findCourseByCategory/${categoryID}`);
+}
+
 export {
   handleLoginApi,
   logOutUser,
@@ -204,4 +209,5 @@ export {
   updateGoIngCourseService,
   buyCourseService,
   updateBuyCourseService,
+  findCourseByCategoryService,
 };
