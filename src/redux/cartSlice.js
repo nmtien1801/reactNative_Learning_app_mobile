@@ -27,14 +27,10 @@ export const addCart = createAsyncThunk(
   async ({ courseID, userID }, thunkAPI) => {
     try {
       const response = await addCourseToCart(courseID, userID);
-      console.log("response", response); // Kiểm tra cấu trúc dữ liệu trả về từ API
-
-      // Kiểm tra EC để xác định trạng thái thành công hay thất bại
+      console.log("response", response);
       if (response.data.EC === 0) {
-        // Nếu thành công, trả về dữ liệu trong DT
         return response.data.DT;
       } else {
-        // Nếu có lỗi, từ chối với thông điệp lỗi
         return thunkAPI.rejectWithValue(response.data.EM);
       }
     } catch (error) {
