@@ -82,7 +82,7 @@ export default function CourseDetailOverView({ navigation, route }) {
 
 
   const handleAddToCart = async () => {
-    if (isAdding) return; // Đảm bảo không thêm khóa học khi đang trong quá trình thêm
+    if (isAdding) return; // Prevent adding if already in progress
 
     try {
       setIsAdding(true);
@@ -94,12 +94,17 @@ export default function CourseDetailOverView({ navigation, route }) {
         userID
       );
 
-      // Dispatch action Redux để thêm khóa học vào giỏ hàng
+      // Dispatch action to add the course to the cart
       const resultAction = await dispatch(addCart({ courseID, userID }));
 
-      // Kiểm tra xem action có thành công hay không
+      // Check if the action was successful
       if (addCart.fulfilled.match(resultAction)) {
-        toast("Course added to cart successfully!", "success");
+        // If the course is already in the cart, show a specific message
+        if (resultAction.payload.EC === 1) {
+          toast(resultAction.payload.EM, "info"); // Toast for already in cart
+        } else {
+          toast("Course added to cart successfully!", "success");
+        }
       } else {
         toast(
           `Error: ${resultAction.payload || "Failed to add course to cart"}`,
@@ -107,7 +112,7 @@ export default function CourseDetailOverView({ navigation, route }) {
         );
       }
 
-      setIsAdding(false); // Đặt trạng thái isAdding về false sau khi hoàn tất
+      setIsAdding(false); // Reset the isAdding state after completion
     } catch (error) {
       setIsAdding(false);
       setAddError(error.message || "Failed to add course to cart");

@@ -22,19 +22,16 @@ export const getCartByUser = createAsyncThunk(
   }
 );
 
+// Redux async thunk to add course to cart
 export const addCart = createAsyncThunk(
   "cart/addCourseToCart",
   async ({ courseID, userID }, thunkAPI) => {
     try {
       const response = await addCourseToCart(courseID, userID);
-      console.log("response", response); // Kiểm tra cấu trúc dữ liệu trả về từ API
-
-      // Kiểm tra EC để xác định trạng thái thành công hay thất bại
+      console.log("response", response);
       if (response.data.EC === 0) {
-        // Nếu thành công, trả về dữ liệu trong DT
         return response.data.DT;
       } else {
-        // Nếu có lỗi, từ chối với thông điệp lỗi
         return thunkAPI.rejectWithValue(response.data.EM);
       }
     } catch (error) {
@@ -82,17 +79,15 @@ const cartSlice = createSlice({
       });
 
     builder
-      // When adding a course to the cart is successful
       .addCase(addCart.pending, (state) => {
         state.isLoading = true;
         state.isError = false;
       })
       .addCase(addCart.fulfilled, (state, action) => {
         state.isLoading = false;
-        // Thêm khóa học vào giỏ hàng (state.listCart sẽ được cập nhật với dữ liệu trả về từ DT)
+        // Add the course to the cart (state.listCart will be updated with the response data)
         state.listCart = action.payload;
       })
-
       .addCase(addCart.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
