@@ -40,7 +40,7 @@ export default function UserProfileScreen({ navigation, route }) {
     name: user.userName,
     title: user.title,
     bannerImage: require("../../../img/User_Profile/UserProfile1.jpg"),
-    profileImage: require("../../../img/User_Profile/User_Profile.jpg"), // chưa sửa
+    profileImage: user.image, // chưa sửa
     stats: {
       save: courseOfUser.totalCourses,
       ongoing: courseOfUser.totalCoursesState1,

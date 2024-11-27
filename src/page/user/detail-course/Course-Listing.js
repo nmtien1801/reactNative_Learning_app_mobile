@@ -14,14 +14,24 @@ import { useSelector, useDispatch } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import Footer from "../../../component/footer/FooterUser";
 import { searchCourse } from "../../../redux/courseSlice"; // Import the searchCourse action
+import { findCourseByCategory } from "../../../redux/courseSlice";
 
-export default function CourseListing({ navigation }) {
+export default function CourseListing({ navigation , route}) {
   const dispatch = useDispatch();
-  const { listCourse, isLoading, isError } = useSelector(
+  const { listCourse, isLoading, isError, listCourseByCategory } = useSelector(
     (state) => state.course
   );
-
+  
   const [searchTerm, setSearchTerm] = useState(""); // State for search term
+  const categoryID = route.params?.categoryID;    // tìm theo categoryID từ route
+  console.log("route: ", route.params,categoryID, "listCourse: ", listCourse);
+
+  // lọc theo category
+  useEffect(() => {
+    if (categoryID) {
+      dispatch(findCourseByCategory(categoryID));
+    }
+  }, []);
 
   // Handle search when search button is pressed
   const handleSearch = () => {
@@ -38,7 +48,7 @@ export default function CourseListing({ navigation }) {
         }
       >
         <Image
-          source={{ uri: `data:image/png;base64,${item.image}` }}
+          source={{ uri: item.image }}
           style={styles.courseImage}
         />
       </TouchableOpacity>
