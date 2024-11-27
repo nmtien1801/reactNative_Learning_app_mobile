@@ -4,7 +4,7 @@ import { Platform } from "react-native";
 
 const baseUrl =
   Platform.OS === "android"
-    ? "http://192.168.1.6:8080/api" // URL cho Android và iOS
+    ? "http://172.16.0.159:8080/api" // URL cho Android và iOS
     : "http://localhost:8080/api"; // URL cho web hoặc môi trường khác
 
 const handleTeacherOverview = (teacherID) => {
@@ -33,7 +33,7 @@ const createLessonService = (data) => {
 
 const deleteVideoService = (videoID) => {
   return axios.delete(`${baseUrl}/deleteVideo/${videoID}`);
-}
+};
 
 const updateLessonService = (data) => {
   return axios.put(`${baseUrl}/updateLesson`, data);
