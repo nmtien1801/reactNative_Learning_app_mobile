@@ -166,6 +166,7 @@ import {
   Animated,
   PanResponder,
   Dimensions,
+  Platform,
 } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { GiftedChat } from "react-native-gifted-chat";
@@ -176,7 +177,11 @@ const ChatBox = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   // Kết nối tới socket.io server
-  const socket = io("http://172.16.0.159:8080");
+  const url =
+    Platform.OS === "android"
+      ? "http://192.168.1.6:8080/api" // URL cho Android và iOS
+      : "http://localhost:8080/api"; // URL cho web hoặc môi trường khác
+  const socket = io(url);
 
   useEffect(() => {
     socket.on("receive_message", (message) => {
@@ -272,6 +277,8 @@ const ChatBox = () => {
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
+    right: 10, // Giữ chatbox ở bên phải màn hình
+    bottom: 100, // Vị trí cách đáy một khoảng nhỏ
     zIndex: 1000,
   },
   chatIcon: {

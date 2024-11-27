@@ -15,6 +15,7 @@ import { buyCourse } from "../../../redux/orderSlide";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useToast } from "../../../component/customToast";
+import {updateBuyCourse} from "../../../redux/courseSlice";
 
 const Cart = () => {
   const user = useSelector((state) => state.auth.user);
@@ -132,6 +133,8 @@ const Cart = () => {
 
       if (buyCourse.fulfilled.match(resultAction)) {
         toast("Purchase successful!", "success");
+        // cập nhật trạng thái khóa học đó là 0 (đã mua)
+        await dispatch(updateBuyCourse(courseIDs));
 
         // Sử dụng handleRemoveSelected để xóa các khóa học đã mua khỏi giỏ hàng
         handleRemoveSelected(); // Gọi hàm xóa khóa học đã chọn
@@ -148,6 +151,7 @@ const Cart = () => {
       toast(`Error during purchase: ${error.message}`, "error");
     }
   };
+
   if (isLoading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
   }

@@ -77,9 +77,6 @@ export default function CourseSearch({ navigation, route }) {
   const [courses, setCourses] = useState([]);
   const [keyword, setKeyword] = useState(""); // Để lưu từ khóa tìm kiếm
 
-console.log("courses: ", courses);
-
-
   // Fetch courses and update state
   useEffect(() => {
     dispatch(findAllCourses());
@@ -159,7 +156,11 @@ console.log("courses: ", courses);
 
         {/* Hot Topics */}
         <Text style={styles.sectionTitle}>Hot Topics</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} nestedScrollEnabled={true}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          nestedScrollEnabled={true}
+        >
           {["Java", "Python", "SQL", "JavaScript", "Photoshop"].map(
             (topic, index) => (
               <HotTopic
@@ -195,7 +196,11 @@ console.log("courses: ", courses);
 
         {/* Recommended Courses */}
         <Text style={styles.sectionTitle}>Recommended for You</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} nestedScrollEnabled={true}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          nestedScrollEnabled={true}
+        >
           {courses.map((course) => (
             <CourseCard
               key={course.id} // Use the course id to ensure unique key
@@ -207,7 +212,7 @@ console.log("courses: ", courses);
       </ScrollView>
 
       {/* Footer */}
-      <Footer navigation={navigation} route={route} showActive="search" />
+        <Footer navigation={navigation} route={route} showActive="search" />
     </View>
   );
 }
@@ -280,7 +285,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
   },
   courseImage: {
-    width: "100%",
+    // width: "100%",
     height: 150,
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,

@@ -6,7 +6,10 @@ import {
   findCourseSimilarService,
   searchCourseService,
   findInspireCoursesService,
-  findCourseByCategoryService
+  findCourseByCategoryService,
+  updateSaveCourseService,
+  updateGoIngCourseService,
+  updateBuyCourseService,
 } from "../service/userService";
 
 const initialState = {
@@ -16,6 +19,8 @@ const initialState = {
   listCart: [], // Giỏ hàng sẽ lưu trữ các khóa học đã thêm
   courseDetail: {},
   listCourseSimilar: [],
+  listSave: [],
+  isSave: null,
   isLogin: false, // Kiểm tra xem người dùng đã đăng nhập chưa
   isLoading: false,
   isError: false,
@@ -79,6 +84,32 @@ export const findCourseByCategory = createAsyncThunk(
   }
 );
 
+export const updateSaveCourse = createAsyncThunk(
+  "course/updateSaveCourse",
+  async ({ courseID, state }, thunkAPI) => {
+    const response = await updateSaveCourseService(courseID, state);
+    return response.data;
+  }
+);
+
+export const updateGoIngCourse = createAsyncThunk(
+  "course/updateGoIngCourse",
+  async (courseID, thunkAPI) => {
+    const response = await updateGoIngCourseService(courseID);
+    return response.data;
+  }
+);
+
+export const updateBuyCourse = createAsyncThunk(
+  "course/updateBuyCourse",
+  async (courseID, thunkAPI) => {
+    console.log("idsdsds: ", courseID);
+    
+    const response = await updateBuyCourseService(courseID);
+    return response.data;
+  }
+);
+
 // Reducer
 const courseSlice = createSlice({
   name: "course",
@@ -103,7 +134,18 @@ const courseSlice = createSlice({
     clearCart: (state) => {
       state.listCart = [];
     },
+    saveCourse: (state, action) => {
+      state.listSave.push(action.payload);
+    },
+
+    // Remove course from save
+    removeCourse: (state, action) => {
+      state.listSave = state.listSave.filter(
+        (course) => course.id !== action.payload.id
+      );
+    },
   },
+
   extraReducers: (builder) => {
     // findAllCourses
     builder
@@ -230,11 +272,67 @@ const courseSlice = createSlice({
         state.isError = true;
         state.errorMessage = action.error.message;
       });
-      
+
+    // updateSaveCourse
+    builder
+      .addCase(updateSaveCourse.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.errorMessage = "";
+        // state.isSave = null;
+      })
+      .addCase(updateSaveCourse.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSave = action.payload.DT;
+      })
+      .addCase(updateSaveCourse.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.errorMessage = action.error.message;
+      });
+
+    // updateGoIngCourse
+    builder
+      .addCase(updateGoIngCourse.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.errorMessage = "";
+      })
+      .addCase(updateGoIngCourse.fulfilled, (state, action) => {
+        state.isLoading = false;
+      })
+      .addCase(updateGoIngCourse.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.errorMessage = action.error.message;
+      });
+
+      // updateBuyCourse
+    builder
+    .addCase(updateBuyCourse.pending, (state) => {
+      state.isLoading = true;
+      state.isError = false;
+      state.errorMessage = "";
+    })
+    .addCase(updateBuyCourse.fulfilled, (state, action) => {
+      state.isLoading = false;
+    })
+    .addCase(updateBuyCourse.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.errorMessage = action.error.message;
+    });
+
   },
 });
 
 // Export actions
-export const { addToCart, removeFromCart, clearCart } = courseSlice.actions;
+export const {
+  addToCart,
+  removeFromCart,
+  clearCart,
+  saveCourse,
+  removeCourse,
+} = courseSlice.actions;
 
 export default courseSlice.reducer;

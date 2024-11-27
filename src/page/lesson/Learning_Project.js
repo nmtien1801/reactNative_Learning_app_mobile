@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   projectImage: {
-    width: "100%",
+    // width: "100%",
     height: 180,
     borderRadius: 8,
     resizeMode: "contain",

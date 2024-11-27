@@ -12,7 +12,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { WebView } from "react-native-webview";
 import { useDispatch, useSelector } from "react-redux";
-import { findCourseByID, findCourseSimilar } from "../../../redux/courseSlice";
+import { findCourseByID, findCourseSimilar , updateSaveCourse} from "../../../redux/courseSlice";
 import { addCart } from "../../../redux/cartSlice"; // Import action addCart
 import { useToast } from "../../../component/customToast";
 
@@ -31,8 +31,8 @@ function BenefitItem({ icon, text }) {
 }
 
 export default function CourseDetailOverView({ navigation, route }) {
-  const toast = useToast();
   const user = useSelector((state) => state.auth.user); // Lấy thông tin user
+  const isSave = useSelector((state) => state.course.isSave); // Lấy thông tin user
   const courseDetail = useSelector((state) => state.course.courseDetail); // lấy thông tin top teacher
   const listCourseSimilar = useSelector(
     (state) => state.course.listCourseSimilar
@@ -40,6 +40,7 @@ export default function CourseDetailOverView({ navigation, route }) {
   const [course, setCourse] = useState({});
   const [listSimilar, setListSimilar] = useState([]); // Danh sách course tương tự
   const dispatch = useDispatch();
+  const toast = useToast();
 
   const [isAdding, setIsAdding] = useState(false); // Lưu trạng thái khi thêm vào giỏ hàng
   const [addError, setAddError] = useState("");
@@ -59,7 +60,6 @@ export default function CourseDetailOverView({ navigation, route }) {
   useEffect(() => {
     if (listCourseSimilar.length !== 0) {
       setListSimilar([
-        ...listSimilar,
         ...listCourseSimilar.map((course) => ({
           id: course.id, // Sử dụng kết hợp giữa id và index để đảm bảo tính duy nhất
           title: course.name,
@@ -68,53 +68,18 @@ export default function CourseDetailOverView({ navigation, route }) {
           rating: course.averageRating,
           reviews: course.totalRating,
           lessons: course.totalLessons,
-          image: "https://v0.dev/placeholder.svg?height=200&width=200",
+          image: course.image,
           bookmarked: false,
+          state: course.state,
         })),
       ]);
     }
   }, [listCourseSimilar]);
 
-  // const handleAddToCart = async () => {
-  //   try {
-  //     setIsAdding(true);
+  useEffect(() => {
+    dispatch(findCourseSimilar(courseID)); 
+  }, [isSave]);
 
-  //     // const userID = 1; // Thay thế bằng userID thực tế
-  //     // const courseID = 5; // Thay thế bằng courseID thực tế
-
-  //     console.log(
-  //       "Adding course to cart with courseID:",
-  //       courseID,
-  //       "and userID:",
-  //       userID
-  //     );
-
-  //     // Gửi yêu cầu GET hoặc POST với query parameters (Tùy API yêu cầu POST hay GET)
-  //     const response = await axios.post(
-  //       `http://localhost:8080/api/addCourseToCart?userID=${userID}&courseID=${courseID}`,
-  //       {},
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json", // Bạn có thể bỏ qua phần body nếu API không yêu cầu nó
-  //         },
-  //       }
-  //     );
-
-  //     console.log("Response:", response.data); // In ra kết quả trả về từ API
-
-  //     // Nếu thành công
-  //     setIsAdding(false);
-  //     toast("Course added to cart successfully!", "success");
-  //   } catch (error) {
-  //     setIsAdding(false);
-  //     setAddError(error.message || "Failed to add course to cart");
-  //     console.error(
-  //       "Error adding course to cart:",
-  //       error.response ? error.response.data : error.message
-  //     );
-  //     toast("Failed to add course to cart", "error");
-  //   }
-  // };
 
   const handleAddToCart = async () => {
     if (isAdding) return; // Prevent adding if already in progress
@@ -159,6 +124,16 @@ export default function CourseDetailOverView({ navigation, route }) {
     }
   };
 
+  const handleSaveCourse = async (courseID, state) => {
+    let res = await dispatch(updateSaveCourse({ courseID, state }));
+
+    if (res.payload.EC == 0) {
+      toast(res.payload.EM);
+    } else {
+      toast(res.payload.EM, "error");
+    }
+  };
+
   const CourseCard = ({
     id,
     title,
@@ -169,6 +144,7 @@ export default function CourseDetailOverView({ navigation, route }) {
     lessons,
     image,
     bookmarked,
+    state,
   }) => (
     <TouchableOpacity
       style={styles.card}
@@ -189,7 +165,10 @@ export default function CourseDetailOverView({ navigation, route }) {
             <Text style={styles.lessons}>{lessons} lessons</Text>
           </View>
         </View>
-        <TouchableOpacity style={styles.bookmarkButton}>
+        <TouchableOpacity
+          style={styles.bookmarkButton}
+          onPress={() => handleSaveCourse(id, state)}
+        >
           <Ionicons
             name={bookmarked ? "bookmark" : "bookmark-outline"}
             size={24}

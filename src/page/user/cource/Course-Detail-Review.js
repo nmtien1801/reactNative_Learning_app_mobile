@@ -46,8 +46,6 @@ export default function CourseDetailReview({ navigation, route }) {
     }
   }, [listReview]);
 
-  console.log("reviews: ", reviews);
-
   const StarRating = ({ rating }) => {
     return (
       <View style={styles.starContainer}>

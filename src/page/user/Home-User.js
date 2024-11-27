@@ -29,6 +29,7 @@ import {
   findAllCourses,
   findPopularCourses,
   findInspireCourses,
+  updateSaveCourse,
 } from "../../redux/courseSlice";
 import { getTopTeacher } from "../../redux/userSlice";
 
@@ -44,6 +45,7 @@ export default function HomeUser({ navigation, route }) {
     (state) => state.course.listCourseInspire
   ); // lấy thông tin course truyền cảm hứng
   const topTeacher = useSelector((state) => state.user.topTeacher); // lấy thông tin top teacher
+  const isSave = useSelector((state) => state.course.isSave); // lấy thông tin đã lưu khóa học chưa
   const dispatch = useDispatch();
   const toast = useToast();
 
@@ -68,11 +70,26 @@ export default function HomeUser({ navigation, route }) {
     dispatch(findInspireCourses());
   }, []);
 
+  useEffect(() => {
+    dispatch(findAllCourses());
+    dispatch(findPopularCourses());
+    dispatch(findInspireCourses());
+  }, [isSave]);
+
+  const handleSaveCourse = async (courseID, state) => {
+    let res = await dispatch(updateSaveCourse({ courseID, state }));
+
+    if (res.payload.EC == 0) {
+      toast(res.payload.EM);
+    } else {
+      toast(res.payload.EM, "error");
+    }
+  };
+
   // popular + recommended for you courses
   useEffect(() => {
     if (listCourse.length !== 0 && listCoursePopular.length !== 0) {
       setSection([
-        ...section,
         {
           id: "1",
           title: "Popular courses",
@@ -86,6 +103,7 @@ export default function HomeUser({ navigation, route }) {
               reviews: course.totalRating,
               lessons: course.totalLessons,
               image: course.image,
+              state: course.state,
             })),
           ],
         },
@@ -102,6 +120,7 @@ export default function HomeUser({ navigation, route }) {
               reviews: course.totalRating,
               lessons: course.totalLessons,
               image: course.image,
+              state: course.state,
             })),
           ],
         },
@@ -113,7 +132,6 @@ export default function HomeUser({ navigation, route }) {
   useEffect(() => {
     if (listCourseInspire.length !== 0) {
       setCourses([
-        ...courses,
         ...listCourseInspire.map((course, index) => ({
           id: course.id, // Sử dụng kết hợp giữa id và index để đảm bảo tính duy nhất
           title: course.name,
@@ -123,6 +141,7 @@ export default function HomeUser({ navigation, route }) {
           reviews: course.totalRating,
           lessons: course.totalLessons,
           image: course.image,
+          state: course.state,
         })),
       ]);
     }
@@ -139,7 +158,7 @@ export default function HomeUser({ navigation, route }) {
           rating: teacher.averageRating,
           reviews: teacher.averageRating,
           lessons: teacher.totalLessons,
-          image: "https://v0.dev/placeholder.svg?height=200&width=200",
+          image: teacher.image,
         })),
       ]);
     }
@@ -165,7 +184,9 @@ export default function HomeUser({ navigation, route }) {
       <View style={styles.courseContent}>
         <View style={styles.titleRow}>
           <Text style={styles.courseTitle}>{course.title}</Text>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => handleSaveCourse(course.id, course.state)}
+          >
             <Bookmark size={24} color="#00BCD4" />
           </TouchableOpacity>
         </View>
@@ -222,7 +243,9 @@ export default function HomeUser({ navigation, route }) {
       <View style={styles.courseContent}>
         <View style={styles.titleRow}>
           <Text style={styles.courseTitle}>{course.title}</Text>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => handleSaveCourse(course.id, course.state)}
+          >
             <Bookmark size={24} color="#00BCD4" />
           </TouchableOpacity>
         </View>
@@ -330,6 +353,7 @@ export default function HomeUser({ navigation, route }) {
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.container}
+          nestedScrollEnabled={true} // Kích hoạt cuộn lồng nhau -> do lồng trong scrollView
         />
 
         {/* course inspires Section */}
@@ -521,7 +545,7 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   courseImage: {
-    width: "100%",
+    // width: "100%",
     height: 160,
     backgroundColor: "#f0f0f0",
     resizeMode: "contain",
@@ -586,7 +610,7 @@ const styles = StyleSheet.create({
     marginRight: 16,
   },
   teacherImage: {
-    width: "100%",
+    // width: "100%",
     height: 160,
     borderRadius: 8,
     marginBottom: 8,

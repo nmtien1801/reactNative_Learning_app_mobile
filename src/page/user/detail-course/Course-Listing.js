@@ -38,7 +38,7 @@ export default function CourseListing({ navigation }) {
         }
       >
         <Image
-          source={{ uri: `data:image/png;base64,${item.image}` }}
+          source={{ uri: item.image }}
           style={styles.courseImage}
         />
       </TouchableOpacity>
@@ -110,7 +110,7 @@ export default function CourseListing({ navigation }) {
         )}
       </ScrollView>
 
-      <Footer navigation={navigation} showActive="search" />
+        <Footer navigation={navigation} showActive="search" />
     </View>
   );
 }

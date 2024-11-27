@@ -269,11 +269,41 @@ const Project = () => {
                   component={ManageCourse}
                   options={{ header: () => {} }}
                 />
+
                 <Stack.Screen name="ManageLesson" component={ManageLesson} />
                 <Stack.Screen name="FormCourse" component={FormCourse} />
                 <Stack.Screen name="FormLesson" component={FormLesson} />
 
                 <Stack.Screen name="ManageProject" component={ManageProject} />
+
+                {/* ================ search course */}
+                <Stack.Screen
+                  name="courseSearch"
+                  component={CourseSearch}
+                  options={{ header: () => {} }}
+                />
+                <Stack.Screen
+                  name="courseListing"
+                  component={CourseListing}
+                  options={{ header: () => {} }}
+                />
+
+                {/* setting */}
+                <Stack.Screen
+                  name="setting"
+                  component={Setting}
+                  options={({ navigation, route }) => ({
+                    header: () => (
+                      <HeaderSetting navigation={navigation} route={route} />
+                    ),
+                  })}
+                />
+
+                <Stack.Screen
+                  name="changePassword"
+                  component={ChangePassword}
+                  options={{ header: () => {} }}
+                />
               </>
             )}
           </>
