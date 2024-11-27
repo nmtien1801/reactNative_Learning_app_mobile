@@ -9,6 +9,7 @@ import {
   findCourseByCategoryService,
   updateSaveCourseService,
   updateGoIngCourseService,
+  updateBuyCourseService,
 } from "../service/userService";
 
 const initialState = {
@@ -95,6 +96,16 @@ export const updateGoIngCourse = createAsyncThunk(
   "course/updateGoIngCourse",
   async (courseID, thunkAPI) => {
     const response = await updateGoIngCourseService(courseID);
+    return response.data;
+  }
+);
+
+export const updateBuyCourse = createAsyncThunk(
+  "course/updateBuyCourse",
+  async (courseID, thunkAPI) => {
+    console.log("idsdsds: ", courseID);
+    
+    const response = await updateBuyCourseService(courseID);
     return response.data;
   }
 );
@@ -295,6 +306,23 @@ const courseSlice = createSlice({
         state.isError = true;
         state.errorMessage = action.error.message;
       });
+
+      // updateBuyCourse
+    builder
+    .addCase(updateBuyCourse.pending, (state) => {
+      state.isLoading = true;
+      state.isError = false;
+      state.errorMessage = "";
+    })
+    .addCase(updateBuyCourse.fulfilled, (state, action) => {
+      state.isLoading = false;
+    })
+    .addCase(updateBuyCourse.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.errorMessage = action.error.message;
+    });
+
   },
 });
 
