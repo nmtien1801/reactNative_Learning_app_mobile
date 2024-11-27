@@ -22,6 +22,7 @@ export const getCartByUser = createAsyncThunk(
   }
 );
 
+// Redux async thunk to add course to cart
 export const addCart = createAsyncThunk(
   "cart/addCourseToCart",
   async ({ courseID, userID }, thunkAPI) => {
@@ -78,17 +79,15 @@ const cartSlice = createSlice({
       });
 
     builder
-      // When adding a course to the cart is successful
       .addCase(addCart.pending, (state) => {
         state.isLoading = true;
         state.isError = false;
       })
       .addCase(addCart.fulfilled, (state, action) => {
         state.isLoading = false;
-        // Thêm khóa học vào giỏ hàng (state.listCart sẽ được cập nhật với dữ liệu trả về từ DT)
+        // Add the course to the cart (state.listCart will be updated with the response data)
         state.listCart = action.payload;
       })
-
       .addCase(addCart.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
