@@ -158,7 +158,7 @@ export default function HomeUser({ navigation, route }) {
           rating: teacher.averageRating,
           reviews: teacher.averageRating,
           lessons: teacher.totalLessons,
-          image: "https://v0.dev/placeholder.svg?height=200&width=200",
+          image: teacher.image,
         })),
       ]);
     }
