@@ -37,7 +37,10 @@ export default function CourseListing({ navigation }) {
           navigation.navigate("courseDetailOverView", { courseID: item.id })
         }
       >
-        <Image source={{ uri: item.image }} style={styles.courseImage} />
+        <Image
+          source={{ uri: `data:image/png;base64,${item.image}` }}
+          style={styles.courseImage}
+        />
       </TouchableOpacity>
       <View style={styles.courseDetails}>
         <TouchableOpacity
