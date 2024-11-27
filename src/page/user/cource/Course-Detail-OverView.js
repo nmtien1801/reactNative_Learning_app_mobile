@@ -12,7 +12,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { WebView } from "react-native-webview";
 import { useDispatch, useSelector } from "react-redux";
-import { findCourseByID, findCourseSimilar } from "../../../redux/courseSlice";
+import { findCourseByID, findCourseSimilar , updateSaveCourse} from "../../../redux/courseSlice";
 import { addCart } from "../../../redux/cartSlice"; // Import action addCart
 import { useToast } from "../../../component/customToast";
 
@@ -32,6 +32,7 @@ function BenefitItem({ icon, text }) {
 
 export default function CourseDetailOverView({ navigation, route }) {
   const user = useSelector((state) => state.auth.user); // Lấy thông tin user
+  const isSave = useSelector((state) => state.course.isSave); // Lấy thông tin user
   const courseDetail = useSelector((state) => state.course.courseDetail); // lấy thông tin top teacher
   const listCourseSimilar = useSelector(
     (state) => state.course.listCourseSimilar
@@ -39,12 +40,13 @@ export default function CourseDetailOverView({ navigation, route }) {
   const [course, setCourse] = useState({});
   const [listSimilar, setListSimilar] = useState([]); // Danh sách course tương tự
   const dispatch = useDispatch();
+  const toast = useToast();
 
   const [isAdding, setIsAdding] = useState(false); // Lưu trạng thái khi thêm vào giỏ hàng
   const [addError, setAddError] = useState("");
 
   const courseID = route.params.params.courseID; // Lấy courseID từ route params
-  const userID = user._id; 
+  const userID = user._id;
 
   useEffect(() => {
     dispatch(findCourseByID(courseID)); // Gửi action để lấy thông tin course
@@ -55,11 +57,9 @@ export default function CourseDetailOverView({ navigation, route }) {
     setCourse(courseDetail);
   }, [courseDetail]);
 
-  
   useEffect(() => {
     if (listCourseSimilar.length !== 0) {
       setListSimilar([
-        ...listSimilar,
         ...listCourseSimilar.map((course) => ({
           id: course.id, // Sử dụng kết hợp giữa id và index để đảm bảo tính duy nhất
           title: course.name,
@@ -70,10 +70,15 @@ export default function CourseDetailOverView({ navigation, route }) {
           lessons: course.totalLessons,
           image: course.image,
           bookmarked: false,
+          state: course.state,
         })),
       ]);
     }
   }, [listCourseSimilar]);
+
+  useEffect(() => {
+    dispatch(findCourseSimilar(courseID)); 
+  }, [isSave]);
 
   const handleAddToCart = async () => {
     try {
@@ -115,6 +120,16 @@ export default function CourseDetailOverView({ navigation, route }) {
     }
   };
 
+  const handleSaveCourse = async (courseID, state) => {
+    let res = await dispatch(updateSaveCourse({ courseID, state }));
+
+    if (res.payload.EC == 0) {
+      toast(res.payload.EM);
+    } else {
+      toast(res.payload.EM, "error");
+    }
+  };
+
   const CourseCard = ({
     id,
     title,
@@ -125,6 +140,7 @@ export default function CourseDetailOverView({ navigation, route }) {
     lessons,
     image,
     bookmarked,
+    state,
   }) => (
     <TouchableOpacity
       style={styles.card}
@@ -145,7 +161,10 @@ export default function CourseDetailOverView({ navigation, route }) {
             <Text style={styles.lessons}>{lessons} lessons</Text>
           </View>
         </View>
-        <TouchableOpacity style={styles.bookmarkButton}>
+        <TouchableOpacity
+          style={styles.bookmarkButton}
+          onPress={() => handleSaveCourse(id, state)}
+        >
           <Ionicons
             name={bookmarked ? "bookmark" : "bookmark-outline"}
             size={24}

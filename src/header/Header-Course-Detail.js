@@ -12,6 +12,8 @@ import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 
 const HeaderCourseDetail = ({ navigation, route }) => {
+  console.log("HeaderCourseDetail", route);
+  
   return (
     <View style={styles.header}>
       <TouchableOpacity

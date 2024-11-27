@@ -13,7 +13,7 @@ import Footer from "../../component/footer/FooterUser";
 import { useToast } from "../../component/customToast";
 
 import { useDispatch, useSelector } from "react-redux";
-import { getCourseOfUser } from "../../redux/userSlice";
+import { getSaveCourseOfUser } from "../../redux/userSlice";
 
 
 
@@ -25,7 +25,7 @@ export default function UserProfileScreen({ navigation, route }) {
   const [courseOfUser, setCourseOfUser] = useState([]); //state lưu danh sách khóa học của user
 
   useEffect(() => {
-    dispatch(getCourseOfUser(user._id)); // id user login
+    dispatch(getSaveCourseOfUser(user._id)); // id user login
   }, []);
 
   // course của user

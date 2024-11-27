@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { WebView } from "react-native-webview";
-import HeaderCourseDetail from "../../header/Header-Course-Detail";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function Header({ navigation, route }) {

@@ -138,6 +138,18 @@ const createReview = async (courseID, userID, rating) => {
   }
 };
 
+const updateSaveCourseService = (courseID, state) => {
+  return axios.put(`${baseUrl}/updateSaveCourse`, { courseID, state });
+}
+
+const getSaveCourseOfUserService = (userID) => {
+  return axios.get(`${baseUrl}/getSaveCourseOfUser/${userID}`);
+}
+
+const updateGoIngCourseService = (courseID) => {
+  return axios.put(`${baseUrl}/updateGoIngCourse`, { courseID });
+}
+
 export {
   handleLoginApi,
   logOutUser,
@@ -164,4 +176,7 @@ export {
   findInspireCoursesService,
   getLessonByCourseService,
   createReview,
+  updateSaveCourseService,
+  getSaveCourseOfUserService,
+  updateGoIngCourseService,
 };

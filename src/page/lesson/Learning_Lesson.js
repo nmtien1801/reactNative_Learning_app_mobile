@@ -13,7 +13,7 @@ import { useToast } from "../../component/customToast";
 
 import { useDispatch, useSelector } from "react-redux";
 import { getAllLesson } from "../../redux/lessonSlice";
-import { findCourseByID } from "../../redux/courseSlice";
+import { findCourseByID, updateGoIngCourse } from "../../redux/courseSlice";
 import { addUrlVideo } from "../../redux/lessonSlice";
 
 
@@ -96,6 +96,7 @@ export default function LessonComponent({ navigation, route }) {
   const onClickVideo = async (lessonIndex, videoIndex, urlVideo) => {
     setActiveIndex({ lessonIndex, videoIndex });
     await dispatch(addUrlVideo(urlVideo));
+    await dispatch(updateGoIngCourse(route.params.params?.courseID));
   };
 
   return (
