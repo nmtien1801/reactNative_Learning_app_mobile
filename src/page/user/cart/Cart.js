@@ -15,7 +15,7 @@ import { buyCourse } from "../../../redux/orderSlide";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useToast } from "../../../component/customToast";
-import {updateBuyCourse} from "../../../redux/courseSlice";
+import { updateBuyCourse } from "../../../redux/courseSlice";
 
 const Cart = () => {
   const user = useSelector((state) => state.auth.user);
@@ -209,7 +209,9 @@ const Cart = () => {
               <Text style={styles.price}>${item.price}</Text>
               <View style={styles.ratingContainer}>
                 <Ionicons name="star" size={16} color="#FFD700" />
-                <Text style={styles.rating}>{item.averageRating}</Text>
+                <Text style={styles.rating}>
+                  {item.averageRating.toFixed(2)}
+                </Text>
                 <Text style={styles.reviews}>({item.totalRating} reviews)</Text>
               </View>
               <Text style={styles.lessons}>{item.totalLessons} lessons</Text>
