@@ -58,8 +58,8 @@ export const findCourseUserState2 = createAsyncThunk(
 
 export const getSaveCourseOfUser = createAsyncThunk(
   "user/getSaveCourseOfUser",
-  async ({ id, state }, thunkAPI) => {
-    const response = await getSaveCourseOfUserService(id, state);
+  async (id, thunkAPI) => {
+    const response = await getSaveCourseOfUserService(id);
     return response.data;
   }
 );

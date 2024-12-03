@@ -27,27 +27,28 @@ import UserProfile from "../../page/user/User_Profile";
 import Learning_Lesson from "../../page/lesson/Learning_Lesson";
 import Learning_Project from "../../page/lesson/Learning_Project";
 import Learning_QA from "../../page/lesson/Learning_QA";
+import ChatBox from "../../component/chatbox/ChatScreens";
 
-import {  useToast } from "../../component/customToast";
-import {logOutUser} from "../../service/userService";
-import { useDispatch, useSelector } from 'react-redux'
-import {handleLogout} from "../../redux/authSlice";
+import { useToast } from "../../component/customToast";
+import { logOutUser } from "../../service/userService";
+import { useDispatch, useSelector } from "react-redux";
+import { handleLogout } from "../../redux/authSlice";
 
 const DrawerHeader = ({ navigation, route }) => {
   const user = useSelector((state) => state.auth.user); // lấy thông tin user login
-  const dispatch = useDispatch(); 
+  const dispatch = useDispatch();
   const toast = useToast();
 
   OnClickLogout = async (props) => {
-    let res = await logOutUser();  // clear cookies
+    let res = await logOutUser(); // clear cookies
     console.log("res: ", res);
-    
+
     if (res && +res.data.EC === 0) {
       dispatch(handleLogout()); // clear store
       toast("logout success...");
-      props.navigation.navigate("LoginScreen")
+      props.navigation.navigate("LoginScreen");
     } else {
-      toast(res.payload.EM , "error");
+      toast(res.payload.EM, "error");
     }
   };
 
@@ -66,13 +67,8 @@ const DrawerHeader = ({ navigation, route }) => {
         </View>
 
         <DrawerItem
-          label="Favorites"
-          onPress={() => props.navigation.navigate("Setting")} // chưa làm
-        />
-
-        <DrawerItem
-          label="Follow"
-          onPress={() => props.navigation.navigate("Setting")} // chưa làm
+          label="ChatBox"
+          onPress={() => props.navigation.navigate("ChatBox")} // chưa làm
         />
 
         <DrawerItem
@@ -80,16 +76,13 @@ const DrawerHeader = ({ navigation, route }) => {
           onPress={() => props.navigation.navigate("Setting")}
         />
 
-        <DrawerItem
-          label="Log out"
-          onPress={() => OnClickLogout(props)}
-        />
+        <DrawerItem label="Log out" onPress={() => OnClickLogout(props)} />
       </DrawerContentScrollView>
     );
   }
 
   const Drawer = createDrawerNavigator();
-  
+
   // đang ở màn hình nào đầu tiên (lấy từ .app qua)
   // nhớ import màn hình
   let initialScreen;
@@ -102,11 +95,11 @@ const DrawerHeader = ({ navigation, route }) => {
   } else if (route.params?.screenName === "UserProfile") {
     initialScreen = UserProfile;
   } else if (route.params?.screenName === "Learning_Lesson") {
-    initialScreen = Learning_Lesson
+    initialScreen = Learning_Lesson;
   } else if (route.params?.screenName === "Learning_Project") {
-    initialScreen = Learning_Project
+    initialScreen = Learning_Project;
   } else if (route.params?.screenName === "Learning_QA") {
-    initialScreen = Learning_QA
+    initialScreen = Learning_QA;
   }
 
   return (
@@ -120,15 +113,15 @@ const DrawerHeader = ({ navigation, route }) => {
       <Drawer.Screen
         name="screenFromApp"
         component={initialScreen}
-        initialParams={route}   // lấy route
+        initialParams={route} // lấy route
         options={({ navigation, route }) => ({
           header: () => <Header navigation={navigation} route={route} />,
         })}
       />
       {/* dưới đây là nơi chứa đường dẫn của thanh drawer */}
       <Drawer.Screen
-        name="Favorites"
-        component={Setting} // chưa làm
+        name="ChatBox"
+        component={ChatBox} // chưa làm
         options={({ navigation, route }) => ({
           header: () => {
             return (
@@ -139,27 +132,7 @@ const DrawerHeader = ({ navigation, route }) => {
                 >
                   <Ionicons name="chevron-back" size={24} color="black" />
                 </TouchableOpacity>
-                <Text style={styles.titleBar}>Favorites</Text>
-              </View>
-            );
-          },
-        })}
-      />
-
-      <Drawer.Screen
-        name="Follow"
-        component={Setting} // chưa làm
-        options={({ navigation, route }) => ({
-          header: () => {
-            return (
-              <View style={styles.header}>
-                <TouchableOpacity
-                  style={styles.backButton}
-                  onPress={() => navigation.goBack()}
-                >
-                  <Ionicons name="chevron-back" size={24} color="black" />
-                </TouchableOpacity>
-                <Text style={styles.titleBar}>Follow</Text>
+                <Text style={styles.titleBar}>ChatBox</Text>
               </View>
             );
           },
