@@ -208,7 +208,7 @@ export default function HomeUser({ navigation, route }) {
     <View style={styles.section}>
       <SectionHeader title={section.title} />
       <FlatList
-        data={section.data.slice(0, 5)} // Lấy 5 phần tử đầu tiên
+        data={section.data} // Lấy 5 phần tử đầu tiên
         renderItem={({ item }) => <CourseCard course={item} />}
         keyExtractor={(item) => item.id}
         horizontal

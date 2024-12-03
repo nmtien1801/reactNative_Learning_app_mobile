@@ -14,7 +14,7 @@ import * as DocumentPicker from "expo-document-picker";
 import { useDispatch, useSelector } from "react-redux";
 import { useToast } from "../../component/customToast";
 
-import { addNewCourse , updateCourse} from "../../redux/teacherSlide";
+import { addNewCourse, updateCourse } from "../../redux/teacherSlide";
 import { getAllCourseUser } from "../../redux/userSlice";
 
 export default function Component({ navigation, route }) {
@@ -42,6 +42,9 @@ export default function Component({ navigation, route }) {
   );
   const [file, setFile] = useState(dataUpdate ? dataUpdate.image : null); // lưu ảnh
 
+  console.log("====================================");
+  console.log("dataUpdate", dataUpdate);
+  console.log("====================================");
   // category set cứng
   const [categories, setCategories] = useState({
     design: false, // 1
@@ -49,6 +52,7 @@ export default function Component({ navigation, route }) {
     business: false, // 3
     video: false, // 4
     language: false, // 5
+    writing: false, // 6
   });
 
   // Chọn một category, hủy bỏ tất cả các category đã chọn khác
@@ -59,6 +63,7 @@ export default function Component({ navigation, route }) {
       business: false,
       video: false,
       language: false,
+      writing: false, // 6
       [key]: true, // Chỉ chọn category này
     });
   };
@@ -83,6 +88,8 @@ export default function Component({ navigation, route }) {
           return 4;
         case "language":
           return 5;
+        case "writing":
+          return 6;
         default:
           return 0;
       }
@@ -104,6 +111,8 @@ export default function Component({ navigation, route }) {
         return "video";
       case 5:
         return "language";
+      case 6:
+        return "writing";
       default:
         return "";
     }
@@ -172,7 +181,6 @@ export default function Component({ navigation, route }) {
       res = await dispatch(addNewCourse(dataNewCourse));
     } else if (active === "UPDATE") {
       res = await dispatch(updateCourse(dataNewCourse));
-      
     }
     if (res && +res.payload.EC === 0) {
       dispatch(getAllCourseUser(user._id)); // lấy danh sách khoá học của user

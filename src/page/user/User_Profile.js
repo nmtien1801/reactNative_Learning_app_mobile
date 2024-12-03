@@ -15,8 +15,6 @@ import { useToast } from "../../component/customToast";
 import { useDispatch, useSelector } from "react-redux";
 import { getSaveCourseOfUser } from "../../redux/userSlice";
 
-
-
 export default function UserProfileScreen({ navigation, route }) {
   const user = useSelector((state) => state.auth.user); // lấy thông tin user login
   const listCourse = useSelector((state) => state.user.listCourse); // lấy danh sách khóa học của user
@@ -39,7 +37,7 @@ export default function UserProfileScreen({ navigation, route }) {
   const userData = {
     name: user.userName,
     title: user.title,
-    bannerImage: require("../../../img/User_Profile/UserProfile1.jpg"),
+    bannerImage: require("../../../img/User_Profile/UserProfile1.png"),
     profileImage: user.image, // chưa sửa
     stats: {
       save: courseOfUser.totalCourses,
@@ -51,16 +49,20 @@ export default function UserProfileScreen({ navigation, route }) {
         id: course.courseID,
         image: course.courseImage, // chưa sửa
         title: course.courseName,
-        author: course.teacherName, 
-        price: course.price, 
+        author: course.teacherName,
+        price: course.price,
         rating: course.averageRating,
         lessons: course.totalLessons,
       };
     }),
   };
 
-  const Item = ({ image, title, author, price, rating, lessons , courseID}) => (
-    <TouchableOpacity onPress={() => navigation.navigate("courseDetailOverView", {courseID: courseID})}>
+  const Item = ({ image, title, author, price, rating, lessons, courseID }) => (
+    <TouchableOpacity
+      onPress={() =>
+        navigation.navigate("courseDetailOverView", { courseID: courseID })
+      }
+    >
       <View style={styles.courseItem}>
         <Image source={image} style={styles.courseImage} />
         <View style={styles.courseInfo}>

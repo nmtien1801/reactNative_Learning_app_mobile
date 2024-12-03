@@ -12,7 +12,11 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { WebView } from "react-native-webview";
 import { useDispatch, useSelector } from "react-redux";
-import { findCourseByID, findCourseSimilar , updateSaveCourse} from "../../../redux/courseSlice";
+import {
+  findCourseByID,
+  findCourseSimilar,
+  updateSaveCourse,
+} from "../../../redux/courseSlice";
 import { addCart } from "../../../redux/cartSlice"; // Import action addCart
 import { useToast } from "../../../component/customToast";
 
@@ -41,7 +45,9 @@ export default function CourseDetailOverView({ navigation, route }) {
   const [listSimilar, setListSimilar] = useState([]); // Danh sách course tương tự
   const dispatch = useDispatch();
   const toast = useToast();
-
+  console.log("====================================");
+  console.log("course", course);
+  console.log("====================================");
   const [isAdding, setIsAdding] = useState(false); // Lưu trạng thái khi thêm vào giỏ hàng
   const [addError, setAddError] = useState("");
 
@@ -64,7 +70,7 @@ export default function CourseDetailOverView({ navigation, route }) {
           id: course.id, // Sử dụng kết hợp giữa id và index để đảm bảo tính duy nhất
           title: course.name,
           instructor: course.UserFollow[0]?.user.userName,
-          price: course.Orders[0]?.OrderDetail?.price,
+          price: course.price,
           rating: course.averageRating,
           reviews: course.totalRating,
           lessons: course.totalLessons,
@@ -77,9 +83,8 @@ export default function CourseDetailOverView({ navigation, route }) {
   }, [listCourseSimilar]);
 
   useEffect(() => {
-    dispatch(findCourseSimilar(courseID)); 
+    dispatch(findCourseSimilar(courseID));
   }, [isSave]);
-
 
   const handleAddToCart = async () => {
     if (isAdding) return; // Prevent adding if already in progress
@@ -247,9 +252,7 @@ export default function CourseDetailOverView({ navigation, route }) {
 
       <View style={styles.footer}>
         <View style={styles.priceContainer}>
-          <Text style={styles.price}>
-            ${course?.Orders?.length > 0 && course.Orders[0]?.OrderDetail.price}
-          </Text>
+          <Text style={styles.price}>${course.price ? course.price : "0"}</Text>
           <Text style={styles.originalPrice}>$1020</Text>
         </View>
         <TouchableOpacity
