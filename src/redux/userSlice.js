@@ -5,7 +5,7 @@ import {
   getAllCourseUserService,
   findCourseUserState1Service,
   findCourseUserState2Service,
-  getSaveCourseOfUserService
+  getSaveCourseOfUserService,
 } from "../service/userService";
 
 const initialState = {
@@ -58,8 +58,8 @@ export const findCourseUserState2 = createAsyncThunk(
 
 export const getSaveCourseOfUser = createAsyncThunk(
   "user/getSaveCourseOfUser",
-  async (id, thunkAPI) => {
-    const response = await getSaveCourseOfUserService(id);
+  async ({ id, state }, thunkAPI) => {
+    const response = await getSaveCourseOfUserService(id, state);
     return response.data;
   }
 );
@@ -152,22 +152,21 @@ const userSlice = createSlice({
         state.isError = true;
       });
 
-      // getSaveCourseOfUser
+    // getSaveCourseOfUser
     builder
-    .addCase(getSaveCourseOfUser.pending, (state) => {
-      state.isLoading = true;
-      state.isError = false;
-    })
-    .addCase(getSaveCourseOfUser.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.isError = false;
-      state.listCourse = action.payload.DT || [];
-    })
-    .addCase(getSaveCourseOfUser.rejected, (state, action) => {
-      state.isLoading = false;
-      state.isError = true;
-    });
-    
+      .addCase(getSaveCourseOfUser.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+      })
+      .addCase(getSaveCourseOfUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.listCourse = action.payload.DT || [];
+      })
+      .addCase(getSaveCourseOfUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+      });
   },
 });
 

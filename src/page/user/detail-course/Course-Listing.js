@@ -16,15 +16,15 @@ import Footer from "../../../component/footer/FooterUser";
 import { searchCourse } from "../../../redux/courseSlice"; // Import the searchCourse action
 import { findCourseByCategory } from "../../../redux/courseSlice";
 
-export default function CourseListing({ navigation , route}) {
+export default function CourseListing({ navigation, route }) {
   const dispatch = useDispatch();
   const { listCourse, isLoading, isError, listCourseByCategory } = useSelector(
     (state) => state.course
   );
-  
+
   const [searchTerm, setSearchTerm] = useState(""); // State for search term
-  const categoryID = route.params?.categoryID;    // tìm theo categoryID từ route
-  console.log("route: ", route.params,categoryID, "listCourse: ", listCourse);
+  const categoryID = route.params?.categoryID; // tìm theo categoryID từ route
+  console.log("route: ", route.params, categoryID, "listCourse: ", listCourse);
 
   // lọc theo category
   useEffect(() => {
@@ -47,10 +47,7 @@ export default function CourseListing({ navigation , route}) {
           navigation.navigate("courseDetailOverView", { courseID: item.id })
         }
       >
-        <Image
-          source={{ uri: item.image }}
-          style={styles.courseImage}
-        />
+        <Image source={{ uri: item.image }} style={styles.courseImage} />
       </TouchableOpacity>
       <View style={styles.courseDetails}>
         <TouchableOpacity
@@ -63,7 +60,7 @@ export default function CourseListing({ navigation , route}) {
         <Text style={styles.instructorName}>
           {item.UserFollow[0]?.user.userName}
         </Text>
-        <Text style={styles.price}>${item.Orders[0]?.OrderDetail?.price}</Text>
+        <Text style={styles.price}>${item.price}</Text>
         <View style={styles.ratingContainer}>
           <Ionicons name="star" size={16} color="#FFD700" />
 
@@ -120,7 +117,7 @@ export default function CourseListing({ navigation , route}) {
         )}
       </ScrollView>
 
-        <Footer navigation={navigation} showActive="search" />
+      <Footer navigation={navigation} showActive="search" />
     </View>
   );
 }

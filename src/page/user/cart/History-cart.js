@@ -10,50 +10,29 @@ import {
   Modal,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchOrdersByUserId } from "../../../redux/orderSlide"; // Fetch orders of the user
-import { submitCourseReview } from "../../../redux/reviewSlice"; // Action to submit review
-import { ArrowLeft, Search, Star } from "lucide-react-native"; // Icons
-import { useToast } from "../../../component/customToast"; // Toast notifications
+import { fetchOrdersByUserId } from "../../../redux/orderSlide";
+import { submitCourseReview } from "../../../redux/reviewSlice";
+import { ArrowLeft, Search, Star } from "lucide-react-native";
+import { useToast } from "../../../component/customToast";
 
 // Star Rating Component
 const StarRating = ({ rating, onPress }) => {
-  const fullStars = Math.floor(rating);
-  const hasHalfStar = rating % 1 !== 0;
-
+  const stars = [1, 2, 3, 4, 5];
   return (
     <View style={styles.starContainer}>
-      {[1, 2, 3, 4, 5].map((index) => {
-        if (index <= fullStars) {
-          return (
-            <TouchableOpacity key={index} onPress={() => onPress(index)}>
-              <Star size={20} color="#FFD700" fill="#FFD700" />
-            </TouchableOpacity>
-          );
-        } else if (index === fullStars + 1 && hasHalfStar) {
-          return (
-            <TouchableOpacity key={index} onPress={() => onPress(index)}>
-              <Star
-                size={20}
-                color="#FFD700"
-                fill="transparent"
-                stroke="#FFD700"
-                strokeWidth={2}
-              />
-            </TouchableOpacity>
-          );
-        } else {
-          return (
-            <TouchableOpacity key={index} onPress={() => onPress(index)}>
-              <Star size={20} color="#E0E0E0" fill="transparent" />
-            </TouchableOpacity>
-          );
-        }
-      })}
+      {stars.map((index) => (
+        <TouchableOpacity key={index} onPress={() => onPress(index)}>
+          <Star
+            size={20}
+            color={index <= rating ? "#FFD700" : "#E0E0E0"}
+            fill={index <= rating ? "#FFD700" : "transparent"}
+          />
+        </TouchableOpacity>
+      ))}
     </View>
   );
 };
 
-// Course Item Component
 // Course Item Component
 const CourseItem = ({ order }) => {
   const user = useSelector((state) => state.auth.user);
@@ -63,20 +42,9 @@ const CourseItem = ({ order }) => {
     order?.OrderDetails?.[0]?.Course?.averageRating || 0
   );
   const [isModalVisible, setIsModalVisible] = useState(false);
+
   const course = order?.OrderDetails?.[0]?.Course;
-  const [base64Image, setBase64Image] = useState(null);
-
-  if (!course) {
-    return <Text style={styles.errorText}>Không có khóa học.</Text>;
-  }
-
-  useEffect(() => {
-    if (course?.image) {
-      // Giả sử ảnh trả về dưới dạng Blob và bạn muốn chuyển thành Base64
-      const imageBase64 = `data:image/png;base64,${course.image}`;
-      setBase64Image(imageBase64);
-    }
-  }, [course]);
+  if (!course) return <Text style={styles.errorText}>Không có khóa học.</Text>;
 
   const handleStarPress = async (value) => {
     try {
@@ -96,7 +64,7 @@ const CourseItem = ({ order }) => {
     } catch (error) {
       toast("Có lỗi xảy ra. Vui lòng thử lại!");
     } finally {
-      setIsModalVisible(false); // Close the modal after submitting review
+      setIsModalVisible(false);
     }
   };
 
@@ -106,39 +74,31 @@ const CourseItem = ({ order }) => {
       <Text style={styles.courseInstructor}>
         {course?.UserFollow?.[0]?.user?.userName}
       </Text>
-      {base64Image && (
-        <Image
-          source={{
-            uri:
-              base64Image ||
-              "https://v0.dev/placeholder.svg?height=200&width=200",
-          }}
-          style={styles.courseImage}
-        />
-      )}
+      <Image
+        source={{
+          uri: course?.image
+            ? `data:image/png;base64,${course.image}`
+            : "https://v0.dev/placeholder.svg?height=200&width=200",
+        }}
+        style={styles.courseImage}
+      />
 
       <View style={styles.detailsContainer}>
-        <View style={styles.priceContainer}>
-          <Text style={styles.priceLabel}>Thành tiền:</Text>
-          <Text style={styles.price}>${order?.total}</Text>
-        </View>
-
-        <View style={styles.ratingRow}>
-          <TouchableOpacity
-            style={styles.ratingButton}
-            onPress={() => setIsModalVisible(true)} // Open the modal for review
-          >
-            <Text style={styles.ratingButtonText}>Đánh giá</Text>
-          </TouchableOpacity>
-        </View>
+        <Text style={styles.priceLabel}>Thành tiền:</Text>
+        <Text style={styles.price}>${order?.total}</Text>
+        <TouchableOpacity
+          style={styles.ratingButton}
+          onPress={() => setIsModalVisible(true)}
+        >
+          <Text style={styles.ratingButtonText}>Đánh giá</Text>
+        </TouchableOpacity>
       </View>
 
-      {/* Modal for Rating */}
       <Modal
         visible={isModalVisible}
-        transparent={true}
+        transparent
         animationType="fade"
-        onRequestClose={() => setIsModalVisible(false)} // Close modal when requested
+        onRequestClose={() => setIsModalVisible(false)}
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
@@ -146,7 +106,7 @@ const CourseItem = ({ order }) => {
             <StarRating rating={rating} onPress={handleStarPress} />
             <TouchableOpacity
               style={styles.closeButton}
-              onPress={() => setIsModalVisible(false)} // Close modal
+              onPress={() => setIsModalVisible(false)}
             >
               <Text style={styles.closeButtonText}>Đóng</Text>
             </TouchableOpacity>
@@ -158,31 +118,22 @@ const CourseItem = ({ order }) => {
 };
 
 // Main HistoryCart Component
-export default function HistoryCart({ navigation }) {
-  const user = useSelector((state) => state.auth.user); // Lấy thông tin user
-  const dispatch = useDispatch();
+const HistoryCart = ({ navigation }) => {
+  const user = useSelector((state) => state.auth.user);
   const { orders, loading, error } = useSelector((state) => state.orders);
-  const userId = user._id;
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchOrdersByUserId(userId)); // Fetch orders when component mounts
-  }, [dispatch, userId]);
+    dispatch(fetchOrdersByUserId(user._id));
+  }, [dispatch, user._id]);
 
-  if (loading) {
-    return <Text style={styles.loadingText}>Đang tải...</Text>;
-  }
-
-  if (error) {
-    return <Text style={styles.errorText}>Lỗi: {error}</Text>;
-  }
-
-  if (!orders || orders.length === 0) {
+  if (loading) return <Text style={styles.loadingText}>Đang tải...</Text>;
+  if (error) return <Text style={styles.errorText}>Lỗi: {error}</Text>;
+  if (!orders || orders.length === 0)
     return <Text style={styles.errorText}>Không có đơn hàng nào!</Text>;
-  }
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <TouchableOpacity
@@ -197,19 +148,17 @@ export default function HistoryCart({ navigation }) {
           <Search size={24} color="#000" />
         </TouchableOpacity>
       </View>
-
-      {/* Content */}
       <FlatList
-        data={orders}
+        data={orders || []}
         renderItem={({ item }) => <CourseItem order={item} />}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item, index) => item.id?.toString() || index.toString()}
         contentContainerStyle={styles.listContainer}
-        showsVerticalScrollIndicator={false}
       />
     </SafeAreaView>
   );
-}
+};
 
+export default HistoryCart;
 // Styles
 
 const styles = StyleSheet.create({

@@ -146,8 +146,8 @@ const updateSaveCourseService = (courseID, state) => {
   return axios.put(`${baseUrl}/updateSaveCourse`, { courseID, state });
 };
 
-const getSaveCourseOfUserService = (userID) => {
-  return axios.get(`${baseUrl}/getSaveCourseOfUser/${userID}`);
+const getSaveCourseOfUserService = (userID, state) => {
+  return axios.get(`${baseUrl}/getSaveCourseOfUser/${userID}`, { state });
 };
 
 const updateGoIngCourseService = (courseID) => {
@@ -174,9 +174,8 @@ const updateBuyCourseService = async (courseID) => {
 };
 
 const findCourseByCategoryService = (categoryID) => {
-  
   return axios.get(`${baseUrl}/findCourseByCategory/${categoryID}`);
-}
+};
 
 export {
   handleLoginApi,
