@@ -11,6 +11,7 @@ import {
 const initialState = {
   topTeacher: [],
   listCourse: [],
+  listCourseSave: [],
   isLoading: false,
   isError: false,
 };
@@ -58,8 +59,8 @@ export const findCourseUserState2 = createAsyncThunk(
 
 export const getSaveCourseOfUser = createAsyncThunk(
   "user/getSaveCourseOfUser",
-  async ({ id, state }, thunkAPI) => {
-    const response = await getSaveCourseOfUserService(id, state);
+  async (id, thunkAPI) => {
+    const response = await getSaveCourseOfUserService(id);
     return response.data;
   }
 );
@@ -161,7 +162,7 @@ const userSlice = createSlice({
       .addCase(getSaveCourseOfUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
-        state.listCourse = action.payload.DT || [];
+        state.listCourseSave = action.payload.DT || [];
       })
       .addCase(getSaveCourseOfUser.rejected, (state, action) => {
         state.isLoading = false;

@@ -13,28 +13,30 @@ import Footer from "../../component/footer/FooterUser";
 import { useToast } from "../../component/customToast";
 
 import { useDispatch, useSelector } from "react-redux";
-import { getSaveCourseOfUser } from "../../redux/userSlice";
+import {
+  getSaveCourseOfUser,
+  findCourseUserState2,
+  findCourseUserState1,
+} from "../../redux/userSlice";
 
 export default function UserProfileScreen({ navigation, route }) {
   const user = useSelector((state) => state.auth.user); // lấy thông tin user login
-  const listCourse = useSelector((state) => state.user.listCourse); // lấy danh sách khóa học của user
+  const listCourse = useSelector((state) => state.user.listCourseSave); // lấy danh sách khóa học của user
   const dispatch = useDispatch();
 
   const [courseOfUser, setCourseOfUser] = useState([]); //state lưu danh sách khóa học của user
-  const [state, setState] = useState(4); //state lưu trạng thái khóa học của user
-  useEffect(() => {
-    dispatch(getSaveCourseOfUser(user._id, state)); // id user login
-  }, []);
 
   useEffect(() => {
-    dispatch(getSaveCourseOfUser(user._id, state)); // id user login
-  }, [state]);
+    dispatch(getSaveCourseOfUser(user._id)); // id user login
+  }, []);
+
   // course của user
   useEffect(() => {
     if (listCourse) {
       setCourseOfUser(listCourse);
     }
   }, [listCourse]);
+
 
   // Mảng dữ liệu người dùng bao gồm thông tin cá nhân và hình ảnh
   const userData = {
@@ -45,7 +47,7 @@ export default function UserProfileScreen({ navigation, route }) {
     stats: {
       save: courseOfUser.totalCourses,
       ongoing: courseOfUser.totalCoursesState1,
-      completed: courseOfUser.totalCoursesState2,
+      completed: courseOfUser.totalCoursesState2 ,
     },
     courses: courseOfUser.courses?.map((course) => {
       return {
@@ -59,10 +61,6 @@ export default function UserProfileScreen({ navigation, route }) {
       };
     }),
   };
-
-  console.log("====================================");
-  console.log("courseOfUser", courseOfUser);
-  console.log("====================================");
 
   const Item = ({ image, title, author, price, rating, lessons, courseID }) => (
     <TouchableOpacity
@@ -98,15 +96,15 @@ export default function UserProfileScreen({ navigation, route }) {
           <Text style={styles.userName}>{userData.name}</Text>
           <Text style={styles.userTitle}>{userData.title}</Text>
           <View style={styles.statsContainer}>
-            <View style={styles.statItem} onPress={() => setState(4)}>
+            <View style={styles.statItem}>
               <Text style={styles.statNumber}>{userData.stats.save}</Text>
               <Text style={styles.statLabel}>Save</Text>
             </View>
-            <View style={styles.statItem} onPress={() => setState(1)}>
+            <View style={styles.statItem}>
               <Text style={styles.statNumber}>{userData.stats.ongoing}</Text>
               <Text style={styles.statLabel}>On going</Text>
             </View>
-            <View style={styles.statItem} onPress={() => setState(2)}>
+            <View style={styles.statItem}>
               <Text style={styles.statNumber}>{userData.stats.completed}</Text>
               <Text style={styles.statLabel}>Completed</Text>
             </View>
