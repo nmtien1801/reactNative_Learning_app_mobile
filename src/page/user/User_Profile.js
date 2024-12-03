@@ -13,11 +13,15 @@ import Footer from "../../component/footer/FooterUser";
 import { useToast } from "../../component/customToast";
 
 import { useDispatch, useSelector } from "react-redux";
-import { getSaveCourseOfUser } from "../../redux/userSlice";
+import {
+  getSaveCourseOfUser,
+  findCourseUserState2,
+  findCourseUserState1,
+} from "../../redux/userSlice";
 
 export default function UserProfileScreen({ navigation, route }) {
   const user = useSelector((state) => state.auth.user); // lấy thông tin user login
-  const listCourse = useSelector((state) => state.user.listCourse); // lấy danh sách khóa học của user
+  const listCourse = useSelector((state) => state.user.listCourseSave); // lấy danh sách khóa học của user
   const dispatch = useDispatch();
 
   const [courseOfUser, setCourseOfUser] = useState([]); //state lưu danh sách khóa học của user
@@ -33,6 +37,7 @@ export default function UserProfileScreen({ navigation, route }) {
     }
   }, [listCourse]);
 
+
   // Mảng dữ liệu người dùng bao gồm thông tin cá nhân và hình ảnh
   const userData = {
     name: user.userName,
@@ -42,7 +47,7 @@ export default function UserProfileScreen({ navigation, route }) {
     stats: {
       save: courseOfUser.totalCourses,
       ongoing: courseOfUser.totalCoursesState1,
-      completed: courseOfUser.totalCoursesState2,
+      completed: courseOfUser.totalCoursesState2 ,
     },
     courses: courseOfUser.courses?.map((course) => {
       return {

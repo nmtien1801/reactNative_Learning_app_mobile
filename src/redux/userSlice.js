@@ -11,6 +11,7 @@ import {
 const initialState = {
   topTeacher: [],
   listCourse: [],
+  listCourseSave: [],
   isLoading: false,
   isError: false,
 };
@@ -161,7 +162,7 @@ const userSlice = createSlice({
       .addCase(getSaveCourseOfUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
-        state.listCourse = action.payload.DT || [];
+        state.listCourseSave = action.payload.DT || [];
       })
       .addCase(getSaveCourseOfUser.rejected, (state, action) => {
         state.isLoading = false;
