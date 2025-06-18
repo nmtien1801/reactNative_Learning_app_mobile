@@ -33,20 +33,24 @@ baseUrl: sửa local phù hợp
 
 ## Screenshots
 
-![App Screenshot](https://res.cloudinary.com/dv6qgkaj4/image/upload/v1734138120/login-register_mgxmkz.png)
+<img src="https://github.com/nmtien1801/reactNative_Learning_app_mobile/blob/main/assets/image/login.png?raw=true" alt="Login" width="300"/>
+
 
 *Hình 1: Màn hình Đăng nhập và Đăng ký với giao diện đơn giản, thân thiện.*
 
-![App Screenshot](https://res.cloudinary.com/dv6qgkaj4/image/upload/v1734138227/teacher-manage_sl8scn.png)
+<img src="https://github.com/nmtien1801/reactNative_Learning_app_mobile/blob/main/assets/image/teacher_home.png?raw=true" alt="Login" width="300"/>
+
 
 *Hình 2: teacher home*
 
-![App Screenshot](https://res.cloudinary.com/dv6qgkaj4/image/upload/v1734138320/my_lesson_-_course_bought_a6sh14.png)
+<img src="https://github.com/nmtien1801/reactNative_Learning_app_mobile/blob/main/assets/image/my_course.png?raw=true" alt="Login" width="300"/>
+
 
 *Hình 3: my course*
 
 
-![App Screenshot](https://res.cloudinary.com/dv6qgkaj4/image/upload/v1734138740/search_screen_d58ztw.png)
+<img src="https://github.com/nmtien1801/reactNative_Learning_app_mobile/blob/main/assets/image/search.png?raw=true" alt="Login" width="300"/>
+
 
 *Hình 4: search screen of student*
 
