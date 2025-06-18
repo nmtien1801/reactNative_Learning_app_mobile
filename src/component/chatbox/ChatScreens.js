@@ -18,12 +18,21 @@ const ChatBox = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   // Kết nối tới socket.io server
-  const url =
-    Platform.OS === "android"
-      ? "http://172.16.1.96:8080/api" // URL cho Android và iOS
-      : "http://localhost:8080/api"; // URL cho web hoặc môi trường khác
-  const socket = io(url);
+  // const url =
+  //   Platform.OS === "android"
+  //     ? "http://172.16.1.96:8080/api" // URL cho Android và iOS
+  //     : "http://localhost:8080/api"; // URL cho web hoặc môi trường khác
+  // const socket = io(url);
+
   // const socket = io("http://localhost:8080");
+
+  // Cập nhật URL cho cả Android và iOS
+  const socket = io(
+    Platform.OS === "android"
+      ? "http://172.16.1.96:8080" // Địa chỉ IP của máy tính trên mạng local (thay "x" bằng số thật)
+      : "http://localhost:8080" // URL cho localhost hoặc môi trường khác
+  );
+
   useEffect(() => {
     socket.on("receive_message", (message) => {
       setMessages((previousMessages) =>
